@@ -4,7 +4,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
-namespace Default
+namespace KCoreKit
 {
 #if UNITY_EDITOR
     [CustomEditor(typeof(GlobalPrintSetting))]

@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 
-namespace Default
+namespace KCoreKit
 {
     public interface IAbilityStats 
     {

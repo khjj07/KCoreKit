@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public class GizmosCubeDrawer : MonoBehaviour
     {
@@ -17,11 +17,11 @@ namespace Default
             scale.x = transform.localScale.x * size.x;
             scale.y = transform.localScale.y * size.y;
             scale.z = transform.localScale.z * size.z;
-            Gizmos.color = color;
+            UnityEngine.Gizmos.color = color;
             if (_wireFrame)
-                Gizmos.DrawWireCube(transform.position+offset, scale);
+                UnityEngine.Gizmos.DrawWireCube(transform.position+offset, scale);
             else
-                Gizmos.DrawCube(transform.position+offset, scale);
+                UnityEngine.Gizmos.DrawCube(transform.position+offset, scale);
         }
 #endif
     }

@@ -2,9 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Default;
 
-namespace EFZ
+namespace KCoreKit
 { 
     public class DataTableManager : Singleton<DataTableManager>
     {

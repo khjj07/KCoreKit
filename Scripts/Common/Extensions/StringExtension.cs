@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public static class StringExtension
     {

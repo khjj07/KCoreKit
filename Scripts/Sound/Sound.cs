@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     [Serializable]
     public class Sound

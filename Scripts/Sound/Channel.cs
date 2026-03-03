@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     [RequireComponent(typeof(AudioSource))]
     public class Channel : MonoBehaviour

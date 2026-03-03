@@ -2,7 +2,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     [Serializable]
     public class PrintStyleAppearGroup

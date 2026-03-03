@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Default
+namespace KCoreKit
 {
     [RequireComponent(typeof(Button))]
     public class ButtonWidget : BoxWidget

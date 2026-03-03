@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Default
+namespace KCoreKit
 {
     public static class RandomExtension
     {

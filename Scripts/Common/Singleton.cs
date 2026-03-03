@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {

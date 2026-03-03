@@ -5,7 +5,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     [RequireComponent(typeof(TextMeshProUGUI))]
     public class Printer : MonoBehaviour

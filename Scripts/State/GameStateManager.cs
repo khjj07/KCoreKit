@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public class GameStateManager<T> :MonoBehaviour where T : GameStateBase
     {

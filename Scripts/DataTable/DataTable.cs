@@ -5,10 +5,11 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Default
+namespace KCoreKit
 {
 #if UNITY_EDITOR
     [CustomEditor(typeof(DataTable), true)]
@@ -38,14 +39,23 @@ namespace Default
             {
                 if (!dataTable.rowScript)
                 {
-                    if (GUILayout.Button("데이터 테이블 스크립트 선택"))
+                    if (GUILayout.Button("데이터 테이블 스크립트 선택", GUILayout.Height(25)))
                     {
-                        EditorGUIUtility.ShowObjectPicker<MonoScript>(
-                            scriptProp.objectReferenceValue,
-                            false,
-                            "DataTableRow",
-                            pickerControlID
-                        );
+                        // 버튼의 위치를 기준으로 드롭다운 출력
+                        Rect rect = EditorGUILayout.GetControlRect(false, 0);
+                        var dropdown = new RowScriptSelectorDropdown(new AdvancedDropdownState(), (selectedScript) => 
+                        {
+                            // 선택 시 실행될 콜백
+                            Undo.RecordObject(dataTable, "Select Row Script");
+                            dataTable.rowScript = selectedScript;
+                            dataTable.rowTypeName = selectedScript.GetClass().AssemblyQualifiedName;
+                            EditorUtility.SetDirty(dataTable);
+            
+                            // 시리얼라이즈드 프로퍼티 업데이트가 필요한 경우
+                            serializedObject.Update(); 
+                        });
+        
+                        dropdown.Show(rect);
                     }
                 }
                 else

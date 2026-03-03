@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Default
+namespace KCoreKit
 {
     public class LabelBoxWidget : WidgetBase {
         [HideInInspector]

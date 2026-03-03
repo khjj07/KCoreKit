@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
 #if UNITY_EDITOR
     [CustomEditor(typeof(SoundManager))]

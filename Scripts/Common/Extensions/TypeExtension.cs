@@ -7,7 +7,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
-namespace Default
+namespace KCoreKit
 {
     public static class TypeExtension
     {

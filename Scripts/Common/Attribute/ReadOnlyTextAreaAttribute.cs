@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public class ReadOnlyTextAreaAttribute : PropertyAttribute
     {
@@ -36,8 +36,7 @@ namespace Default
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             ReadOnlyTextAreaAttribute textArea = (ReadOnlyTextAreaAttribute)attribute;
-
-            // 기본 텍스트 줄 높이 계산
+            
             return EditorGUIUtility.singleLineHeight * Mathf.Clamp(textArea.maxLines, textArea.minLines, 20);
         }
     }

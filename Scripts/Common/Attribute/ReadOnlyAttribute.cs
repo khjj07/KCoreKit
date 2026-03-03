@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public class ReadOnlyAttribute : PropertyAttribute { }
 #if UNITY_EDITOR

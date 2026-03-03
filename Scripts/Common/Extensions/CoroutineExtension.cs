@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public static class CoroutineExtension
     {

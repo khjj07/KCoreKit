@@ -1,4 +1,4 @@
-﻿namespace Default
+﻿namespace KCoreKit
 {
     public interface IView<TModel>
     {

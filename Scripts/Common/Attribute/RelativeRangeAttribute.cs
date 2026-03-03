@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     // 필드 간의 상대적인 값 제약을 슬라이더로 표시해주는 Attribute
     public class RelativeRangeAttribute : PropertyAttribute

@@ -1,6 +1,6 @@
 using UnityEngine.InputSystem;
 
-namespace Default
+namespace KCoreKit
 {
     public enum AbilityEffectState
     {
@@ -9,6 +9,7 @@ namespace Default
         Failure,
         Cancel,
     }
+
     public abstract class AbilityEffectBase
     {
         public string name;
@@ -16,10 +17,10 @@ namespace Default
         public int order;
         public int cooldown;
         public string[] tag;
-        
+
         private bool _isActive;
 
-        public AbilityEffectBase(string name,AbilityAgent owner, int order, int cooldown, string[] tag)
+        public AbilityEffectBase(string name, AbilityAgent owner, int order, int cooldown, string[] tag)
         {
             this.name = name;
             this.owner = owner;
@@ -27,8 +28,7 @@ namespace Default
             this.order = order;
             this.tag = tag;
         }
-
-
+        
         protected virtual bool CanActiveEffect()
         {
             return !_isActive;
@@ -38,16 +38,17 @@ namespace Default
         {
             return AbilityEffectState.Success;
         }
+
         protected virtual AbilityEffectState OnDeactivateEffect()
         {
             return AbilityEffectState.Success;
         }
-        
+
         public virtual void OnActionTriggered(InputAction.CallbackContext context)
         {
             
         }
-        
+
         public void Activate()
         {
             if (CanActiveEffect())
@@ -56,13 +57,13 @@ namespace Default
                 OnActivateEffect();
             }
         }
-        
+
         public void Deactivate()
         {
             OnDeactivateEffect();
             _isActive = false;
         }
-        
+
         public bool IsActivate()
         {
             return _isActive;

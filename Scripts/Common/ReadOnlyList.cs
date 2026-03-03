@@ -6,7 +6,7 @@ using UnityEngine;
 
 // Linq 사용을 위해 추가
 
-namespace Default
+namespace KCoreKit
 {
     /// <summary>
     /// List<T>를 감싸서 인스펙터에서만 읽기 전용으로 표시하며,

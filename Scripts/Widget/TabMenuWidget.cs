@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Default
+namespace KCoreKit
 {
     public class TabMenuWidget : PanelWidget
     {

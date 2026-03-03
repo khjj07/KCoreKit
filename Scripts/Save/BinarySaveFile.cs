@@ -2,7 +2,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public class BinarySaveFile<T> : BinarySaveFileBase where T : ISaveData, new() 
     {

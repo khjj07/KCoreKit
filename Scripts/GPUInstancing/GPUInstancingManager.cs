@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Default
+namespace KCoreKit
 {
     public class GPUInstancingManager : Singleton<GPUInstancingManager>
     {

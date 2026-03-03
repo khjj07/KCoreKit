@@ -3,7 +3,7 @@ using System.Reflection;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class TweenPresetAttribute : System.Attribute

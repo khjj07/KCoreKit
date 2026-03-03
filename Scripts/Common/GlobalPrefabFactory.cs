@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     [CreateAssetMenu(fileName = "GlobalPrefabManager", menuName = "Default/Common/GlobalPrefabManager")]
     public class GlobalPrefabFactory : SingletonAsset<GlobalPrefabFactory>

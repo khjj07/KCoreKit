@@ -3,7 +3,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
-namespace Default
+namespace KCoreKit
 {
 #if UNITY_EDITOR
     [CustomEditor(typeof(WidgetBase), true)]
@@ -62,13 +62,13 @@ namespace Default
             gameObject.SetActive(true);
         }
         
-        public void SetPosition(Camera camera, Vector3 position, Vector3 offset)
+        public void SetPosition(UnityEngine.Camera camera, Vector3 position, Vector3 offset)
         {
             var screenPosition = camera.WorldToScreenPoint(position + offset);
             rectTransform.anchoredPosition = screenPosition;
         }
 
-        public void SetSize(Camera camera, float  size)
+        public void SetSize(UnityEngine.Camera camera, float  size)
         {
             float scaleFactor = size / camera.orthographicSize;
             rectTransform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);

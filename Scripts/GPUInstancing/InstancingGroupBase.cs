@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public abstract class InstancingGroupBase
     {

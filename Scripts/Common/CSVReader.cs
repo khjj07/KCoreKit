@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public class CSVReader
     {

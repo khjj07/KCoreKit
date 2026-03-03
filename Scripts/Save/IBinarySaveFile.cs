@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public abstract class BinarySaveFileBase
     {

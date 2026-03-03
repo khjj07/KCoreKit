@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public abstract class InstanceBase : MonoBehaviour
     {

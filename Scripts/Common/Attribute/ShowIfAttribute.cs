@@ -7,7 +7,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
-namespace Default
+namespace KCoreKit
 {
 #if UNITY_EDITOR
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]

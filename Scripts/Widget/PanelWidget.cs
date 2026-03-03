@@ -1,4 +1,4 @@
-﻿namespace Default
+﻿namespace KCoreKit
 {
     public abstract class PanelWidget : WidgetBase
     {

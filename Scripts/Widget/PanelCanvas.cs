@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public class PanelCanvas : Singleton<PanelCanvas>
     {

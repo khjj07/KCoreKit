@@ -2,17 +2,17 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public class CameraControllerManager : Singleton<CameraControllerManager>
     {
         private List<CameraController> _cameraControllers;
         private CameraController _currentController;
-        private Camera _camera;
+        private UnityEngine.Camera _camera;
 
         public void Awake()
         {
-            _camera = Camera.main;
+            _camera = UnityEngine.Camera.main;
             _cameraControllers = GetComponentsInChildren<CameraController>().ToList();
         }
 
@@ -39,7 +39,7 @@ namespace Default
             }
         }
 
-        public static Camera GetCamera()
+        public static UnityEngine.Camera GetCamera()
         {
             return GetInstance()._camera;
         }

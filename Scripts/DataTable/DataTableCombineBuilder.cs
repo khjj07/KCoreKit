@@ -3,12 +3,12 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public static class DataTableCombineBuilder
     {
         [MenuItem("DataTable/Build All")]
-        public static void Build()
+        public static void BuildAll()
         {
             string[] guids = AssetDatabase.FindAssets("t:DataTable");
 

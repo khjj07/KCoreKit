@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public class NameTagWidget : FollowTransformWidget
     {

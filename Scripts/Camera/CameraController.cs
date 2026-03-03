@@ -2,7 +2,7 @@
 using Unity.Cinemachine;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     [Serializable]
     public class CameraControllerOption

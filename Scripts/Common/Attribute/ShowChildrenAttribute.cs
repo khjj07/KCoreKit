@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     // 이 어트리뷰트가 붙은 필드는 PropertyDrawer가 모든 내용을 표시하도록 합니다.
 public class ShowChildrenAttribute : PropertyAttribute 

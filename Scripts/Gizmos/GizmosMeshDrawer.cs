@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public class GizmosMeshDrawer : MonoBehaviour
     {
@@ -16,11 +16,11 @@ namespace Default
             scale.x = transform.localScale.x * _scale.x;
             scale.y = transform.localScale.y * _scale.y;
             scale.z = transform.localScale.z * _scale.z;
-            Gizmos.color = _color;
+            UnityEngine.Gizmos.color = _color;
             if (_wireFrame)
-                Gizmos.DrawWireMesh(_mesh, transform.position, transform.rotation, scale);
+                UnityEngine.Gizmos.DrawWireMesh(_mesh, transform.position, transform.rotation, scale);
             else
-                Gizmos.DrawMesh(_mesh, transform.position, transform.rotation, scale);
+                UnityEngine.Gizmos.DrawMesh(_mesh, transform.position, transform.rotation, scale);
         }
 #endif
     }

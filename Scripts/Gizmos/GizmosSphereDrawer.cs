@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Default
+namespace KCoreKit
 {
     public class GizmosSphereDrawer : MonoBehaviour
     {
@@ -11,11 +11,11 @@ namespace Default
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            Gizmos.color = _color;
+            UnityEngine.Gizmos.color = _color;
             if (_wireFrame)
-                Gizmos.DrawWireSphere(transform.position, size);
+                UnityEngine.Gizmos.DrawWireSphere(transform.position, size);
             else
-                Gizmos.DrawSphere(transform.position, size);
+                UnityEngine.Gizmos.DrawSphere(transform.position, size);
         }
 #endif
     }

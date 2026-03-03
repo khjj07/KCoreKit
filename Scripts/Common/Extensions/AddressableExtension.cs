@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace Default
+namespace KCoreKit
 {
     public static class AddressableExtension
     {

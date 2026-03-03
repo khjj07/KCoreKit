@@ -1,6 +1,6 @@
 using System;
 
-namespace Default
+namespace KCoreKit
 {
 
     [Serializable]
