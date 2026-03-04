@@ -1,0 +1,3 @@
+# Dependencies
+  * Addressable
+  * Dotween
