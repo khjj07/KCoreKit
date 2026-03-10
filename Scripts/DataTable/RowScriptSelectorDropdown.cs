@@ -22,21 +22,18 @@ namespace KCoreKit
         protected override AdvancedDropdownItem BuildRoot()
         {
             var root = new AdvancedDropdownItem("Select Row Script");
-
-            // DataTableRowBase를 상속받은 모든 타입 가져오기
+            
             var types = TypeCache.GetTypesDerivedFrom<DataTableRowBase>()
                 .Where(t => !t.IsAbstract && !t.IsInterface);
 
             foreach (var type in types)
             {
-                // 타입 이름으로 프로젝트 내 MonoScript 에셋 찾기
                 var assetGuids = AssetDatabase.FindAssets($"{type.Name} t:MonoScript");
                 foreach (var guid in assetGuids)
                 {
                     var path = AssetDatabase.GUIDToAssetPath(guid);
                     var script = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
-                
-                    // 실제 클래스 타입이 일치하는지 재검증
+                    
                     if (script != null && script.GetClass() == type)
                     {
                         root.AddChild(new ScriptItem(type.Name, script));

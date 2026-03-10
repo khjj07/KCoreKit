@@ -19,18 +19,15 @@ namespace KCoreKit
         public float positionSpeed = 1;
         public Vector3 beginPosition;
         public Vector3 endPosition;
-
         public Ease positionEase;
 
         [Header("Rotation")]
         public float rotationSpeed = 1;
         public Vector3 beginRotation;
         public Vector3 endRotation;
-
         public Ease rotationEase;
 
         [Header("Color")]
-
         public float colorSpeed = 1;
         public Color beginColor = Color.black;
         public Color endColor = Color.black;

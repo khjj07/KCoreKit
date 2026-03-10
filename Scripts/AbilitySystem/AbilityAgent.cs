@@ -8,9 +8,7 @@ namespace KCoreKit
     public class AbilityAgent : MonoBehaviour
     {
         private PlayerInput _playerInput;
-        
         public List<AbilityEffectBase> effects = new List<AbilityEffectBase>();
-
         public IAbilityStats baseAbilityStats;
         public IAbilityStats currentAbilityStats;
 
@@ -44,7 +42,6 @@ namespace KCoreKit
             ActivateAllEffect();
         }
         
-
         public AbilityEffectBase GetEffect(string name)
         {
             return effects.Find(x => x.name == name);

@@ -8,8 +8,7 @@ namespace KCoreKit
         
         protected Mesh instanceMesh;
         protected Material[] instanceMaterials;
-
-        // ✅ Double Buffer
+        
         private ComputeBuffer[] drawDataBuffers = new ComputeBuffer[2];
         private int activeBufferIndex = 0;
 
@@ -85,10 +84,7 @@ namespace KCoreKit
                 drawDataBuffers[newBufferIndex]?.Release();
                 drawDataBuffers[newBufferIndex] = buffer;
             }
-
-            // 새 데이터 GPU로 업로드
             
-
             // 인스턴스 수 반영
             for (int i = 0; i < instanceMaterials.Length; i++)
             {

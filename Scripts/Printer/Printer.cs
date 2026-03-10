@@ -13,7 +13,7 @@ namespace KCoreKit
         [SerializeField]
         private Letter[] letters;
 
-        private Sequence sequence;
+        private Sequence _sequence;
         private TextMeshProUGUI _textComponent;
 
         public void Awake()
@@ -24,7 +24,7 @@ namespace KCoreKit
         {
             letters = GenerateLetter(text);
             _textComponent.text = GenerateText();
-            sequence = GenerateSequence(letters);
+            _sequence = GenerateSequence(letters);
         }
 
         private string GenerateText()
@@ -40,7 +40,7 @@ namespace KCoreKit
         public void Print(TweenCallback callback = null)
         {
             
-            sequence.Play().OnComplete(() =>
+            _sequence.Play().OnComplete(() =>
             {
                 if (callback != null)
                 {
@@ -51,10 +51,10 @@ namespace KCoreKit
 
         public void Stop()
         {
-            if (sequence != null)
+            if (_sequence != null)
             {
-                sequence.Kill();
-                sequence = null;
+                _sequence.Kill();
+                _sequence = null;
             }
             foreach (var letter in letters)
             {

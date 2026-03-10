@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 namespace KCoreKit
 {
-
     [CustomEditor(typeof(PrinterEditor))]
     public class PrinterEditorInspector : Editor
     {
@@ -23,17 +22,14 @@ namespace KCoreKit
             }
         }
     }
+    
     public class PrinterEditor : MonoBehaviour
     {
-        [SerializeField]
-        private string text;
+        [SerializeField] private string text;
 
-        [SerializeField]
-        private Button playButton;
-        [SerializeField]
-        private Button stopButton;
-        [SerializeField]
-        private TMP_InputField textInputField;
+        [SerializeField] private Button playButton;
+        [SerializeField] private Button stopButton;
+        [SerializeField] private TMP_InputField textInputField;
 
         private Printer _printer;
 
@@ -42,7 +38,7 @@ namespace KCoreKit
             playButton.onClick.AddListener(OnPlayButtonClick);
             stopButton.onClick.AddListener(OnStopButtonClick);
             textInputField.onValueChanged.AddListener(OnTextChanged);
-            textInputField.text=text;
+            textInputField.text = text;
         }
 
         public void OnPlayButtonClick()
@@ -65,7 +61,7 @@ namespace KCoreKit
             _printer = GetComponent<Printer>();
             _printer.Stop();
             _printer.PreLoad(text);
-            _printer.Print(() => { UnityEngine.Debug.Log("end");});
+            _printer.Print(() => { UnityEngine.Debug.Log("end"); });
         }
     }
 }

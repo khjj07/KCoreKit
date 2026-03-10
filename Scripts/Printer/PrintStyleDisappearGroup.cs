@@ -23,11 +23,9 @@ namespace KCoreKit
         [Header("Rotation")]
         public float rotationSpeed = 1;
         public Vector3 endRotation;
-
         public Ease rotationEase;
 
         [Header("Color")]
-
         public float colorSpeed = 1;
         public Color endColor = Color.black;
         public Ease colorEase;

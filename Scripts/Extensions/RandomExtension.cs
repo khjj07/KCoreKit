@@ -12,6 +12,7 @@ namespace KCoreKit
         {
             random = new Random(seed);
         }
+        
         public static T GetRandomElement<T>(this IList<T> array)
         {
             return array.OrderBy(x => random.Next()).First();

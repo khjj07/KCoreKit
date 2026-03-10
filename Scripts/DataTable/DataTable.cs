@@ -4,8 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
+#endif
+
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -190,26 +194,7 @@ namespace KCoreKit
             return Selection.activeObject is DataTable;
         }
     }
-
-    [CustomEditor(typeof(DataTableRowBase), true)]
-    public class DataTableRowBaseInspector : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            GUI.enabled = false;
-            base.OnInspectorGUI();
-            GUI.enabled = true;
-        }
-    }
-    
 #endif
-
-
-    public abstract class DataTableRowBase : ScriptableObject
-    {
-        public string id;
-        public bool isEnable;
-    }
 
     public class DataTable : ScriptableObject
     {
@@ -291,8 +276,7 @@ namespace KCoreKit
                 dataType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
 
             List<string> headers = new List<string>();
-
-            // GenerateData 로직에 따라 첫 번째 컬럼은 "id"라고 가정하고 추가
+            
             headers.Add("id");
 
             foreach (FieldInfo field in allFields)
@@ -335,7 +319,7 @@ namespace KCoreKit
                     EditorGUIUtility.PingObject(newAsset);
                 }
 
-                Debug.Log($"✅ CSV 템플릿이 성공적으로 저장되었습니다: {finalPath}");
+                Debug.Log($"✅ CSV 템플릿 생성 성공: {finalPath}");
 
                 return newAsset;
             }
@@ -346,7 +330,7 @@ namespace KCoreKit
 
             return null;
         }
-
+    
         public async Task UpdateData(TextAsset csvAsset, Action<object, Dictionary<string, string>> customAction)
         {
             rowTypeName = GetRowType().AssemblyQualifiedName;

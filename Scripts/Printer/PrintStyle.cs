@@ -17,13 +17,12 @@ namespace KCoreKit
     [CreateAssetMenu(menuName = "Printer/Print Style", fileName = "new Print Style")]
     public class PrintStyle : ScriptableObject
     {
-  
-        public string name = "default";
-
         public AdvancedPrintOption option;
-
+        [BigHeader("Appear")]
         public PrintStyleAppearGroup appear;
+        [BigHeader("Repeat")]
         public PrintStyleRepeatGroup repeat;
+        [BigHeader("Disappear")]
         public PrintStyleDisappearGroup disappear;
     }
 }

@@ -25,7 +25,6 @@ namespace KCoreKit
         public Ease rotationEase;
 
         [Header("Color")]
-
         public float colorSpeed = 1;
         public Color endColor = Color.black;
         public Ease colorEase;
