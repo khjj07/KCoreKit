@@ -1,5 +1,7 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace KCoreKit
@@ -12,5 +14,10 @@ namespace KCoreKit
         
         [HideInInspector]
         public TMP_Text label => GetComponentInChildren<TMP_Text>(true);
+
+        public void AddOnClickAction(UnityAction action)
+        {
+            button.onClick.AddListener(action);
+        }
     }
 }
