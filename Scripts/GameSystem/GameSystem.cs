@@ -6,14 +6,14 @@ using UnityEngine;
 namespace KCoreKit
 {
     
-    public class GameSystem : MonoBehaviour
+    public class GameSystem : Singleton<GameSystem>
     {
-        private static GameSubSystemBase[] _subSystems;
+        private static IGameSubSystem[] _subSystems;
         private static bool _isRunning = false;
 
         public void Awake()
         {
-            _subSystems = GetComponentsInChildren<GameSubSystemBase>();
+            _subSystems = GetComponentsInChildren<IGameSubSystem>(true);
             foreach (var subSystem in _subSystems)
             {
                 subSystem.Setup(this);
@@ -34,7 +34,7 @@ namespace KCoreKit
         {
             foreach (var subSystem in _subSystems)
             {
-                subSystem.OnInitialize();
+                yield return subSystem.OnInitialize();
             }
 
             _isRunning = true;
@@ -43,7 +43,7 @@ namespace KCoreKit
             {
                 foreach (var subSystem in _subSystems)
                 {
-                   subSystem.OnUpdate();
+                    yield return subSystem.OnUpdate();
                 }
 
                 yield return new WaitForEndOfFrame();

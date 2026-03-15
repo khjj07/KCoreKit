@@ -97,7 +97,7 @@ namespace KCoreKit
             return result;
         }
 
-        public override void OnInitialize()
+        public override IEnumerator OnInitialize()
         {
             _dataTableDictionary = new Dictionary<Type, List<DataTable>>();
             foreach (var asset in dataTables)
@@ -112,13 +112,10 @@ namespace KCoreKit
                 {
                     _dataTableDictionary.TryAdd(Type.GetType(type), new List<DataTable>() { asset });
                 }
-               
             }
-        }
 
-        public override void OnUpdate()
-        {
-           
+            yield return null;
         }
+        
     }
 }

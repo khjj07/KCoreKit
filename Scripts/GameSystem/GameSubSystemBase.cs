@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace KCoreKit
 {
-    public abstract class GameSubSystemBase : MonoBehaviour
+    public abstract class GameSubSystemBase : MonoBehaviour, IGameSubSystem
     {
         protected GameSystem GameSystem;
         public void Setup(GameSystem gameSystem)
@@ -12,14 +12,14 @@ namespace KCoreKit
             GameSystem = gameSystem;
         }
 
-        public virtual void OnInitialize()
+        public virtual IEnumerator OnInitialize()
         {
-            
+            yield return null;
         }
 
-        public virtual void OnUpdate()
+        public virtual IEnumerator OnUpdate()
         {
-            
+            yield return null;
         }
     }
 }
