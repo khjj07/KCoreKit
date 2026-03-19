@@ -7,7 +7,7 @@ namespace KCoreKit
 {
     public static class CoroutineExtension
     {
-        public static IEnumerator WaitForTween(Tweener tween)
+        public static IEnumerator WaitForTween(Tween tween)
         {
             bool done = false;
             tween.OnComplete(() => { done = true; });
