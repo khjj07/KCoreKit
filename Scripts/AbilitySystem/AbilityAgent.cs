@@ -9,25 +9,34 @@ namespace KCoreKit
     {
         private PlayerInput _playerInput;
         public List<AbilityEffectBase> effects = new List<AbilityEffectBase>();
-        public IAbilityStats baseAbilityStats;
-        public IAbilityStats currentAbilityStats;
+        public IAbilityStats abilityStats;
 
         public void Awake()
         {
             _playerInput = FindAnyObjectByType<PlayerInput>();
         }
-        
+
         public void SetStats(IAbilityStats stats)
         {
-            baseAbilityStats = stats;
-            currentAbilityStats = stats;
+            abilityStats = stats;
         }
-        
+
+        public T GetStats<T>() where T : IAbilityStats
+        {
+            return (T)abilityStats;
+        }
+
+
         public void AddEffect(AbilityEffectBase effect)
         {
             DeactivateAllEffect();
             effects.Add(effect);
-            _playerInput.onActionTriggered += effect.OnActionTriggered;
+            effect.Setup(this);
+            if (_playerInput)
+            {
+                _playerInput.onActionTriggered += effect.OnActionTriggered;
+            }
+
             ReorderEffect();
             ResetAllStats();
             ActivateAllEffect();
@@ -37,17 +46,25 @@ namespace KCoreKit
         {
             DeactivateAllEffect();
             effects.Remove(effect);
-            _playerInput.onActionTriggered -= effect.OnActionTriggered;
+            if (_playerInput)
+            {
+                _playerInput.onActionTriggered -= effect.OnActionTriggered;
+            }
+
             ResetAllStats();
             ActivateAllEffect();
         }
-        
-        public AbilityEffectBase GetEffect(string name)
+
+        public AbilityEffectBase GetEffectByName(string name)
         {
             return effects.Find(x => x.name == name);
         }
-
-        public List<AbilityEffectBase> GetEffects(string tag)
+        public  List<AbilityEffectBase> GetEffectsByName(string name)
+        {
+            return effects.FindAll(x => x.name == name);
+        }
+        
+        public List<AbilityEffectBase> GetEffectsByTag(string tag)
         {
             return effects.FindAll(x => x.tag.Contains(tag));
         }
@@ -59,7 +76,7 @@ namespace KCoreKit
 
         public void ResetAllStats()
         {
-            foreach (var stat in baseAbilityStats.Get())
+            foreach (var stat in abilityStats.Get())
             {
                 stat.Reset();
             }
@@ -80,6 +97,20 @@ namespace KCoreKit
                 effect.Deactivate();
             }
         }
-     
+
+        public void ClearEffect()
+        {
+            DeactivateAllEffect();
+            foreach (var effect in effects)
+            {
+                if (_playerInput)
+                {
+                    _playerInput.onActionTriggered -= effect.OnActionTriggered;
+                }
+            }
+
+            effects.Clear();
+            ResetAllStats();
+        }
     }
 }

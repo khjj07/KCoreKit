@@ -15,18 +15,22 @@ namespace KCoreKit
         public string name;
         public AbilityAgent owner;
         public int order;
-        public int cooldown;
+        public float cooldown;
         public string[] tag;
 
         private bool _isActive;
 
-        public AbilityEffectBase(string name, AbilityAgent owner, int order, int cooldown, string[] tag)
+        public AbilityEffectBase(string name, int order, float cooldown, string[] tag)
         {
             this.name = name;
-            this.owner = owner;
             this.cooldown = cooldown;
             this.order = order;
             this.tag = tag;
+        }
+
+        public void Setup(AbilityAgent owner)
+        {
+            this.owner = owner;
         }
         
         protected virtual bool CanActiveEffect()
