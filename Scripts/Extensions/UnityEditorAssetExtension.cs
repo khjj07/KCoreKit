@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
 
-using UnityEngine;
 namespace KCoreKit
 {
-
-#if UNITY_EDITOR
     public static class UnityEditorAssetExtensions
     {
+#if UNITY_EDITOR
         public static string GetSelectedDirectoryPath()
         {
             Object selectedObject = Selection.activeObject;
