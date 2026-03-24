@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using System.IO;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
+#endif
 
+using UnityEngine;
 namespace KCoreKit
 {
+
 #if UNITY_EDITOR
     public static class UnityEditorAssetExtensions
     {
@@ -83,7 +86,7 @@ namespace KCoreKit
 
             return assets;
         }
-
+#endif
         public static void SaveAsPNG(this Texture2D @this, string path) //metodo que exporta como png
         {
             byte[] bytes = @this.EncodeToPNG();
@@ -153,5 +156,4 @@ namespace KCoreKit
             return croppedTexture;
         }
     }
-#endif
 }
