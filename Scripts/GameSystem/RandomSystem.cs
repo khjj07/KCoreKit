@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -22,7 +23,23 @@ namespace KCoreKit
             }
             return array.OrderBy(x => random.Next()).First();
         }
+        public static List<T> GetRandomElements<T>(this IList<T> array, int number)
+        {
+            // 1. 방어 코드: 소스가 없거나 요청 개수가 0 이하일 때 빈 리스트 반환
+            if (array == null || array.Count == 0 || number <= 0)
+            {
+                return new List<T>();
+            }
 
+            // 2. 요청 개수가 원본보다 많으면 원본 크기로 제한
+            int count = Math.Min(number, array.Count);
+
+            // 3. 효율적인 추출 (Fisher-Yates 셔플 응용 또는 LINQ 활용)
+            // 소규모라면 OrderBy도 괜찮지만, 아래 방식이 가독성과 범용성이 좋습니다.
+            return array.OrderBy(x => random.Next())
+                .Take(count)
+                .ToList();
+        }
         public static float Range(float min, float max)
         {
             return (float)(random.NextDouble() * (max - min) + min);
