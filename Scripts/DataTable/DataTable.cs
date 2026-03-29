@@ -480,7 +480,7 @@ namespace KCoreKit
             object result = null;
             if (elementType == typeof(string))
             {
-                result = new ReadOnlyList<string>(list.ConvertAll(x => x.ToString()));
+                result = new List<string>(list.ConvertAll(x => x.ToString()));
             }
             else if (elementType == typeof(float))
                 result = list.ConvertAll(float.Parse);
@@ -490,7 +490,7 @@ namespace KCoreKit
                 result = list.ConvertAll(bool.Parse);
             else if (elementType.IsEnum)
             {
-                Type targetListType = typeof(ReadOnlyList<>).MakeGenericType(elementType);
+                Type targetListType = typeof(List<>).MakeGenericType(elementType);
                 var targetList = Activator.CreateInstance(targetListType);
                 MethodInfo addMethod = targetListType.GetMethod("Add");
                 foreach (string item in list)
@@ -502,7 +502,7 @@ namespace KCoreKit
             }
             else if (typeof(MonoBehaviour).IsAssignableFrom(elementType))
             {
-                Type targetListType = typeof(ReadOnlyList<>).MakeGenericType(elementType);
+                Type targetListType = typeof(List<>).MakeGenericType(elementType);
                 var targetList = Activator.CreateInstance(targetListType);
                 MethodInfo addMethod = targetListType.GetMethod("Add");
                 foreach (string item in list)
@@ -515,7 +515,7 @@ namespace KCoreKit
             }
             else if (typeof(Object).IsAssignableFrom(elementType))
             {
-                Type targetListType = typeof(ReadOnlyList<>).MakeGenericType(elementType);
+                Type targetListType = typeof(List<>).MakeGenericType(elementType);
                 var targetList = Activator.CreateInstance(targetListType);
                 MethodInfo addMethod = targetListType.GetMethod("Add");
                 foreach (string item in list)
