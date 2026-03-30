@@ -47,6 +47,21 @@ namespace KCoreKit
             _dataTableDictionary.TryGetValue(typeof(T), out List<DataTable> tableList);
             return tableList!.Find(x=>x.name == tableName);
         }
+        public T FindRow<T>() where T : DataTableRowBase
+        {
+            var typeList = GetDerivedTypes(typeof(T));
+
+            foreach (var type in typeList)
+            {
+                var dtList = _dataTableDictionary[type];
+                foreach (var dt in dtList)
+                {
+                    return dt.Get<T>()[0];
+                }
+            }
+
+            return null;
+        }
         
         public T FindRow<T>(Predicate<T> predicate) where T : DataTableRowBase
         {
