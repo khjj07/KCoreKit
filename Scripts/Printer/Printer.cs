@@ -199,5 +199,10 @@ namespace KCoreKit
                 _textComponent.canvasRenderer.SetMesh(mesh);
             }
         }
+
+        public bool IsPlaying()
+        {
+            return _isPlaying;
+        }
     }
 }
