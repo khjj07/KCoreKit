@@ -17,9 +17,13 @@ namespace KCoreKit
         private bool _isPlaying;
 
 
-        public void Setup(string text)
+        public void Setup(string text,TMP_FontAsset font = null)
         {
             _textComponent = GetComponent<TMP_Text>();
+            if (font != null)
+            {
+                _textComponent.font = font;
+            }
             _letters = GenerateLetter(text);
             _textComponent.text = GenerateText();
             _appearSequence = GenerateAppearSequence(_letters);
@@ -37,11 +41,11 @@ namespace KCoreKit
             return builder.ToString();
         }
 
-        public void Print(float delay = 0,TweenCallback callback = null)
+        public Tween Print(float delay = 0,TweenCallback callback = null)
         {
             if (_isPlaying)
             {
-                return;
+                return null;
             }
 
             _isPlaying = true;
@@ -51,7 +55,7 @@ namespace KCoreKit
                 _repeatSequence.Play();
                 callback?.Invoke();
             });
-            _appearSequence.SetDelay(delay).Play();
+            return _appearSequence.SetDelay(delay).Play();
         }
 
         public void Stop()
