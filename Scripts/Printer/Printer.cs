@@ -12,7 +12,6 @@ namespace KCoreKit
     {
         private Letter[] _letters;
         private Sequence _appearSequence;
-        private Sequence _repeatSequence;
         private TMP_Text _textComponent;
         private bool _isPlaying;
 
@@ -27,7 +26,6 @@ namespace KCoreKit
             _letters = GenerateLetter(text);
             _textComponent.text = GenerateText();
             _appearSequence = GenerateAppearSequence(_letters);
-            _repeatSequence = GenerateRepeatSequence(_letters);
         }
 
         private string GenerateText()
@@ -52,7 +50,6 @@ namespace KCoreKit
             _appearSequence.OnComplete(() =>
             {
                 _isPlaying = false;
-                _repeatSequence.Play();
                 callback?.Invoke();
             });
             return _appearSequence.SetDelay(delay).Play();
@@ -64,12 +61,6 @@ namespace KCoreKit
             {
                 _appearSequence.Kill();
                 _appearSequence = null;
-            }
-
-            if (_repeatSequence != null)
-            {
-                _repeatSequence.Kill();
-                _repeatSequence = null;
             }
 
             _isPlaying = false;
@@ -84,24 +75,17 @@ namespace KCoreKit
 
         public Sequence GenerateAppearSequence(Letter[] letters)
         {
-            var sequence = DOTween.Sequence();
+            var sequence = DOTween.Sequence().Pause().SetAutoKill(false);;
             foreach (var letter in letters)
             {
-                sequence.Append(letter.AppearSequence());
+                sequence.Append(letter.AppearSequence().AppendCallback(() =>
+                {
+                    letter.RepeatSequence();
+                }));
             }
             return sequence;
         }
         
-        private Sequence GenerateRepeatSequence(Letter[] letters)
-        {
-            var sequence = DOTween.Sequence();
-            foreach (var letter in letters)
-            {
-                sequence.Append(letter.RepeatSequence());
-            }
-            return sequence;
-        }
-
         public Letter[] GenerateLetter(string text)
         {
             var setting = GlobalPrintSetting.GetInstance();

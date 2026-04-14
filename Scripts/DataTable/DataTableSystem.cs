@@ -9,13 +9,12 @@ namespace KCoreKit
 { 
     public class DataTableSystem : GameSubSystemBase
     {
-        [SerializeField]
-        private DataTable[] dataTables;
+        private DataTable[] _dataTables;
         private static Dictionary<Type, List<DataTable>> _dataTableDictionary;
 
         public void Awake()
         {
-            dataTables = Resources.LoadAll<DataTable>("");
+            _dataTables = Resources.LoadAll<DataTable>("");
         }
         
         public T FindRow<T>(string id) where T : DataTableRowBase
@@ -122,7 +121,7 @@ namespace KCoreKit
         public override IEnumerator OnInitialize()
         {
             _dataTableDictionary = new Dictionary<Type, List<DataTable>>();
-            foreach (var asset in dataTables)
+            foreach (var asset in _dataTables)
             {
                 var type = asset.rowTypeName;
                 var key = Type.GetType(type);
