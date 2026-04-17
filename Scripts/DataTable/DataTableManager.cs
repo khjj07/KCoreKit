@@ -7,19 +7,37 @@ using UnityEngine;
 
 namespace KCoreKit
 { 
-    public class DataTableSystem : GameSubSystemBase
+    public class DataTableManager : Singleton<DataTableManager>
     {
         private DataTable[] _dataTables;
+        private static bool _isLoaded;
+        public static Action onLoad;
         private static Dictionary<Type, List<DataTable>> _dataTableDictionary;
 
-        public void Awake()
+        public void Start()
         {
             _dataTables = Resources.LoadAll<DataTable>("");
+            _dataTableDictionary = new Dictionary<Type, List<DataTable>>();
+            foreach (var asset in _dataTables)
+            {
+                var type = asset.rowTypeName;
+                var key = Type.GetType(type);
+                if (key != null && _dataTableDictionary.ContainsKey(key))
+                {
+                    _dataTableDictionary[key].Add(asset);
+                }
+                else
+                {
+                    _dataTableDictionary.TryAdd(Type.GetType(type), new List<DataTable>() { asset });
+                }
+            }
+            onLoad?.Invoke();
+            _isLoaded = true;
         }
         
-        public T FindRow<T>(string id) where T : DataTableRowBase
+        public static T FindRow<T>(string id) where T : DataTableRowBase
         {
-            var typeList = GetDerivedTypes(typeof(T));
+            var typeList = GetInstance().GetDerivedTypes(typeof(T));
             T result = null;
 
             foreach (var type in typeList)
@@ -48,14 +66,14 @@ namespace KCoreKit
             return derivedTypeList;
         }
 
-        public DataTable FindTable<T>(string tableName)
+        public static DataTable FindTable<T>(string tableName)
         {
             _dataTableDictionary.TryGetValue(typeof(T), out List<DataTable> tableList);
             return tableList!.Find(x=>x.name == tableName);
         }
-        public T FindRow<T>() where T : DataTableRowBase
+        public static T FindRow<T>() where T : DataTableRowBase
         {
-            var typeList = GetDerivedTypes(typeof(T));
+            var typeList = GetInstance().GetDerivedTypes(typeof(T));
 
             foreach (var type in typeList)
             {
@@ -69,9 +87,9 @@ namespace KCoreKit
             return null;
         }
         
-        public T FindRow<T>(Predicate<T> predicate) where T : DataTableRowBase
+        public static T FindRow<T>(Predicate<T> predicate) where T : DataTableRowBase
         {
-            var typeList = GetDerivedTypes(typeof(T));
+            var typeList = GetInstance().GetDerivedTypes(typeof(T));
 
             foreach (var type in typeList)
             {
@@ -85,10 +103,10 @@ namespace KCoreKit
             return null;
         }
 
-        public List<T> FindAllRows<T>() where T : DataTableRowBase
+        public static List<T> FindAllRows<T>() where T : DataTableRowBase
         {
             var result = new List<T>();
-            var typeList = GetDerivedTypes(typeof(T));
+            var typeList = GetInstance().GetDerivedTypes(typeof(T));
             foreach (var type in typeList)
             {
                 var dtList = _dataTableDictionary[type];
@@ -101,10 +119,10 @@ namespace KCoreKit
             return result;
         }
 
-        public List<T> FindAllRows<T>(Predicate<T> predicate) where T : DataTableRowBase
+        public static List<T> FindAllRows<T>(Predicate<T> predicate) where T : DataTableRowBase
         {
             var result = new List<T>();
-            var typeList = GetDerivedTypes(typeof(T));
+            var typeList = GetInstance().GetDerivedTypes(typeof(T));
 
             foreach (var type in typeList)
             {
@@ -118,25 +136,16 @@ namespace KCoreKit
             return result;
         }
 
-        public override IEnumerator OnInitialize()
+        public static void AddOnLoadAction(Action action)
         {
-            _dataTableDictionary = new Dictionary<Type, List<DataTable>>();
-            foreach (var asset in _dataTables)
+            if (_isLoaded)
             {
-                var type = asset.rowTypeName;
-                var key = Type.GetType(type);
-                if (key != null && _dataTableDictionary.ContainsKey(key))
-                {
-                    _dataTableDictionary[key].Add(asset);
-                }
-                else
-                {
-                    _dataTableDictionary.TryAdd(Type.GetType(type), new List<DataTable>() { asset });
-                }
+                action.Invoke();
             }
-
-            yield return null;
+            else
+            {
+                onLoad += action.Invoke;
+            }
         }
-        
     }
 }

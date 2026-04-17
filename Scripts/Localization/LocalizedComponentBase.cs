@@ -5,12 +5,11 @@ namespace KCoreKit
     public abstract class LocalizedComponentBase :  MonoBehaviour
     {  
         
-        protected LocalizationSystem localizationSystem;
+        protected LocalizationManager localizationManager => LocalizationManager.GetInstance();
 
         public void Start()
         {
-            localizationSystem = GameSystem.GetInstance().GetSubSystem<LocalizationSystem>();
-            localizationSystem.OnChange += OnChange;
+            LocalizationManager.onChange += OnChange;
         }
 
         public abstract void OnChange();
