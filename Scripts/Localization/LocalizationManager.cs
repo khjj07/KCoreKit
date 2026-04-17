@@ -14,34 +14,35 @@ namespace KCoreKit
         CN
     }
 
-    public class LocalizationSystem : GameSubSystemBase
+    public class LocalizationManager : Singleton<LocalizationManager>
     {
         [SerializeField] private Language defaultLanguage = Language.EN;
 
-        private Language _language;
+        private static Language _language;
 
         private List<LocalizedTextDataTableRow> _textDataTableRows;
         private List<LocalizedFontDataTableRow> _fontDataTableRows;
         private List<LocalizedSpriteDataTableRow> _spriteDataTableRows;
         private List<LocalizedPrefabDataTableRow> _prefabDataTableRows;
 
-        public Action OnChange;
+        public static Action onChange;
 
-        public override IEnumerator OnInitialize()
+        public void Start()
         {
-            var dataTableSystem = GameSystem.GetSubSystem<DataTableSystem>();
-            _textDataTableRows = dataTableSystem?.FindAllRows<LocalizedTextDataTableRow>();
-            _fontDataTableRows = dataTableSystem?.FindAllRows<LocalizedFontDataTableRow>();
-            _spriteDataTableRows = dataTableSystem?.FindAllRows<LocalizedSpriteDataTableRow>();
-            _prefabDataTableRows = dataTableSystem?.FindAllRows<LocalizedPrefabDataTableRow>();
-            SetLanguage(defaultLanguage);
-            yield return null;
+            DataTableManager.AddOnLoadAction(() =>
+            {
+                _textDataTableRows = DataTableManager.FindAllRows<LocalizedTextDataTableRow>();
+                _fontDataTableRows = DataTableManager.FindAllRows<LocalizedFontDataTableRow>();
+                _spriteDataTableRows = DataTableManager.FindAllRows<LocalizedSpriteDataTableRow>();
+                _prefabDataTableRows = DataTableManager.FindAllRows<LocalizedPrefabDataTableRow>();
+                SetLanguage(defaultLanguage);
+            });
         }
 
-        public void SetLanguage(Language language)
+        public static void SetLanguage(Language language)
         {
             _language = language;
-            OnChange?.Invoke();
+            onChange?.Invoke();
         }
 
         public Language GetLanguage()

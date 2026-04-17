@@ -88,7 +88,7 @@ namespace KCoreKit
         
         public Letter[] GenerateLetter(string text)
         {
-            var setting = GlobalPrintSetting.GetInstance();
+            var setting = PrinterManager.GetInstance();
             List<Letter> result = new List<Letter>();
             string pattern = @"<(?<tag>\w+)>(?<value>.*?)<\/\w+>|([^<>]+)";
             string pattern1 = @"<(?<tag>\w+)>(?<value>.*?)<\/\w+>";
