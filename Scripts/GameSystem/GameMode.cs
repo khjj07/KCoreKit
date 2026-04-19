@@ -6,17 +6,17 @@ using UnityEngine;
 namespace KCoreKit
 {
     
-    public class GameSystem : Singleton<GameSystem>
+    public class GameMode : Singleton<GameMode>
     {
-        private static IGameSubSystem[] _subSystems;
+        private static IGameSubMode[] _subModes;
         private static bool _isRunning = false;
 
         public void Awake()
         {
-            _subSystems = GetComponentsInChildren<IGameSubSystem>(true);
-            foreach (var subSystem in _subSystems)
+            _subModes = GetComponentsInChildren<IGameSubMode>(true);
+            foreach (var subMode in _subModes)
             {
-                subSystem.Setup(this);
+                subMode.Setup(this);
             }
         }
 
@@ -25,14 +25,14 @@ namespace KCoreKit
             StartCoroutine(Run());
         }
 
-        public T GetSubSystem<T>() where T : class
+        public static T GetSubSystem<T>() where T : class
         {
-            return Array.Find(_subSystems, s => s is T) as T;
+            return Array.Find(_subModes, s => s is T) as T;
         }
         
         public static IEnumerator Run()
         {
-            foreach (var subSystem in _subSystems)
+            foreach (var subSystem in _subModes)
             {
                 yield return subSystem.OnInitialize();
             }
@@ -41,7 +41,7 @@ namespace KCoreKit
             
             while (_isRunning)
             {
-                foreach (var subSystem in _subSystems)
+                foreach (var subSystem in _subModes)
                 {
                     yield return subSystem.OnUpdate();
                 }

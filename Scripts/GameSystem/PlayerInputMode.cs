@@ -12,7 +12,7 @@ namespace Streams
         Canceled
     }
     [RequireComponent(typeof(PlayerInput))]
-    public class PlayerInputSystem : GameSubSystemBase
+    public class PlayerInputMode : GameSubModeBase
     {
         private PlayerInput _playerInput;
 

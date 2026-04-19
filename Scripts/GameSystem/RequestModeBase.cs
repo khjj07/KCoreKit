@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace KCoreKit
 {
-    public abstract class RequestSystemBase : GameSubSystemBase
+    public abstract class RequestModeBase : GameSubModeBase
     {
         private Queue<IRequest> _requestQueue = new Queue<IRequest>();
         [SerializeField] private int maxRequestPerFrame = 10;

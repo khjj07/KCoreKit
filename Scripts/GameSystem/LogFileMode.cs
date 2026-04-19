@@ -3,7 +3,7 @@ using System.IO;
 
 namespace KCoreKit
 {
-    public class LogFileSystem : GameSubSystemBase
+    public class LogFileMode : GameSubModeBase
     {
         public void CreateLogFile(string path, string text)
         {

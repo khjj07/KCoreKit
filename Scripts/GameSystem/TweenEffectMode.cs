@@ -3,7 +3,7 @@ using DG.Tweening;
 
 namespace KCoreKit
 {
-    public class TweenEffectSystem : GameSubSystemBase
+    public class TweenEffectMode : GameSubModeBase
     {
         private Dictionary<string, List<Tween>> _tweenEffects = new();
 
