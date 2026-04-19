@@ -3,7 +3,7 @@ using KCoreKit;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Streams
+namespace KCoreKit
 {
     public enum PlayerActionType
     {
