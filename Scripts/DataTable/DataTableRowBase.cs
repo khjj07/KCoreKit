@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace KCoreKit
@@ -19,8 +20,20 @@ namespace KCoreKit
     
     public abstract class DataTableRowBase : ScriptableObject
     {
+        [SerializeField, HideInInspector]
+        private Dictionary<string, string> rawData;
         public string id;
         public bool isEnable;
+        
+        public void SetRawData(Dictionary<string, string> row)
+        {
+            rawData = row;
+        }
+
+        public Dictionary<string, string> GetRawData()
+        {
+            return rawData;
+        }
     }
 
 }
