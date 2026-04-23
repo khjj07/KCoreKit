@@ -337,6 +337,7 @@ namespace KCoreKit
             var newList = new List<DataTableRowBase>();
             List<Dictionary<string, string>> csv = CSVReader.Read(csvAsset);
 
+            
             int rowCount = 1;
             foreach (var row in csv)
             {
@@ -346,14 +347,14 @@ namespace KCoreKit
                 }
                 
                 DataTableRowBase asset = dataList.Find(x => x.id == row["id"]);
-                
+              
                 if (!asset)
                 {
                     asset = CreateInstance(rowScript.GetClass()) as DataTableRowBase;
                     AssetDatabase.AddObjectToAsset(asset, this);
                     EditorUtility.SetDirty(this);
                 }
-
+                asset.SetRawData(row);
                 Type type = rowScript.GetClass();
                 FieldInfo[] allFields =
                     type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);

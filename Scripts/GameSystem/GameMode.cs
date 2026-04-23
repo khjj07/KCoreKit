@@ -25,7 +25,7 @@ namespace KCoreKit
             StartCoroutine(Run());
         }
 
-        public static T GetSubSystem<T>() where T : class
+        public static T GetSubMode<T>() where T : class
         {
             return Array.Find(_subModes, s => s is T) as T;
         }
