@@ -9,8 +9,9 @@ namespace KCoreKit
         private TMP_Text _textComponent;
         public string key;
       
-        public void Awake()
+        public override void Awake()
         {
+            base.Awake();
             _textComponent = GetComponent<TMP_Text>();
         }
         
@@ -19,6 +20,5 @@ namespace KCoreKit
             _textComponent.font = localizationManager.GetFontAsset();
             _textComponent.text = localizationManager.GetLocalizedText(key);
         }
-        
     }
 }

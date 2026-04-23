@@ -7,9 +7,14 @@ namespace KCoreKit
         
         protected LocalizationManager localizationManager => LocalizationManager.GetInstance();
 
-        public void Awake()
+        public virtual void Awake()
         {
             LocalizationManager.onChange += OnChange;
+        }
+
+        public void OnDestroy()
+        {
+            LocalizationManager.onChange -= OnChange;
         }
 
         public abstract void OnChange();

@@ -10,8 +10,9 @@ namespace KCoreKit
         private Image _image;
         public string key;
       
-        public void Awake()
+        public override void Awake()
         {
+            base.Awake();
             _image = GetComponent<Image>();
         }
 

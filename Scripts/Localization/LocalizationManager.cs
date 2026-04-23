@@ -27,7 +27,7 @@ namespace KCoreKit
 
         public static Action onChange;
 
-        public void Start()
+        public void Awake()
         {
             DataTableManager.AddOnLoadAction(() =>
             {
