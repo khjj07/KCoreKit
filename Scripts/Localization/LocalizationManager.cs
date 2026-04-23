@@ -24,19 +24,25 @@ namespace KCoreKit
         private List<LocalizedFontDataTableRow> _fontDataTableRows;
         private List<LocalizedSpriteDataTableRow> _spriteDataTableRows;
         private List<LocalizedPrefabDataTableRow> _prefabDataTableRows;
+        private bool _isLoaded;
 
         public static Action onChange;
 
         public void Awake()
         {
-            DataTableManager.AddOnLoadAction(() =>
+            if (!_isLoaded)
             {
-                _textDataTableRows = DataTableManager.FindAllRows<LocalizedTextDataTableRow>();
-                _fontDataTableRows = DataTableManager.FindAllRows<LocalizedFontDataTableRow>();
-                _spriteDataTableRows = DataTableManager.FindAllRows<LocalizedSpriteDataTableRow>();
-                _prefabDataTableRows = DataTableManager.FindAllRows<LocalizedPrefabDataTableRow>();
-                SetLanguage(defaultLanguage);
-            });
+                _isLoaded = true;
+                DataTableManager.AddOnLoadAction(() =>
+                {
+                    _textDataTableRows = DataTableManager.FindAllRows<LocalizedTextDataTableRow>();
+                    _fontDataTableRows = DataTableManager.FindAllRows<LocalizedFontDataTableRow>();
+                    _spriteDataTableRows = DataTableManager.FindAllRows<LocalizedSpriteDataTableRow>();
+                    _prefabDataTableRows = DataTableManager.FindAllRows<LocalizedPrefabDataTableRow>();
+                    SetLanguage(defaultLanguage);
+                });
+            }
+            
         }
 
         public static void SetLanguage(Language language)
