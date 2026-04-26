@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace KCoreKit
 {
-    public interface IAbilityStats 
+    public interface IAbilityStatSet 
     {
         IEnumerable<AbilityStat> Get();
     }

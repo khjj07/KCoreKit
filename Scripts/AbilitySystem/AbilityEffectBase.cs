@@ -15,15 +15,12 @@ namespace KCoreKit
         public string name;
         public AbilityAgent owner;
         public int order;
-        public float cooldown;
         public string[] tag;
-
         private bool _isActive;
 
-        public AbilityEffectBase(string name, int order, float cooldown, string[] tag)
+        public AbilityEffectBase(string name, int order, string[] tag)
         {
             this.name = name;
-            this.cooldown = cooldown;
             this.order = order;
             this.tag = tag;
         }

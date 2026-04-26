@@ -45,7 +45,7 @@ namespace KCoreKit
             currentValue += value;
         }
         
-        public void Substract(float value)
+        public void Subtract(float value)
         {
             currentValue -= value;
         }
