@@ -22,7 +22,6 @@ namespace KCoreKit
             return (T)abilityStatSet;
         }
         
-
         public void RemoveEffect(AbilityEffect effect)
         {
             effects.Remove(effect.id);
@@ -49,9 +48,9 @@ namespace KCoreKit
             effect.Setup(this);
         }
 
-        public IEnumerator ExecuteEffect<TArgument>(string id,TArgument argumentData)
+        public bool ExecuteEffect<TProcessResult>(string id,ref TProcessResult argumentData) where TProcessResult : class
         {
-           yield return effects[id].TryExecute(argumentData);
+           return effects[id].TryExecute(argumentData);
         }
     }
 }

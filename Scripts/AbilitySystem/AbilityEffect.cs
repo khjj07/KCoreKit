@@ -53,17 +53,16 @@ namespace KCoreKit
         }
 
 
-        public IEnumerator InvokeAction<TArgumentData>(TArgumentData argumentData)
+        public void InvokeAction<TProcessResult>(ref TProcessResult argumentData)
         {
             for (int i = 0; i < actionMethods.Count; i++)
             {
-                yield return (IEnumerator)actionMethods[i].Invoke(null,
-                    new object[] { this, actionProperties[i], argumentData });
+               actionMethods[i].Invoke(null, new object[] { this, actionProperties[i], argumentData });
             }
         }
 
 
-        public bool EvaluateCondition<TArgumentData>(TArgumentData argumentData)
+        public bool EvaluateCondition<TArgumentData>(ref TArgumentData argumentData)
         {
             var result = false;
             for (int i = 0; i < orConditionMethods.Count; i++)
@@ -82,12 +81,15 @@ namespace KCoreKit
         }
 
 
-        public IEnumerator TryExecute<TArgument>(TArgument argumentData)
+        public bool TryExecute<TProcessResult>(TProcessResult result) where TProcessResult : class
         {
-            if (EvaluateCondition(argumentData))
+            if (EvaluateCondition(ref result))
             {
-                yield return InvokeAction(argumentData);
+                InvokeAction(ref result);
+                return true;
             }
+
+            return false;
         }
     }
 }
