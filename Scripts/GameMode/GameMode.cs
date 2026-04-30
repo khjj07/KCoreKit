@@ -8,6 +8,7 @@ namespace KCoreKit
     
     public class GameMode : Singleton<GameMode>
     {
+        private static bool isInitialized;
         private static IGameSubMode[] _subModes;
         private static bool _isRunning = false;
 
@@ -29,6 +30,11 @@ namespace KCoreKit
         {
             return Array.Find(_subModes, s => s is T) as T;
         }
+
+        public static IEnumerator WaitUntilInitialized()
+        {
+            yield return new WaitUntil(() => isInitialized);
+        }
         
         public static IEnumerator Run()
         {
@@ -37,6 +43,7 @@ namespace KCoreKit
                 yield return subSystem.OnInitialize();
             }
 
+            isInitialized = true;
             _isRunning = true;
             
             while (_isRunning)
