@@ -23,15 +23,15 @@ namespace KCoreKit
         public AbilityEffect(string id)
         {
             this.id = id;
+            orConditionMethods = new List<List<MethodInfo>>();
+            conditionProperties = new List<Dictionary<string, string>>();
+            actionMethods = new List<MethodInfo>();
+            actionProperties = new List<Dictionary<string, string>>();
         }
         
         public void Setup(AbilityAgent owner)
         {
             this.owner = owner;
-            orConditionMethods = new List<List<MethodInfo>>();
-            conditionProperties = new List<Dictionary<string, string>>();
-            actionMethods = new List<MethodInfo>();
-            actionProperties = new List<Dictionary<string, string>>();
         }
         
         public void AddNewOrConditionGroup()
