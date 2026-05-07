@@ -6,6 +6,7 @@ namespace KCoreKit
     {
         public abstract void Setup(GameMode gameMode);
         public abstract IEnumerator OnInitialize();
+        
         public abstract IEnumerator OnUpdate();
     }
 }

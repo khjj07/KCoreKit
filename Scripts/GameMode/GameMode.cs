@@ -38,19 +38,18 @@ namespace KCoreKit
         
         public static IEnumerator Run()
         {
-            foreach (var subSystem in _subModes)
+            foreach (var subMode in _subModes)
             {
-                yield return subSystem.OnInitialize();
+                yield return subMode.OnInitialize();
             }
-
             isInitialized = true;
             _isRunning = true;
             
             while (_isRunning)
             {
-                foreach (var subSystem in _subModes)
+                foreach (var subMode in _subModes)
                 {
-                    yield return subSystem.OnUpdate();
+                    yield return subMode.OnUpdate();
                 }
 
                 yield return new WaitForEndOfFrame();

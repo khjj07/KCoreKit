@@ -19,8 +19,6 @@ namespace KCoreKit
             {
                 if (GUILayout.Button("Hide"))
                 {
-                    widgetBase.canvasGroup = widgetBase.GetComponent<CanvasGroup>();
-                    widgetBase.rectTransform = widgetBase.GetComponent<RectTransform>();
                     widgetBase.Hide();
                 }
             }
@@ -28,8 +26,6 @@ namespace KCoreKit
             {
                 if (GUILayout.Button("Show"))
                 {
-                    widgetBase.canvasGroup = widgetBase.GetComponent<CanvasGroup>();
-                    widgetBase.rectTransform = widgetBase.GetComponent<RectTransform>();
                     widgetBase.Show();
                 }
             }
@@ -40,9 +36,9 @@ namespace KCoreKit
     [RequireComponent(typeof(RectTransform), typeof(CanvasGroup))]
     public class WidgetBase : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IPointerMoveHandler
     {
-        [HideInInspector] public RectTransform rectTransform;
-        [HideInInspector] public CanvasGroup canvasGroup;
-        [HideInInspector] public Canvas canvas;
+        [HideInInspector] public RectTransform rectTransform => GetComponent<RectTransform>();
+        [HideInInspector] public CanvasGroup canvasGroup => GetComponent<CanvasGroup>();
+        [HideInInspector] public Canvas canvas => GetComponentInParent<Canvas>();
         protected bool isAwake = false;
         public bool isShown => gameObject.activeSelf;
 
@@ -55,9 +51,6 @@ namespace KCoreKit
 
         public virtual void Awake()
         {
-            rectTransform = GetComponent<RectTransform>();
-            canvasGroup = GetComponent<CanvasGroup>();
-            canvas = GetComponentInParent<Canvas>();
             isAwake = true;
         }
 
