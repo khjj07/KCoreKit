@@ -8,9 +8,9 @@ namespace KCoreKit
 {
     public class AbilityAgent : MonoBehaviour
     {
-        public Dictionary<string,AbilityEffect> effects = new Dictionary<string, AbilityEffect>();
+        public Dictionary<int, AbilityEffect> effects = new Dictionary<int, AbilityEffect>();
         public IAbilityStatSet abilityStatSet;
-        
+
 
         public void SetStats(IAbilityStatSet statSet)
         {
@@ -21,10 +21,10 @@ namespace KCoreKit
         {
             return (T)abilityStatSet;
         }
-        
-        public void RemoveEffect(AbilityEffect effect)
+
+        public void RemoveEffect(int instanceId)
         {
-            effects.Remove(effect.id);
+            effects.Remove(instanceId);
         }
 
         public void ResetAllStats()
@@ -41,16 +41,17 @@ namespace KCoreKit
             ResetAllStats();
         }
 
-        public void AddEffect(string id)
+        public void AddEffect(int instanceId, string id)
         {
             var effect = AbilityManager.CreateAbilityEffect(id);
-            effects.Add(id, effect);
+            effects.Add(instanceId, effect);
             effect.Setup(this);
         }
 
-        public bool ExecuteEffect<TProcessResult>(string id,ref TProcessResult argumentData) where TProcessResult : class
+        public bool ExecuteEffect<TProcessResult>(int instanceId, ref TProcessResult argumentData)
+            where TProcessResult : class
         {
-           return effects[id].TryExecute(argumentData);
+            return effects[instanceId].TryExecute(argumentData);
         }
     }
 }
