@@ -12,33 +12,29 @@ namespace KCoreKit
         Canceled
     }
     [RequireComponent(typeof(PlayerInput))]
-    public class PlayerInputMode : GameSubModeBase
+    public class PlayerInputSystem : Singleton<PlayerInputSystem>
     {
-        private PlayerInput _playerInput;
+        private static PlayerInput PlayerInput => GetInstance().GetComponent<PlayerInput>();
+        
 
-        private void Awake()
+        public static void RegisterAction(Action<InputAction.CallbackContext> callback)
         {
-            _playerInput = GetComponentInChildren<PlayerInput>();
-        }
-
-        public void RegisterAction(Action<InputAction.CallbackContext> callback)
-        {
-            _playerInput.onActionTriggered += callback;
+            PlayerInput.onActionTriggered += callback;
         }
         
-        public void RegisterAction(string action, PlayerActionType actionType,
+        public static void RegisterAction(string action, PlayerActionType actionType,
             Action<InputAction.CallbackContext> callback)
         {
             switch (actionType)
             {
                 case PlayerActionType.Started:
-                    _playerInput.actions[action].started += callback;
+                    PlayerInput.actions[action].started += callback;
                     break;
                 case PlayerActionType.Performed:
-                    _playerInput.actions[action].performed += callback;
+                    PlayerInput.actions[action].performed += callback;
                     break;
                 case PlayerActionType.Canceled:
-                    _playerInput.actions[action].canceled += callback;
+                    PlayerInput.actions[action].canceled += callback;
                     break;
             }
         }
