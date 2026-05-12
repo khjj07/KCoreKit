@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 namespace KCoreKit
 {
-    [RequireComponent(typeof(DontDestroyAndDistinct))]
     public class LoadingManager : Singleton<LoadingManager>
     {
         private IEnumerator LoadSceneAsync(string sceneName, Action onSceneLoaded)
