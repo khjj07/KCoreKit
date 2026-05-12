@@ -12,7 +12,7 @@ namespace KCoreKit
         Canceled
     }
     [RequireComponent(typeof(PlayerInput))]
-    public class PlayerInputSystem : Singleton<PlayerInputSystem>
+    public class InputManager : Singleton<InputManager>
     {
         private static PlayerInput PlayerInput => GetInstance().GetComponent<PlayerInput>();
         
