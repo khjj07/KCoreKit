@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,7 @@ namespace KCoreKit
     {
         public Dictionary<int, AbilityEffect> effects = new Dictionary<int, AbilityEffect>();
         public IAbilityStatSet abilityStatSet;
-
-
+        
         public void SetStats(IAbilityStatSet statSet)
         {
             abilityStatSet = statSet;
@@ -47,11 +47,29 @@ namespace KCoreKit
             effects.Add(instanceId, effect);
             effect.Setup(this);
         }
-
-        public bool ExecuteEffect<TProcessResult>(int instanceId, ref TProcessResult argumentData)
-            where TProcessResult : class
+        
+        public void ExecuteEffects<TProcessResult>(string tag, ref TProcessResult argumentData)
+            where TProcessResult : IAbilityArgument
         {
-            return effects[instanceId].TryExecute(argumentData);
+            foreach (var effect in effects)
+            {
+                if (effect.Value.tags.Contains(tag))
+                {
+                    effect.Value.TryExecute(argumentData);
+                }
+            }
+           
+        }
+
+        public void ExecuteEffect<TProcessResult>(int instanceId, ref TProcessResult argumentData)
+            where TProcessResult : IAbilityArgument
+        {
+             effects[instanceId].TryExecute(argumentData);
+        }
+
+        public void RegisterExecutionCallback(int instanceId, Action<IAbilityArgument> action)
+        {
+            effects[instanceId].RegisterExecutionCallback(action);
         }
     }
 }
