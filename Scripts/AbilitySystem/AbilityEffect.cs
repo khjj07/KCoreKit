@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,7 +11,7 @@ namespace KCoreKit
     {
         public string id;
         public AbilityAgent owner;
-        public string[] tag;
+        public string[] tags;
         private bool _isActive;
         
         private List<List<MethodInfo>> orConditionMethods;
@@ -19,10 +20,12 @@ namespace KCoreKit
         
         private List<MethodInfo> actionMethods;
         private List<Dictionary<string, string>> actionProperties;
+        private Action<IAbilityArgument> _callback;
 
-        public AbilityEffect(string id)
+        public AbilityEffect(string id,List<string> tags)
         {
             this.id = id;
+            this.tags = tags.ToArray();
             orConditionMethods = new List<List<MethodInfo>>();
             conditionProperties = new List<Dictionary<string, string>>();
             actionMethods = new List<MethodInfo>();
@@ -81,15 +84,21 @@ namespace KCoreKit
         }
 
 
-        public bool TryExecute<TProcessResult>(TProcessResult result) where TProcessResult : class
+        public bool TryExecute<TProcessResult>(TProcessResult result) where TProcessResult : IAbilityArgument
         {
             if (EvaluateCondition(ref result))
             {
                 InvokeAction(ref result);
+                _callback?.Invoke(result);
                 return true;
             }
 
             return false;
+        }
+
+        public void RegisterExecutionCallback(Action<IAbilityArgument> action)
+        {
+            _callback += action;
         }
     }
 }
