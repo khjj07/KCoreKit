@@ -19,5 +19,15 @@ namespace KCoreKit
         {
             button.onClick.AddListener(action);
         }
+
+        public void RemoveOnClickAction(UnityAction action)
+        {
+            button.onClick.RemoveListener(action);
+        }
+
+        public void ClearOnClickAction()
+        {
+            button.onClick.RemoveAllListeners();
+        }
     }
 }
