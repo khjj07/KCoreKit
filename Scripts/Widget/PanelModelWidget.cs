@@ -10,7 +10,7 @@
             return model;
         }
         
-        public virtual void Construct(TModel model)
+        public virtual void Setup(TModel model)
         {
             this.model = model;
         }

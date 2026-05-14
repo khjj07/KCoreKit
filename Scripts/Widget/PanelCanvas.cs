@@ -11,12 +11,12 @@ namespace KCoreKit
         public static void Open(PanelWidget widget)
         {
             _currentPanel?.Hide();
-            _currentPanel?.transform.SetParent(_previousPanelParent, true);
+            _currentPanel?.transform.SetParent(_previousPanelParent);
             _currentPanel?.OnClose();
             _currentPanel = widget;
             _previousPanelParent = _currentPanel.transform.parent;
             _currentPanel?.Show();
-            _currentPanel?.transform.SetParent(GetInstance().transform, true);
+            _currentPanel?.transform.SetParent(GetInstance().transform);
             _currentPanel?.OnOpen();
         }
 
