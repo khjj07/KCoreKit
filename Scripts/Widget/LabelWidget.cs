@@ -7,5 +7,10 @@ namespace KCoreKit
     {
         [HideInInspector]
         public TMP_Text label =>GetComponentInChildren<TextMeshProUGUI>(true);
+
+        public void SetText(string s)
+        {
+            label.text = s;
+        }
     }
 }
