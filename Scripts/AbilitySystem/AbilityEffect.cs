@@ -73,7 +73,6 @@ namespace KCoreKit
                 var andConditionResult = true;
                 foreach (var andCondition in orConditionMethods[i])
                 {
-                    
                     andConditionResult &= (bool)andCondition.Invoke(null, new object[] { this, conditionProperties[i], argumentData });
                 }
 
@@ -92,7 +91,6 @@ namespace KCoreKit
                 _callback?.Invoke(result);
                 return true;
             }
-
             return false;
         }
 

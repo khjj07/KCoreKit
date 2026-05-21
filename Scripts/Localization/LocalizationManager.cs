@@ -61,9 +61,9 @@ namespace KCoreKit
             return _textDataTableRows.Find(x => x.id == key).Get(_language);
         }
 
-        public TMP_FontAsset GetFontAsset()
+        public TMP_FontAsset GetFontAsset(int index)
         {
-            return _fontDataTableRows.Find(x => x.id == _language.ToString()).fontAsset;
+            return _fontDataTableRows.Find(x => x.language == _language.ToString() && x.index == index).fontAsset;
         }
 
         public Sprite GetLocalizedSprite(string key)

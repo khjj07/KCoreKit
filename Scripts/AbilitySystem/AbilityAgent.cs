@@ -51,11 +51,11 @@ namespace KCoreKit
         public void ExecuteEffects<TProcessResult>(string tag, ref TProcessResult argumentData)
             where TProcessResult : IAbilityArgument
         {
-            foreach (var effect in effects)
+            foreach (var effect in effects.Values.ToList())
             {
-                if (effect.Value.tags.Contains(tag))
+                if (effect.tags.Contains(tag))
                 {
-                    effect.Value.TryExecute(argumentData);
+                    effect.TryExecute(argumentData);
                 }
             }
            
