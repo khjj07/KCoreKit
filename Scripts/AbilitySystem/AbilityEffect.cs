@@ -10,6 +10,7 @@ namespace KCoreKit
     public class AbilityEffect
     {
         public string id;
+        public IAbilityProvider provider;
         public AbilityAgent owner;
         public string[] tags;
         private bool _isActive;
@@ -20,11 +21,12 @@ namespace KCoreKit
         
         private List<MethodInfo> actionMethods;
         private List<Dictionary<string, string>> actionProperties;
-        private Action<IAbilityArgument> _callback;
+        private Action<IAbilityContext> _callback;
 
-        public AbilityEffect(string id,List<string> tags)
+        public AbilityEffect(string id,IAbilityProvider provider, List<string> tags)
         {
             this.id = id;
+            this.provider = provider;
             this.tags = tags.ToArray();
             orConditionMethods = new List<List<MethodInfo>>();
             conditionProperties = new List<Dictionary<string, string>>();
@@ -83,7 +85,7 @@ namespace KCoreKit
         }
 
 
-        public bool TryExecute<TProcessResult>(TProcessResult result) where TProcessResult : IAbilityArgument
+        public bool TryExecute<TProcessResult>(TProcessResult result) where TProcessResult : IAbilityContext
         {
             if (EvaluateCondition(ref result))
             {
@@ -94,7 +96,7 @@ namespace KCoreKit
             return false;
         }
 
-        public void RegisterExecutionCallback(Action<IAbilityArgument> action)
+        public void RegisterExecutionCallback(Action<IAbilityContext> action)
         {
             _callback += action;
         }

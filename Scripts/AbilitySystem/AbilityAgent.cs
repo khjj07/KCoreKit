@@ -9,7 +9,7 @@ namespace KCoreKit
 {
     public class AbilityAgent : MonoBehaviour
     {
-        public Dictionary<int, AbilityEffect> effects = new Dictionary<int, AbilityEffect>();
+        public Dictionary<string, AbilityEffect> effects = new Dictionary<string, AbilityEffect>();
         public IAbilityStatSet abilityStatSet;
         
         public void SetStats(IAbilityStatSet statSet)
@@ -22,7 +22,7 @@ namespace KCoreKit
             return (T)abilityStatSet;
         }
 
-        public void RemoveEffect(int instanceId)
+        public void RemoveEffect(string instanceId)
         {
             effects.Remove(instanceId);
         }
@@ -41,15 +41,15 @@ namespace KCoreKit
             ResetAllStats();
         }
 
-        public void AddEffect(int instanceId, string id)
+        public void AddEffect(string instanceId, string id, IAbilityProvider provider)
         {
-            var effect = AbilityManager.CreateAbilityEffect(id);
+            var effect = AbilityManager.CreateAbilityEffect(id,provider);
             effects.Add(instanceId, effect);
             effect.Setup(this);
         }
         
         public void ExecuteEffects<TProcessResult>(string tag, ref TProcessResult argumentData)
-            where TProcessResult : IAbilityArgument
+            where TProcessResult : IAbilityContext
         {
             foreach (var effect in effects.Values.ToList())
             {
@@ -61,13 +61,13 @@ namespace KCoreKit
            
         }
 
-        public void ExecuteEffect<TProcessResult>(int instanceId, ref TProcessResult argumentData)
-            where TProcessResult : IAbilityArgument
+        public void ExecuteEffect<TProcessResult>(string instanceId, ref TProcessResult argumentData)
+            where TProcessResult : IAbilityContext
         {
              effects[instanceId].TryExecute(argumentData);
         }
 
-        public void RegisterExecutionCallback(int instanceId, Action<IAbilityArgument> action)
+        public void RegisterExecutionCallback(string instanceId, Action<IAbilityContext> action)
         {
             effects[instanceId].RegisterExecutionCallback(action);
         }

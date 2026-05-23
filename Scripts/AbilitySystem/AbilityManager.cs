@@ -27,10 +27,10 @@ namespace KCoreKit
             abilityActionDataTableRow = DataTableManager.FindAllRows<AbilityActionDataTableRow>();
         }
 
-        public static AbilityEffect CreateAbilityEffect(string id)
+        public static AbilityEffect CreateAbilityEffect(string id, IAbilityProvider provider)
         {
             var data = abilityDataList.Find(x => x.id == id);
-            var effect = new AbilityEffect(id,data.tags);
+            var effect = new AbilityEffect(id, provider,data.tags);
             //컨디션 바인딩
             foreach (var conditionId in data.abilityConditionIdList)
             {
