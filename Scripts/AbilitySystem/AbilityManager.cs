@@ -27,7 +27,7 @@ namespace KCoreKit
             abilityActionDataTableRow = DataTableManager.FindAllRows<AbilityActionDataTableRow>();
         }
 
-        public static AbilityEffect CreateAbilityEffect(string id, IAbilityProvider provider)
+        public static AbilityEffect CreateAbilityEffect(string id, AbilityProvider provider)
         {
             var data = abilityDataList.Find(x => x.id == id);
             var effect = new AbilityEffect(id, provider,data.tags);

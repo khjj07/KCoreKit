@@ -41,14 +41,14 @@ namespace KCoreKit
             ResetAllStats();
         }
 
-        public void AddEffect(string instanceId, string id, IAbilityProvider provider)
+        public void AddEffect(string instanceId, string id, AbilityProvider provider)
         {
             var effect = AbilityManager.CreateAbilityEffect(id,provider);
             effects.Add(instanceId, effect);
             effect.Setup(this);
         }
         
-        public void ExecuteEffects<TProcessResult>(string tag, ref TProcessResult argumentData)
+        public void ExecuteEffectsByTag<TProcessResult>(string tag, ref TProcessResult argumentData)
             where TProcessResult : IAbilityContext
         {
             foreach (var effect in effects.Values.ToList())
@@ -61,15 +61,20 @@ namespace KCoreKit
            
         }
 
-        public void ExecuteEffect<TProcessResult>(string instanceId, ref TProcessResult argumentData)
+        public void ExecuteEffectById<TProcessResult>(string instanceId, ref TProcessResult argumentData)
             where TProcessResult : IAbilityContext
         {
              effects[instanceId].TryExecute(argumentData);
         }
 
-        public void RegisterExecutionCallback(string instanceId, Action<IAbilityContext> action)
+        public void RegisterPreExecutionCallback(string instanceId, Action<IAbilityContext> action)
         {
-            effects[instanceId].RegisterExecutionCallback(action);
+            effects[instanceId].RegisterPreExecutionCallback(action);
+        }
+        
+        public void RegisterPostExecutionCallback(string instanceId, Action<IAbilityContext> action)
+        {
+            effects[instanceId].RegisterPostExecutionCallback(action);
         }
     }
 }
