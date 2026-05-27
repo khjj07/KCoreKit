@@ -12,7 +12,7 @@ namespace KCoreKit
         public static Action onLoad;
         private static Dictionary<Type, List<DataTable>> _dataTableDictionary;
 
-        public void Start()
+        public void Awake()
         {
             _dataTables = Resources.LoadAll<DataTable>("");
             _dataTableDictionary = new Dictionary<Type, List<DataTable>>();

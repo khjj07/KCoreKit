@@ -368,14 +368,19 @@ namespace KCoreKit
                     if (key == null) continue;
 
                     string rawValue = row[key];
+                    
+                    
                     Type fieldType = field.FieldType;
 
                     try
                     {
                         object parsedValue = null;
                         // 기본 타입 처리
-
-                        if (fieldType.IsGenericType)
+                        if (rawValue == "")
+                        {
+                            field.SetValue(asset, parsedValue);
+                        }
+                        else if (fieldType.IsGenericType)
                         {
                             parsedValue = await ProcessGenericType(fieldType, rawValue);
                             field.SetValue(asset, parsedValue);
