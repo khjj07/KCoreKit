@@ -9,21 +9,27 @@ namespace KCoreKit
     using UnityEditor;
     using UnityEditor.IMGUI.Controls;
 
-    public class RowScriptSelectorDropdown : AdvancedDropdown
+    public class MonoScriptSelectorDropdown : AdvancedDropdown
     {
         private Action<MonoScript> _onSelected;
-
-        public RowScriptSelectorDropdown(AdvancedDropdownState state, Action<MonoScript> onSelected) : base(state)
+        private Type type;
+        
+        public MonoScriptSelectorDropdown(AdvancedDropdownState state, Action<MonoScript> onSelected) : base(state)
         {
             _onSelected = onSelected;
             this.minimumSize = new Vector2(250, 300);
+        }
+
+        public void Setup(Type type)
+        {
+            this.type = type;
         }
 
         protected override AdvancedDropdownItem BuildRoot()
         {
             var root = new AdvancedDropdownItem("Select Row Script");
             
-            var types = TypeCache.GetTypesDerivedFrom<DataTableRowBase>()
+            var types = TypeCache.GetTypesDerivedFrom(type)
                 .Where(t => !t.IsAbstract && !t.IsInterface);
 
             foreach (var type in types)
@@ -43,7 +49,7 @@ namespace KCoreKit
             }
 
             if (!root.children.Any())
-                root.AddChild(new AdvancedDropdownItem("No DataTableRowBase found"));
+                root.AddChild(new AdvancedDropdownItem("No RowScript found"));
 
             return root;
         }

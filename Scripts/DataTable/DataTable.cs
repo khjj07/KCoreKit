@@ -47,7 +47,7 @@ namespace KCoreKit
                     {
                         // 버튼의 위치를 기준으로 드롭다운 출력
                         Rect rect = EditorGUILayout.GetControlRect(false, 0);
-                        var dropdown = new RowScriptSelectorDropdown(new AdvancedDropdownState(), (selectedScript) => 
+                        var dropdown = new MonoScriptSelectorDropdown(new AdvancedDropdownState(), (selectedScript) => 
                         {
                             // 선택 시 실행될 콜백
                             Undo.RecordObject(dataTable, "Select Row Script");
@@ -58,6 +58,7 @@ namespace KCoreKit
                             // 시리얼라이즈드 프로퍼티 업데이트가 필요한 경우
                             serializedObject.Update(); 
                         });
+                        dropdown.Setup(typeof(DataTableRowBase));
         
                         dropdown.Show(rect);
                     }
