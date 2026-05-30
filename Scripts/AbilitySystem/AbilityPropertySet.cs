@@ -19,7 +19,7 @@ namespace KCoreKit
             _properties.Add(key, value);
         }
 
-        public string GetPropertyString(string key,string defaultValue = "")
+        public string GetPropertyString(string key)
         {
             if (_provider.HasProperty(_properties[key]))
             {
@@ -27,7 +27,7 @@ namespace KCoreKit
                 return providerValue;
             }
 
-            return defaultValue;
+            return _properties[key];
         }
 
         public float GetPropertyFloat(string key, float defaultValue = 0)
@@ -37,9 +37,9 @@ namespace KCoreKit
             {
                 return number;
             }
-            
             if (_provider.HasProperty(_properties[key]))
             {
+             
                 var providerValue = _provider.GetPropertyFloat(_properties[key]);
                 return providerValue;
             }
@@ -49,12 +49,12 @@ namespace KCoreKit
         
         public int GetPropertyInt(string key, int defaultValue = 0)
         {
+            
             var isNumber = int.TryParse(_properties[key], out var number);
             if (isNumber)
             {
                 return number;
             }
-            
             if (_provider.HasProperty(_properties[key]))
             {
                 var providerValue = _provider.GetPropertyInt(_properties[key]);

@@ -76,32 +76,32 @@ namespace KCoreKit
             rectTransform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public virtual void OnPointerClick(PointerEventData eventData)
         {
             onPointerClickCallback?.Invoke(eventData);
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        public virtual void OnPointerEnter(PointerEventData eventData)
         {
             onPointerEnterCallback?.Invoke(eventData);
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        public virtual void OnPointerExit(PointerEventData eventData)
         {
             onPointerExitCallback?.Invoke(eventData);
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public virtual void OnPointerDown(PointerEventData eventData)
         {
             onPointerDownCallback?.Invoke(eventData);
         }
 
-        public void OnPointerUp(PointerEventData eventData)
+        public virtual void OnPointerUp(PointerEventData eventData)
         {
             onPointerUpCallback?.Invoke(eventData);
         }
 
-        public void OnPointerMove(PointerEventData eventData)
+        public virtual void OnPointerMove(PointerEventData eventData)
         {
             onPointerMoveCallback?.Invoke(eventData);
         }
