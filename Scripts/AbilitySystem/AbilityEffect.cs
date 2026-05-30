@@ -63,7 +63,7 @@ namespace KCoreKit
         {
             for (int i = 0; i < actionMethods.Count; i++)
             {
-               actionMethods[i].Invoke(null, new object[] { this, actionProperties[i], context });
+               actionMethods[i]?.Invoke(null, new object[] { this, actionProperties[i], context });
             }
         }
 
