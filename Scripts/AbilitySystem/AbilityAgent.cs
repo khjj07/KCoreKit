@@ -9,7 +9,7 @@ namespace KCoreKit
 {
     public class AbilityAgent : MonoBehaviour
     {
-        public Dictionary<string, AbilityEffect> effects = new Dictionary<string, AbilityEffect>();
+        public List<AbilityEffect> effects = new List<AbilityEffect>();
         public IAbilityStatSet abilityStatSet;
         
         public void SetStats(IAbilityStatSet statSet)
@@ -22,9 +22,10 @@ namespace KCoreKit
             return (T)abilityStatSet;
         }
 
-        public void RemoveEffect(string instanceId)
+        public void RemoveEffect(string id)
         {
-            effects.Remove(instanceId);
+            var effect = effects.Find(x => x.id == id);
+            effects.Remove(effect);
         }
 
         public void ResetAllStats()
@@ -41,17 +42,18 @@ namespace KCoreKit
             ResetAllStats();
         }
 
-        public void AddEffect(string instanceId, string id, AbilityProvider provider)
+        public void AddEffect(string id, AbilityProvider provider = null)
         {
-            var effect = AbilityManager.CreateAbilityEffect(id,provider);
-            effects.Add(instanceId, effect);
+            var effect = AbilityManager.CreateAbilityEffect(id);
             effect.Setup(this);
+            effect.SetProvider(provider);
+            effects.Add(effect);
         }
         
         public void ExecuteEffectsByTag<TProcessResult>(string tag, ref TProcessResult argumentData)
             where TProcessResult : IAbilityContext
         {
-            foreach (var effect in effects.Values.ToList())
+            foreach (var effect in effects)
             {
                 if (effect.tags.Contains(tag))
                 {
@@ -61,20 +63,20 @@ namespace KCoreKit
            
         }
 
-        public void ExecuteEffectById<TProcessResult>(string instanceId, ref TProcessResult argumentData)
+        public void ExecuteEffectById<TProcessResult>(string id, ref TProcessResult argumentData)
             where TProcessResult : IAbilityContext
         {
-             effects[instanceId].TryExecute(argumentData);
+             effects.Find(x=>x.id == id).TryExecute(argumentData);
         }
 
-        public void RegisterPreExecutionCallback(string instanceId, Action<IAbilityContext> action)
+        public void RegisterPreExecutionCallback(string id, Action<IAbilityContext> action)
         {
-            effects[instanceId].RegisterPreExecutionCallback(action);
+            effects.Find(x=>x.id == id).RegisterPreExecutionCallback(action);
         }
         
-        public void RegisterPostExecutionCallback(string instanceId, Action<IAbilityContext> action)
+        public void RegisterPostExecutionCallback(string id, Action<IAbilityContext> action)
         {
-            effects[instanceId].RegisterPostExecutionCallback(action);
+            effects.Find(x=>x.id == id).RegisterPostExecutionCallback(action);
         }
     }
 }

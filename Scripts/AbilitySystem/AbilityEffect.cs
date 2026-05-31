@@ -24,10 +24,9 @@ namespace KCoreKit
         private Action<IAbilityContext> _onPreExecute;
         private Action<IAbilityContext> _onPostExecute;
 
-        public AbilityEffect(string id,AbilityProvider provider, List<string> tags)
+        public AbilityEffect(string id, List<string> tags)
         {
             this.id = id;
-            this.provider = provider;
             this.tags = tags.ToArray();
             orConditionMethods = new List<List<MethodInfo>>();
             conditionProperties = new List<AbilityPropertySet>();
@@ -38,6 +37,11 @@ namespace KCoreKit
         public void Setup(AbilityAgent owner)
         {
             this.owner = owner;
+        }
+
+        public void SetProvider(AbilityProvider provider)
+        {
+            this.provider = provider;
         }
         
         public void AddNewOrConditionGroup()
