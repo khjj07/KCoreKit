@@ -100,7 +100,21 @@ namespace KCoreKit
 
             return null;
         }
+        public static List<T> FindAllRowsByTag<T>(string tag) where T : DataTableRowBase
+        {
+            var result = new List<T>();
+            var typeList = GetInstance().GetDerivedTypes(typeof(T));
+            foreach (var type in typeList)
+            {
+                var dtList = _dataTableDictionary[type];
+                foreach (var dt in dtList)
+                {
+                    result.AddRange(dt.FindAll<T>(x=>x.tag == tag)); 
+                }
+            }
 
+            return result;
+        }
         public static List<T> FindAllRows<T>() where T : DataTableRowBase
         {
             var result = new List<T>();

@@ -23,6 +23,7 @@ namespace KCoreKit
         [SerializeField, HideInInspector]
         private Dictionary<string, string> rawData;
         public string id;
+        public string tag;
         public bool isEnable;
         
         public void SetRawData(Dictionary<string, string> row)
