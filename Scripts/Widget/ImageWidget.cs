@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace KCoreKit
 {
     [RequireComponent(typeof(Image))]
-    public class BoxWidget : WidgetBase
+    public class ImageWidget : WidgetBase
     {
         [HideInInspector]
         public Image image =>GetComponent<Image>();

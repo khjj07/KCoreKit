@@ -64,6 +64,12 @@ namespace KCoreKit
             gameObject.SetActive(true);
         }
         
+        public void Follow(Camera camera, Transform targetTransform,Vector3 offset ,float size = 1)
+        {
+            SetPositionAccordingToWorld(camera, targetTransform.position + offset);
+            SetSizeDependOnCamera(camera, size);
+        }
+        
         public void SetPositionAccordingToWorld(UnityEngine.Camera camera, Vector3 position)
         {
             var screenPosition = camera.WorldToScreenPoint(position);

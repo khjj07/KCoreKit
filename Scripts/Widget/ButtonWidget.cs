@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace KCoreKit
 {
     [RequireComponent(typeof(Button))]
-    public class ButtonWidget : BoxWidget
+    public class ButtonWidget : ImageWidget
     {
         [HideInInspector]
         public Button button => GetComponent<Button>();
