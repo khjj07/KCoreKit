@@ -44,5 +44,10 @@ namespace KCoreKit
         {
             return properties.ContainsKey(key);
         }
+
+        public Dictionary<string, string> GetProperties()
+        {
+            return properties;
+        }
     }
 }

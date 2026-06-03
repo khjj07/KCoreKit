@@ -9,6 +9,16 @@ namespace KCoreKit
     public class PrefabManager : SingletonAsset<PrefabManager>
     {
         public List<GameObject> prefabs;
+        public List<GameObject> initialSpawnPrefabs;
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        public static void OnBeforeSceneLoad()
+        {
+            foreach (var prefab in GetInstance().initialSpawnPrefabs)
+            {
+                Instantiate(prefab);
+            }
+        }
 
         public static T Create<T>(string name = "")
         {
