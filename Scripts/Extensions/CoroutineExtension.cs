@@ -7,18 +7,6 @@ namespace KCoreKit
 {
     public static class CoroutineExtension
     {
-        public static IEnumerator WaitForTween(Tween tween)
-        {
-            bool done = false;
-            tween.OnComplete(() => { done = true; });
-            tween.Play();
-            while (!done)
-            {
-                yield return null;
-            }
-
-            yield return null;
-        }
         
         public static Task AsTask(this IEnumerator coroutine, MonoBehaviour owner)
         {       

@@ -20,7 +20,7 @@ namespace KCoreKit
 
         public override void OnChange()
         {
-            _image.sprite = localizationManager.GetLocalizedSprite(key);
+            _image.sprite = LocalizationManager.GetLocalizedSprite(key);
         }
         
     }

@@ -20,11 +20,11 @@ namespace KCoreKit
 
         private static Language _language;
 
-        private List<LocalizedTextDataTableRow> _textDataTableRows;
-        private List<LocalizedFontDataTableRow> _fontDataTableRows;
-        private List<LocalizedSpriteDataTableRow> _spriteDataTableRows;
-        private List<LocalizedPrefabDataTableRow> _prefabDataTableRows;
-        private bool _isLoaded;
+        private static List<LocalizedTextDataTableRow> _textDataTableRows;
+        private static List<LocalizedFontDataTableRow> _fontDataTableRows;
+        private static List<LocalizedSpriteDataTableRow> _spriteDataTableRows;
+        private static  List<LocalizedPrefabDataTableRow> _prefabDataTableRows;
+        private static  bool _isLoaded;
 
         public static Action onChange;
 
@@ -51,27 +51,27 @@ namespace KCoreKit
             onChange?.Invoke();
         }
 
-        public Language GetLanguage()
+        public static Language GetLanguage()
         {
             return _language;
         }
 
-        public string GetLocalizedText(string key)
+        public static string GetLocalizedText(string key)
         {
             return _textDataTableRows.Find(x => x.id == key).Get(_language);
         }
 
-        public TMP_FontAsset GetFontAsset(int index)
+        public static TMP_FontAsset GetFontAsset(int index)
         {
             return _fontDataTableRows.Find(x => x.language == _language.ToString() && x.index == index).fontAsset;
         }
 
-        public Sprite GetLocalizedSprite(string key)
+        public static Sprite GetLocalizedSprite(string key)
         {
             return _spriteDataTableRows.Find(x => x.id == key).Get(_language);
         }
 
-        public GameObject GetLocalizedPrefab(string key)
+        public static GameObject GetLocalizedPrefab(string key)
         {
             return _prefabDataTableRows.Find(x => x.id == key).Get(_language);
         }

@@ -19,9 +19,9 @@ namespace KCoreKit
         
         public override void OnChange()
         {
-            _textComponent.font = localizationManager.GetFontAsset(0);
+            _textComponent.font = LocalizationManager.GetFontAsset(0);
             _printer.Stop();
-            _printer.Setup(localizationManager.GetLocalizedText(key));
+            _printer.Setup(LocalizationManager.GetLocalizedText(key));
             _printer.Print(Random.Range(0.0f,1.0f));
         }
         

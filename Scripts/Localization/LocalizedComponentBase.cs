@@ -4,9 +4,6 @@ namespace KCoreKit
 {
     public abstract class LocalizedComponentBase :  MonoBehaviour
     {  
-        
-        protected LocalizationManager localizationManager => LocalizationManager.GetInstance();
-
         public virtual void Awake()
         {
             LocalizationManager.onChange += OnChange;
