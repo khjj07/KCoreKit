@@ -19,14 +19,14 @@ namespace KCoreKit
             {
                 return null;
             }
-            
+
             string path = AssetDatabase.GetAssetPath(selectedObject);
 
             if (string.IsNullOrEmpty(path))
             {
                 return null;
             }
-            
+
             if (AssetDatabase.IsValidFolder(path))
             {
                 return path;
@@ -90,15 +90,19 @@ namespace KCoreKit
         {
             byte[] bytes = @this.EncodeToPNG();
             File.WriteAllBytes(path, bytes);
-         
         }
-        
+
         public static Sprite ToSprite(this Texture2D @this)
         {
-          return Sprite.Create(@this, new Rect(0, 0, @this.width, @this.height), new Vector2(0.5f, 0.5f));
+            if (@this)
+            {
+                return Sprite.Create(@this, new Rect(0, 0, @this.width, @this.height), new Vector2(0.5f, 0.5f));
+            }
+
+            return null;
         }
-        
-        
+
+
         public static Texture2D ToTexture2D(this Sprite @this)
         {
             var rect = @this.textureRect;
@@ -107,10 +111,10 @@ namespace KCoreKit
             Texture2D result = new Texture2D((int)rect.width, (int)rect.height);
             result.SetPixels(pixels);
             result.Apply();
-        
+
             return result;
         }
-        
+
         public static Texture2D TrimTexture(this Texture2D @this)
         {
             Color32[] pixels = @this.GetPixels32();
@@ -148,7 +152,7 @@ namespace KCoreKit
             // 3. 새로운 텍스처 생성 및 픽셀 복사
             Texture2D croppedTexture = new Texture2D(newWidth, newHeight);
             Color[] newPixels = @this.GetPixels(minX, minY, newWidth, newHeight);
-        
+
             croppedTexture.SetPixels(newPixels);
             croppedTexture.Apply();
 

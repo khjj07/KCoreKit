@@ -12,5 +12,10 @@ namespace KCoreKit
         {
             label.text = s;
         }
+
+        public void SetFont(TMP_FontAsset font)
+        {
+            label.font = font;
+        }
     }
 }
