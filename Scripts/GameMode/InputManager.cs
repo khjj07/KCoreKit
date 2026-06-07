@@ -38,6 +38,23 @@ namespace KCoreKit
                     break;
             }
         }
+        
+        public static void UnregisterAction(string action, PlayerActionType actionType,
+            Action<InputAction.CallbackContext> callback)
+        {
+            switch (actionType)
+            {
+                case PlayerActionType.Started:
+                    PlayerInput.actions[action].started -= callback;
+                    break;
+                case PlayerActionType.Performed:
+                    PlayerInput.actions[action].performed -= callback;
+                    break;
+                case PlayerActionType.Canceled:
+                    PlayerInput.actions[action].canceled -= callback;
+                    break;
+            }
+        }
     }
 
 
