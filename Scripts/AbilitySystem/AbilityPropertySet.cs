@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace KCoreKit
 {
     public class AbilityPropertySet
     {
-        private AbilityProvider _provider;
+        private AbilityEffect _effect;
         private Dictionary<string, string> _properties = new Dictionary<string, string>();
 
-        public AbilityPropertySet(AbilityProvider provider, Dictionary<string, string> prop)
+        public AbilityPropertySet(AbilityEffect effect, Dictionary<string, string> prop)
         {
-            _provider = provider;
+            _effect = effect;
             _properties = prop;
         }
 
@@ -21,9 +22,10 @@ namespace KCoreKit
 
         public string GetPropertyString(string key)
         {
-            if (_provider.HasProperty(_properties[key]))
+            var provider = _effect.provider;
+            if (provider.HasProperty(_properties[key]))
             {
-                var providerValue = _provider.GetPropertyString(_properties[key]);
+                var providerValue = provider.GetPropertyString(_properties[key]);
                 return providerValue;
             }
 
@@ -32,15 +34,16 @@ namespace KCoreKit
 
         public float GetPropertyFloat(string key, float defaultValue = 0)
         {
+            var provider = _effect.provider;
             var isNumber = float.TryParse(_properties[key], out var number);
             if (isNumber)
             {
                 return number;
             }
-            if (_provider.HasProperty(_properties[key]))
+            if (provider.HasProperty(_properties[key]))
             {
              
-                var providerValue = _provider.GetPropertyFloat(_properties[key]);
+                var providerValue = provider.GetPropertyFloat(_properties[key]);
                 return providerValue;
             }
 
@@ -49,15 +52,15 @@ namespace KCoreKit
         
         public int GetPropertyInt(string key, int defaultValue = 0)
         {
-            
+            var provider = _effect.provider;
             var isNumber = int.TryParse(_properties[key], out var number);
             if (isNumber)
             {
                 return number;
             }
-            if (_provider.HasProperty(_properties[key]))
+            if (provider.HasProperty(_properties[key]))
             {
-                var providerValue = _provider.GetPropertyInt(_properties[key]);
+                var providerValue = provider.GetPropertyInt(_properties[key]);
                 return providerValue;
             }
 
@@ -66,15 +69,16 @@ namespace KCoreKit
         
         public bool GetPropertyBool(string key, bool defaultValue = false)
         {
+            var provider = _effect.provider;
             var isBool = bool.TryParse(_properties[key], out var boolean);
             if (isBool)
             {
                 return boolean;
             }
             
-            if (_provider.HasProperty(_properties[key]))
+            if (provider.HasProperty(_properties[key]))
             {
-                var providerValue = _provider.GetPropertyBool(_properties[key]);
+                var providerValue = provider.GetPropertyBool(_properties[key]);
                 return providerValue;
             }
 

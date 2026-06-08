@@ -53,13 +53,13 @@ namespace KCoreKit
         public void BindAndCondition(MethodInfo condition, Dictionary<string, string> prop)
         {
             currentAndConditionGroup.Add(condition);
-            conditionProperties.Add(new AbilityPropertySet(provider,prop));
+            conditionProperties.Add(new AbilityPropertySet(this,prop));
         }
 
         public void BindAction(MethodInfo action, Dictionary<string, string> prop)
         {
             actionMethods.Add(action);
-            actionProperties.Add(new AbilityPropertySet(provider,prop));
+            actionProperties.Add(new AbilityPropertySet(this,prop));
         }
 
 

@@ -53,7 +53,8 @@ namespace KCoreKit
         public void ExecuteEffectsByTag<TProcessResult>(string tag, ref TProcessResult argumentData)
             where TProcessResult : IAbilityContext
         {
-            foreach (var effect in effects)
+            var array = effects.ToArray();
+            foreach (var effect in array)
             {
                 if (effect.tags.Contains(tag))
                 {
