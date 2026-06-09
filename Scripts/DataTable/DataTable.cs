@@ -34,16 +34,20 @@ namespace KCoreKit
                 GUILayout.Space(10);
                 DrawTableFields(dataTable);
                 GUILayout.Space(10);
-                if (GUILayout.Button("테이블 업데이트", GUILayout.Height(30)))
+                if (GUILayout.Button("Refresh", GUILayout.Height(30)))
                 {
                     dataTable.UpdateData(dataTable.csv, null);
+                }
+                if (GUILayout.Button("Clear", GUILayout.Height(30)))
+                {
+                    dataTable.Clear();
                 }
             }
             else
             {
                 if (!dataTable.rowScript)
                 {
-                    if (GUILayout.Button("데이터 테이블 스크립트 선택", GUILayout.Height(25)))
+                    if (GUILayout.Button("Choose DataTableRow Script", GUILayout.Height(25)))
                     {
                         // 버튼의 위치를 기준으로 드롭다운 출력
                         Rect rect = EditorGUILayout.GetControlRect(false, 0);
@@ -68,7 +72,7 @@ namespace KCoreKit
                     GUI.enabled = false;
                     EditorGUILayout.ObjectField("monoScript", dataTable.rowScript, typeof(MonoScript), false);
                     GUI.enabled = true;
-                    if (GUILayout.Button("테이블 생성 및 연동"))
+                    if (GUILayout.Button("Generate Managing Table"))
                     {
                         dataTable.csv = dataTable.GenerateCsv();
                         AssetDatabase.SaveAssets();
@@ -205,7 +209,9 @@ namespace KCoreKit
         [ReadOnly] public TextAsset csv;
         [SerializeField] [HideInInspector] public List<DataTableRowBase> dataList = new List<DataTableRowBase>();
         [ReadOnly] public string rowTypeName;
+        
 #if UNITY_EDITOR
+        
         [MenuItem("Assets/KCoreKit/Create/DataTable")]
         public static void Create()
         {
@@ -536,11 +542,22 @@ namespace KCoreKit
 
             return result;
         }
-
+        public void Clear()
+        {
+            foreach (var row in dataList)
+            {
+                DestroyImmediate(row);
+            }
+            dataList.Clear();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
 #endif
         public string GetRowTypeName()
         {
             return rowTypeName;
         }
+
+     
     }
 }

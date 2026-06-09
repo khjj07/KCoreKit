@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace KCoreKit
 {
-    public static class DataTableCombineBuilder
+    public static class DataTableUtility
     {
-        [MenuItem("DataTable/Build All")]
-        public static void BuildAll()
+        [MenuItem("DataTable/Refresh All")]
+        public static void RefreshAll()
         {
             string[] guids = AssetDatabase.FindAssets("t:DataTable");
 
