@@ -1,18 +1,16 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-#if UNITY_EDITOR
-using System.IO;
-using UnityEditor;
-#endif
 using UnityEngine;
 using UnityEngine.Networking;
+
 #if UNITY_EDITOR
 using UnityEditor;
-using UnityEngine;
-
+#endif
 namespace KCoreKit
 {
+#if UNITY_EDITOR
     [CustomEditor(typeof(CSVRemoteManager))]
     public class CSVRemoteManagerInspector : Editor
     {
