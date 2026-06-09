@@ -108,11 +108,7 @@ namespace KCoreKit
         /// <summary>
         /// 리스트에 등록된 모든 CSV 파일을 순차적으로 동기화합니다.
         /// </summary>
-        [MenuItem("CSVRemoteManager/Refresh All")]
-        public static void RefreshAll()
-        {
-            GetInstance().SyncAllContexts();
-        }
+        
         public async Task SyncAllContexts()
         {
             Debug.Log("[CSVRemoteManager] 모든 CSV 파일 동기화 시작...");
@@ -130,6 +126,11 @@ namespace KCoreKit
         }
 
 #if UNITY_EDITOR
+        [MenuItem("CSVRemoteManager/Refresh All")]
+        public static void RefreshAll()
+        {
+            GetInstance().SyncAllContexts();
+        }
         [MenuItem("Assets/KCoreKit/Create/CSVRemoteManager")]
         public static void Create()
         {
