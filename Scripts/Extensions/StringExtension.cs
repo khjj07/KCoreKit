@@ -6,7 +6,7 @@ namespace KCoreKit
 {
     public static class StringExtension
     {
-        public static List<string> ParseStringList(this string input, char separator = '|')
+        public static List<string> ParseStringList(this string input, char separator = ',')
         {
             Debug.Log(input);
             if (string.IsNullOrWhiteSpace(input))
