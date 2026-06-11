@@ -90,7 +90,7 @@ namespace KCoreKit
         }
 
 
-        public bool TryExecute<TAbilityContext>(TAbilityContext result) where TAbilityContext : IAbilityContext
+        public bool TryExecute<TAbilityContext>(ref TAbilityContext result) where TAbilityContext : IAbilityContext
         {
             if (EvaluateCondition(ref result))
             {

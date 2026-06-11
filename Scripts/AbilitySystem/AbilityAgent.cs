@@ -58,7 +58,7 @@ namespace KCoreKit
             {
                 if (effect.tags.Contains(tag))
                 {
-                    effect.TryExecute(argumentData);
+                    effect.TryExecute(ref argumentData);
                 }
             }
            
@@ -67,7 +67,7 @@ namespace KCoreKit
         public void ExecuteEffectById<TProcessResult>(string id, ref TProcessResult argumentData)
             where TProcessResult : IAbilityContext
         {
-             effects.Find(x=>x.id == id).TryExecute(argumentData);
+             effects.Find(x=>x.id == id).TryExecute(ref argumentData);
         }
 
         public void RegisterPreExecutionCallback(string id, Action<IAbilityContext> action)
