@@ -30,7 +30,7 @@ namespace KCoreKit
         public static AbilityEffect CreateAbilityEffect(string id)
         {
             var data = abilityDataList.Find(x => x.id == id);
-            var effect = new AbilityEffect(id,data.tags);
+            var effect = new AbilityEffect(id,data.abilityTagList);
             //컨디션 바인딩
             foreach (var conditionId in data.abilityConditionIdList)
             {
