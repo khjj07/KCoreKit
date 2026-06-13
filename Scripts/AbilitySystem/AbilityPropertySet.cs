@@ -20,8 +20,13 @@ namespace KCoreKit
             _properties.Add(key, value);
         }
 
-        public string GetPropertyString(string key)
+        public string GetPropertyString(string key, string defaultValue = "")
         {
+            if (!_properties.ContainsKey(key))
+            {
+                return defaultValue;
+            }
+            
             var provider = _effect.provider;
             if (provider.HasProperty(_properties[key]))
             {
@@ -34,6 +39,10 @@ namespace KCoreKit
 
         public float GetPropertyFloat(string key, float defaultValue = 0)
         {
+            if (!_properties.ContainsKey(key))
+            {
+                return defaultValue;
+            }
             var provider = _effect.provider;
             var isNumber = float.TryParse(_properties[key], out var number);
             if (isNumber)
@@ -52,6 +61,11 @@ namespace KCoreKit
         
         public int GetPropertyInt(string key, int defaultValue = 0)
         {
+            if (!_properties.ContainsKey(key))
+            {
+                return defaultValue;
+            }
+            
             var provider = _effect.provider;
             var isNumber = int.TryParse(_properties[key], out var number);
             if (isNumber)
@@ -69,6 +83,11 @@ namespace KCoreKit
         
         public bool GetPropertyBool(string key, bool defaultValue = false)
         {
+            if (!_properties.ContainsKey(key))
+            {
+                return defaultValue;
+            }
+            
             var provider = _effect.provider;
             var isBool = bool.TryParse(_properties[key], out var boolean);
             if (isBool)
