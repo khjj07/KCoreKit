@@ -50,8 +50,8 @@ namespace KCoreKit
             effects.Add(effect);
         }
         
-        public void ExecuteEffectsByTag<TProcessResult>(string tag, ref TProcessResult argumentData)
-            where TProcessResult : IAbilityContext
+        public void ExecuteEffectsByTag<TAbilityContext>(string tag, ref TAbilityContext argumentData)
+            where TAbilityContext : IAbilityContext
         {
             var array = effects.ToArray();
             foreach (var effect in array)
@@ -64,8 +64,8 @@ namespace KCoreKit
            
         }
 
-        public void ExecuteEffectById<TProcessResult>(string id, ref TProcessResult argumentData)
-            where TProcessResult : IAbilityContext
+        public void ExecuteEffectById<TAbilityContext>(string id, ref TAbilityContext argumentData)
+            where TAbilityContext : IAbilityContext
         {
              effects.Find(x=>x.id == id).TryExecute(ref argumentData);
         }

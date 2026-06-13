@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 namespace KCoreKit
-{ 
+{
     public class DataTableManager : Singleton<DataTableManager>
     {
         private DataTable[] _dataTables;
@@ -29,10 +29,11 @@ namespace KCoreKit
                     _dataTableDictionary.TryAdd(Type.GetType(type), new List<DataTable>() { asset });
                 }
             }
+
             onLoad?.Invoke();
             _isLoaded = true;
         }
-        
+
         public static T FindRow<T>(string id) where T : DataTableRowBase
         {
             var typeList = GetInstance().GetDerivedTypes(typeof(T));
@@ -67,8 +68,9 @@ namespace KCoreKit
         public static DataTable FindTable<T>(string tableName)
         {
             _dataTableDictionary.TryGetValue(typeof(T), out List<DataTable> tableList);
-            return tableList!.Find(x=>x.name == tableName);
+            return tableList!.Find(x => x.name == tableName);
         }
+
         public static T FindRow<T>() where T : DataTableRowBase
         {
             var typeList = GetInstance().GetDerivedTypes(typeof(T));
@@ -84,7 +86,7 @@ namespace KCoreKit
 
             return null;
         }
-        
+
         public static T FindRow<T>(Predicate<T> predicate) where T : DataTableRowBase
         {
             var typeList = GetInstance().GetDerivedTypes(typeof(T));
@@ -100,7 +102,8 @@ namespace KCoreKit
 
             return null;
         }
-        public static List<T> FindAllRowsByTag<T>(string tag) where T : DataTableRowBase
+
+        public static List<T> FindRowsByTag<T>(string tag) where T : DataTableRowBase
         {
             var result = new List<T>();
             var typeList = GetInstance().GetDerivedTypes(typeof(T));
@@ -109,12 +112,32 @@ namespace KCoreKit
                 var dtList = _dataTableDictionary[type];
                 foreach (var dt in dtList)
                 {
-                    result.AddRange(dt.FindAll<T>(x=>x.tag == tag)); 
+                    result.AddRange(dt.FindAll<T>(x => x.tags.Contains(tag)));
                 }
             }
 
             return result;
         }
+
+        public static List<T> FindRowsByTags<T>(List<string> tags) where T : DataTableRowBase
+        {
+            var result = new List<T>();
+            var typeList = GetInstance().GetDerivedTypes(typeof(T));
+            foreach (var type in typeList)
+            {
+                var dtList = _dataTableDictionary[type];
+                foreach (var dt in dtList)
+                {
+                    foreach (var tag in tags)
+                    {
+                        result.AddRange(dt.FindAll<T>(x => x.tags.Contains(tag)));
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public static List<T> FindAllRows<T>() where T : DataTableRowBase
         {
             var result = new List<T>();
@@ -124,7 +147,7 @@ namespace KCoreKit
                 var dtList = _dataTableDictionary[type];
                 foreach (var dt in dtList)
                 {
-                    result.AddRange(dt.FindAll<T>()); 
+                    result.AddRange(dt.FindAll<T>());
                 }
             }
 
@@ -141,7 +164,7 @@ namespace KCoreKit
                 var dtList = _dataTableDictionary[type];
                 foreach (var dt in dtList)
                 {
-                    result.AddRange(dt.FindAll<T>(predicate)); 
+                    result.AddRange(dt.FindAll<T>(predicate));
                 }
             }
 

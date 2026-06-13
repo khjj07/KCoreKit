@@ -23,7 +23,7 @@ namespace KCoreKit
         [SerializeField, HideInInspector]
         private Dictionary<string, string> rawData;
         public string id;
-        public string tag;
+        public List<string> tags;
         public bool isEnable;
         
         public void SetRawData(Dictionary<string, string> row)
@@ -34,6 +34,19 @@ namespace KCoreKit
         public Dictionary<string, string> GetRawData()
         {
             return rawData;
+        }
+        
+        public bool ContainTags(List<string> list)
+        {
+            foreach (var tag in list)
+            {
+                if (!tags.Contains(tag))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 
