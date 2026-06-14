@@ -36,6 +36,7 @@ namespace KCoreKit
                 GUILayout.Space(10);
                 if (GUILayout.Button("Refresh", GUILayout.Height(30)))
                 {
+                    dataTable.Clear();
                     dataTable.UpdateData(dataTable.csv, null);
                 }
                 if (GUILayout.Button("Clear", GUILayout.Height(30)))
@@ -455,30 +456,6 @@ namespace KCoreKit
                 rowCount++;
             }
 
-            // 기존에 존재했으나 CSV에 없는 데이터는 제거
-            foreach (DataTableRowBase dataAsset in dataList)
-            {
-                if (!newList.Exists(x => x.id == dataAsset.id))
-                {
-                    DestroyImmediate(dataAsset, true);
-                }
-                else if (dataAsset.name == "" || dataAsset.id == "")
-                {
-                    DestroyImmediate(dataAsset, true);
-                }
-            }
-
-            //쓰레기 청소
-            var path = AssetDatabase.GetAssetPath(this);
-            var allAssets = AssetDatabase.LoadAllAssetsAtPath(path);
-            foreach (var asset in allAssets)
-            {
-                if (asset.name == "")
-                {
-                    DestroyImmediate(asset, true);
-                }
-            }
-
             dataList = newList;
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
@@ -544,13 +521,38 @@ namespace KCoreKit
         }
         public void Clear()
         {
-            foreach (var row in dataList)
+            // 1. 현재 메인 에셋의 경로를 가져옵니다. (this는 메인 스크립터블 오브젝트라고 가정)
+            string path = AssetDatabase.GetAssetPath(this);
+            if (string.IsNullOrEmpty(path))
             {
-                DestroyImmediate(row);
+                Debug.LogError("메인 에셋의 경로를 찾을 수 없습니다.");
+                return;
             }
-            dataList.Clear();
+
+            // 2. 메인 에셋을 제외한 순수 '하위 에셋'들만 모두 가져옵니다.
+            Object[] subAssets = AssetDatabase.LoadAllAssetRepresentationsAtPath(path);
+
+            // 3. 안전한 삭제를 위해 배열의 뒤에서부터 역순으로 순회하며 파괴합니다.
+            for (int i = subAssets.Length - 1; i >= 0; i--)
+            {
+                Object subAsset = subAssets[i];
+                if (subAsset != null)
+                {
+                    // 하위 에셋 관계 해제
+                    AssetDatabase.RemoveObjectFromAsset(subAsset);
+                    // 메모리 및 에셋 파괴
+                    DestroyImmediate(subAsset, true);
+                }
+            }
+
+            // 4. 만약 별도의 내부 리스트(dataList 등)를 유지하고 있었다면 비워줍니다.
+            dataList?.Clear();
+            // 5. 부모 에셋이 변경되었음을 Unity에 알리고 저장합니다.
+            EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+
+            Debug.Log($"{subAssets.Length}개의 하위 에셋을 모두 찾아서 삭제했습니다.");
         }
 #endif
         public string GetRowTypeName()
