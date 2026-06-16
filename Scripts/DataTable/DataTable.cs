@@ -360,7 +360,6 @@ namespace KCoreKit
                 {
                     asset = CreateInstance(rowScript.GetClass()) as DataTableRowBase;
                     AssetDatabase.AddObjectToAsset(asset, this);
-                    EditorUtility.SetDirty(this);
                 }
                 asset.SetRawData(row);
                 Type type = rowScript.GetClass();
@@ -451,7 +450,6 @@ namespace KCoreKit
                 }
 
                 EditorUtility.SetDirty(asset);
-                EditorUtility.SetDirty(this);
                 newList.Add(asset);
                 rowCount++;
             }
