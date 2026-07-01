@@ -70,6 +70,11 @@ namespace KCoreKit
             SetSizeDependOnCamera(camera, size);
         }
         
+        public void SetParent(Transform parent,bool worldPositionStays = false)
+        {
+            transform.SetParent(parent,worldPositionStays);
+        }
+        
         public void SetPositionAccordingToWorld(UnityEngine.Camera camera, Vector3 position)
         {
             var screenPosition = camera.WorldToScreenPoint(position);
