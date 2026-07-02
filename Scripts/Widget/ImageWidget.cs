@@ -8,5 +8,10 @@ namespace KCoreKit
     {
         [HideInInspector]
         public Image image =>GetComponent<Image>();
+
+        public void SetSprite(Sprite sprite)
+        {
+            image.sprite = sprite;
+        }
     }
 }
