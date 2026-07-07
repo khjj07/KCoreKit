@@ -27,7 +27,7 @@ namespace KCoreKit
             if (GUILayout.Button("모든 CSV 원격 동기화 (Sync All)", GUILayout.Height(30)))
             {
                 // 비동기 메서드 실행
-                _ = manager.SyncAllContexts();
+                manager.SyncAllContexts();
             }
 
             GUI.enabled = true;
@@ -51,7 +51,7 @@ namespace KCoreKit
         /// <summary>
         /// 특정 텍스트 에셋의 원격 데이터를 다운로드하여 동기화합니다.
         /// </summary>
-        public async Task DownloadAndSync(CSVRemoteContext context)
+        public void DownloadAndSync(CSVRemoteContext context)
         {
             if (context.csvFile == null || string.IsNullOrEmpty(context.remoteAddress))
             {
@@ -76,8 +76,6 @@ namespace KCoreKit
                     System.Threading.Thread.Sleep(10); 
                 }
 #endif
-                // 재생 중이거나 빌드 후 런타임 환경에서는 밀리초 단위로 안전하게 대기합니다.
-                await Task.Delay(10);
             }
 
             // 에러 체크
@@ -107,13 +105,13 @@ namespace KCoreKit
         /// 리스트에 등록된 모든 CSV 파일을 순차적으로 동기화합니다.
         /// </summary>
         
-        public async Task SyncAllContexts()
+        public void SyncAllContexts()
         {
             Debug.Log("[CSVRemoteManager] 모든 CSV 파일 동기화 시작...");
             foreach (var context in contexts)
             {
                 Debug.Log($"context :  {context.remoteAddress}, {context.csvFile.name}");
-                await DownloadAndSync(context);
+                DownloadAndSync(context);
             }
 
 #if UNITY_EDITOR
@@ -124,11 +122,13 @@ namespace KCoreKit
         }
 
 #if UNITY_EDITOR
-        [MenuItem("CSVRemoteManager/Refresh All")]
-        public static void RefreshAll()
+        [MenuItem("DataTable/Sync & Refresh All")]
+        public static void SyncAll()
         {
             GetInstance().SyncAllContexts();
+            DataTableUtility.RefreshAll();
         }
+        
         [MenuItem("Assets/KCoreKit/Create/CSVRemoteManager")]
         public static void Create()
         {
