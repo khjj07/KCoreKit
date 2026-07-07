@@ -43,7 +43,7 @@ namespace KCoreKit
         }
         public static float Range(float min, float max)
         {
-            return Next() * (max - min) + min;
+            return (float)NextDouble() * (max - min) + min;
         }
         
         public static int RangeInt(int min, int max)
