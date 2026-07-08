@@ -8,9 +8,9 @@ namespace KCoreKit
     
     public class GameMode : Singleton<GameMode>
     {
-        private static bool isInitialized;
-        private static IGameSubMode[] _subModes;
-        private static bool _isRunning = false;
+        private bool isInitialized;
+        private IGameSubMode[] _subModes;
+        private bool _isRunning = false;
 
         public void Awake()
         {
@@ -28,32 +28,39 @@ namespace KCoreKit
 
         public static T GetSubMode<T>() where T : class
         {
-            return Array.Find(_subModes, s => s is T) as T;
+            return Array.Find(GetInstance()._subModes, s => s is T) as T;
         }
 
         public static IEnumerator WaitUntilInitialized()
         {
-            yield return new WaitUntil(() => isInitialized);
+            yield return new WaitUntil(() => GetInstance().isInitialized);
         }
         
         public static IEnumerator Run()
         {
-            foreach (var subMode in _subModes)
+            var instance = GetInstance();
+            foreach (var subMode in instance._subModes)
             {
                 yield return subMode.OnInitialize();
             }
-            isInitialized = true;
-            _isRunning = true;
+            instance.isInitialized = true;
+            instance._isRunning = true;
             
-            while (_isRunning)
+            while (instance._isRunning)
             {
-                foreach (var subMode in _subModes)
+                foreach (var subMode in instance._subModes)
                 {
                     yield return subMode.OnUpdate();
                 }
 
                 yield return new WaitForEndOfFrame();
             }
+        }
+
+        public void OnDestroy()
+        {
+            isInitialized = false;
+            _isRunning = false;
         }
     }
 }
