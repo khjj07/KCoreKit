@@ -30,7 +30,8 @@ namespace KCoreKit
                 }
 
                 Debug.Log($"[BuildAll] {dt.name} 데이터 생성 시작");
-                dt.UpdateData(dt.csv,null);
+                dt.Clear();
+                dt.UpdateData(dt.csv, null);
                 Debug.Log($"[BuildAll] {dt.name} 데이터 생성 완료");
             }
         }
