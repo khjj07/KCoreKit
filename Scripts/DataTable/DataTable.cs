@@ -344,8 +344,8 @@ namespace KCoreKit
             rowTypeName = GetRowType().AssemblyQualifiedName;
             var newList = new List<DataTableRowBase>();
             List<Dictionary<string, string>> csv = CSVReader.Read(csvAsset);
+            var tasks = new List<Task>();
 
-            
             int rowCount = 1;
             foreach (var row in csv)
             {
@@ -353,9 +353,9 @@ namespace KCoreKit
                 {
                     continue;
                 }
-                
+
                 DataTableRowBase asset = dataList.Find(x => x.id == row["id"]);
-              
+
                 if (!asset)
                 {
                     asset = CreateInstance(rowScript.GetClass()) as DataTableRowBase;
@@ -375,70 +375,58 @@ namespace KCoreKit
                     if (key == null) continue;
 
                     string rawValue = row[key];
-                    
-                    
+
                     Type fieldType = field.FieldType;
 
                     try
                     {
-                        object parsedValue = null;
-                        // 기본 타입 처리
-                        if (rawValue == "")
+                        if (string.IsNullOrEmpty(rawValue))
                         {
-                            field.SetValue(asset, parsedValue);
+                            field.SetValue(asset, null);
                         }
                         else if (fieldType.IsGenericType)
                         {
-                            parsedValue = await ProcessGenericType(fieldType, rawValue);
-                            field.SetValue(asset, parsedValue);
+                            tasks.Add(ProcessGenericType(fieldType, rawValue).ContinueWith(t => field.SetValue(asset, t.Result)));
                         }
                         else
                         {
                             if (fieldType == typeof(string))
                             {
-                                parsedValue = rawValue;
-                                field.SetValue(asset, parsedValue);
+                                field.SetValue(asset, rawValue);
                             }
                             else if (fieldType == typeof(int))
                             {
-                                parsedValue = int.Parse(rawValue);
-                                field.SetValue(asset, parsedValue);
+                                field.SetValue(asset, int.Parse(rawValue));
                             }
                             else if (fieldType == typeof(float))
                             {
-                                parsedValue = float.Parse(rawValue);
-                                field.SetValue(asset, parsedValue);
+                                field.SetValue(asset, float.Parse(rawValue));
                             }
                             else if (fieldType == typeof(bool))
                             {
-                                parsedValue = bool.Parse(rawValue);
-                                field.SetValue(asset, parsedValue);
+                                field.SetValue(asset, bool.Parse(rawValue));
                             }
                             else if (fieldType.IsEnum)
                             {
-                                parsedValue = Enum.Parse(fieldType, rawValue);
-                                field.SetValue(asset, parsedValue);
+                                field.SetValue(asset, Enum.Parse(fieldType, rawValue));
                             }
                             else if (typeof(MonoBehaviour).IsAssignableFrom(fieldType))
                             {
-                                await AddressableExtension.LoadAsset<GameObject>(rawValue,
+                                tasks.Add(AddressableExtension.LoadAsset<GameObject>(rawValue,
                                     x =>
                                     {
-                                        parsedValue = x.GetComponent(fieldType);
-                                        field.SetValue(asset, parsedValue);
-                                    });
+                                        if (x != null)
+                                            field.SetValue(asset, x.GetComponent(fieldType));
+                                    }));
                             }
                             else if (typeof(Object).IsAssignableFrom(fieldType))
                             {
-                                await AddressableExtension.LoadAsset<Object>(rawValue, x =>
+                                tasks.Add(AddressableExtension.LoadAsset<Object>(rawValue, x =>
                                 {
                                     field.SetValue(asset, x);
-                                });
+                                }));
                             }
                         }
-
-
-                        Debug.Log(rawValue);
                     }
                     catch (Exception e)
                     {
@@ -448,10 +436,16 @@ namespace KCoreKit
                     customAction?.Invoke(asset, row);
                     asset.name = asset.id;
                 }
-
-                EditorUtility.SetDirty(asset);
+                
                 newList.Add(asset);
                 rowCount++;
+            }
+
+            await Task.WhenAll(tasks);
+
+            foreach (var item in newList)
+            {
+                EditorUtility.SetDirty(item);
             }
 
             dataList = newList;
