@@ -39,6 +39,7 @@ namespace KCoreKit
                     dataTable.Clear();
                     dataTable.UpdateData(dataTable.csv, null);
                 }
+
                 if (GUILayout.Button("Clear", GUILayout.Height(30)))
                 {
                     dataTable.Clear();
@@ -52,19 +53,19 @@ namespace KCoreKit
                     {
                         // 버튼의 위치를 기준으로 드롭다운 출력
                         Rect rect = EditorGUILayout.GetControlRect(false, 0);
-                        var dropdown = new MonoScriptSelectorDropdown(new AdvancedDropdownState(), (selectedScript) => 
+                        var dropdown = new MonoScriptSelectorDropdown(new AdvancedDropdownState(), (selectedScript) =>
                         {
                             // 선택 시 실행될 콜백
                             Undo.RecordObject(dataTable, "Select Row Script");
                             dataTable.rowScript = selectedScript;
                             dataTable.rowTypeName = selectedScript.GetClass().AssemblyQualifiedName;
                             EditorUtility.SetDirty(dataTable);
-            
+
                             // 시리얼라이즈드 프로퍼티 업데이트가 필요한 경우
-                            serializedObject.Update(); 
+                            serializedObject.Update();
                         });
                         dropdown.Setup(typeof(DataTableRowBase));
-        
+
                         dropdown.Show(rect);
                     }
                 }
@@ -210,9 +211,9 @@ namespace KCoreKit
         [ReadOnly] public TextAsset csv;
         [SerializeField] [HideInInspector] public List<DataTableRowBase> dataList = new List<DataTableRowBase>();
         [ReadOnly] public string rowTypeName;
-        
+
 #if UNITY_EDITOR
-        
+
         [MenuItem("Assets/KCoreKit/Create/DataTable")]
         public static void Create()
         {
@@ -250,6 +251,7 @@ namespace KCoreKit
             return rowScript.GetClass();
         }
 #endif
+
         public List<T> Get<T>() where T : DataTableRowBase
         {
             return dataList.ConvertAll<T>(x => x as T);
@@ -284,7 +286,7 @@ namespace KCoreKit
                 dataType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
 
             List<string> headers = new List<string>();
-            
+
             headers.Add("id");
 
             foreach (FieldInfo field in allFields)
@@ -319,7 +321,7 @@ namespace KCoreKit
                 // 명시적 바이트 변환 대신 문자열로 직접 저장 (유니티 표준 방식)
                 File.WriteAllText(finalPath, csvHeader, System.Text.Encoding.UTF8);
                 AssetDatabase.ImportAsset(finalPath); // Refresh보다 더 정확한 개별 임포트
-    
+
                 var newAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(finalPath);
 
                 if (newAsset != null)
@@ -338,7 +340,7 @@ namespace KCoreKit
 
             return null;
         }
-    
+
         public async Task UpdateData(TextAsset csvAsset, Action<object, Dictionary<string, string>> customAction)
         {
             rowTypeName = GetRowType().AssemblyQualifiedName;
@@ -361,6 +363,7 @@ namespace KCoreKit
                     asset = CreateInstance(rowScript.GetClass()) as DataTableRowBase;
                     AssetDatabase.AddObjectToAsset(asset, this);
                 }
+
                 asset.SetRawData(row);
                 Type type = rowScript.GetClass();
                 FieldInfo[] allFields =
@@ -386,7 +389,8 @@ namespace KCoreKit
                         }
                         else if (fieldType.IsGenericType)
                         {
-                            tasks.Add(ProcessGenericType(fieldType, rawValue).ContinueWith(t => field.SetValue(asset, t.Result)));
+                            tasks.Add(ProcessGenericType(fieldType, rawValue)
+                                .ContinueWith(t => field.SetValue(asset, t.Result)));
                         }
                         else
                         {
@@ -421,10 +425,8 @@ namespace KCoreKit
                             }
                             else if (typeof(Object).IsAssignableFrom(fieldType))
                             {
-                                tasks.Add(AddressableExtension.LoadAsset<Object>(rawValue, x =>
-                                {
-                                    field.SetValue(asset, x);
-                                }));
+                                tasks.Add(AddressableExtension.LoadAsset<Object>(rawValue,
+                                    x => { field.SetValue(asset, x); }));
                             }
                         }
                     }
@@ -436,7 +438,7 @@ namespace KCoreKit
                     customAction?.Invoke(asset, row);
                     asset.name = asset.id;
                 }
-                
+
                 newList.Add(asset);
                 rowCount++;
             }
@@ -489,10 +491,10 @@ namespace KCoreKit
                 MethodInfo addMethod = targetListType.GetMethod("Add");
                 foreach (string item in list)
                 {
-                    await AddressableExtension.LoadAsset<GameObject>(item, 
+                    await AddressableExtension.LoadAsset<GameObject>(item,
                         x => { addMethod.Invoke(targetList, new object[] { x.GetComponent(fieldType) }); });
                 }
-                
+
                 result = targetList;
             }
             else if (typeof(Object).IsAssignableFrom(elementType))
@@ -511,6 +513,7 @@ namespace KCoreKit
 
             return result;
         }
+
         public void Clear()
         {
             // 1. 현재 메인 에셋의 경로를 가져옵니다. (this는 메인 스크립터블 오브젝트라고 가정)
@@ -551,7 +554,5 @@ namespace KCoreKit
         {
             return rowTypeName;
         }
-
-     
     }
 }
