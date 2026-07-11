@@ -34,13 +34,12 @@ namespace KCoreKit
                 GUILayout.Space(10);
                 DrawTableFields(dataTable);
                 GUILayout.Space(10);
-                
                 if (GUILayout.Button("Refresh", GUILayout.Height(30)))
                 {
-                    // [수정됨] 비동기 작업 대기를 위해 별도 메서드로 분리
-                    RefreshDataAsync(dataTable);
+                    dataTable.Clear();
+                    dataTable.UpdateData(dataTable.csv, null);
                 }
-                
+
                 if (GUILayout.Button("Clear", GUILayout.Height(30)))
                 {
                     dataTable.Clear();
@@ -52,18 +51,21 @@ namespace KCoreKit
                 {
                     if (GUILayout.Button("Choose DataTableRow Script", GUILayout.Height(25)))
                     {
+                        // 버튼의 위치를 기준으로 드롭다운 출력
                         Rect rect = EditorGUILayout.GetControlRect(false, 0);
-                        var dropdown = new MonoScriptSelectorDropdown(new AdvancedDropdownState(), (selectedScript) => 
+                        var dropdown = new MonoScriptSelectorDropdown(new AdvancedDropdownState(), (selectedScript) =>
                         {
+                            // 선택 시 실행될 콜백
                             Undo.RecordObject(dataTable, "Select Row Script");
                             dataTable.rowScript = selectedScript;
                             dataTable.rowTypeName = selectedScript.GetClass().AssemblyQualifiedName;
                             EditorUtility.SetDirty(dataTable);
-            
-                            serializedObject.Update(); 
+
+                            // 시리얼라이즈드 프로퍼티 업데이트가 필요한 경우
+                            serializedObject.Update();
                         });
                         dropdown.Setup(typeof(DataTableRowBase));
-        
+
                         dropdown.Show(rect);
                     }
                 }
@@ -93,18 +95,6 @@ namespace KCoreKit
             }
 
             serializedObject.ApplyModifiedProperties();
-        }
-
-        // [추가됨] Task를 정상적으로 await 하여 데이터 누락을 방지하는 비동기 래퍼 메서드
-        private async void RefreshDataAsync(DataTable dataTable)
-        {
-            dataTable.Clear();
-            await dataTable.UpdateData(dataTable.csv, null);
-            
-            // 안전을 위해 UpdateData 완료 후 최종 저장 및 리프레시 명시
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            Repaint();
         }
 
         private void DrawTableFields(DataTable dataTable)
@@ -153,13 +143,21 @@ namespace KCoreKit
 
         private string GetTypeName(Type type)
         {
-            if (type == typeof(string)) return "string";
-            else if (type == typeof(int)) return "int";
-            else if (type == typeof(float)) return "float";
-            else if (type == typeof(bool)) return "bool";
-            else if (type == typeof(double)) return "double";
-            else if (type.IsEnum) return "enum";
+            // C# 기본 타입 별칭(Alias) 매핑
+            if (type == typeof(string))
+                return "string";
+            else if (type == typeof(int))
+                return "int";
+            else if (type == typeof(float))
+                return "float";
+            else if (type == typeof(bool))
+                return "bool";
+            else if (type == typeof(double))
+                return "double";
+            else if (type.IsEnum)
+                return "enum";
 
+            // 제네릭 타입 처리 (List<T> 등)
             if (type.IsGenericType)
             {
                 Type genericType = type.GetGenericTypeDefinition();
@@ -191,7 +189,7 @@ namespace KCoreKit
         public static void CopyAsset()
         {
             var asset = Selection.activeObject as DataTable;
-            if (asset != null)
+            if (asset != null) // null 체크는 항상 좋은 습관입니다.
             {
                 asset.CopyAsset();
             }
@@ -213,9 +211,9 @@ namespace KCoreKit
         [ReadOnly] public TextAsset csv;
         [SerializeField] [HideInInspector] public List<DataTableRowBase> dataList = new List<DataTableRowBase>();
         [ReadOnly] public string rowTypeName;
-        
+
 #if UNITY_EDITOR
-        
+
         [MenuItem("Assets/KCoreKit/Create/DataTable")]
         public static void Create()
         {
@@ -238,6 +236,7 @@ namespace KCoreKit
             AssetDatabase.CopyAsset(originPaths[0], copyPaths[0]);
             AssetDatabase.CopyAsset(originPaths[1], copyPaths[1]);
 
+
             var asset = AssetDatabase.LoadAssetAtPath<DataTable>(copyPaths[0]);
             var copyCsv = AssetDatabase.LoadAssetAtPath<TextAsset>(copyPaths[1]);
             asset.csv = copyCsv;
@@ -252,6 +251,7 @@ namespace KCoreKit
             return rowScript.GetClass();
         }
 #endif
+
         public List<T> Get<T>() where T : DataTableRowBase
         {
             return dataList.ConvertAll<T>(x => x as T);
@@ -286,11 +286,12 @@ namespace KCoreKit
                 dataType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
 
             List<string> headers = new List<string>();
-            
+
             headers.Add("id");
 
             foreach (FieldInfo field in allFields)
             {
+                // 이미 추가된 "id" 필드는 제외
                 if (field.Name.Equals("id", StringComparison.OrdinalIgnoreCase))
                     continue;
 
@@ -317,9 +318,10 @@ namespace KCoreKit
 
             try
             {
+                // 명시적 바이트 변환 대신 문자열로 직접 저장 (유니티 표준 방식)
                 File.WriteAllText(finalPath, csvHeader, System.Text.Encoding.UTF8);
-                AssetDatabase.ImportAsset(finalPath); 
-    
+                AssetDatabase.ImportAsset(finalPath); // Refresh보다 더 정확한 개별 임포트
+
                 var newAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(finalPath);
 
                 if (newAsset != null)
@@ -338,8 +340,7 @@ namespace KCoreKit
 
             return null;
         }
-#endif
-    
+
         public async Task UpdateData(TextAsset csvAsset, Action<object, Dictionary<string, string>> customAction)
         {
             rowTypeName = GetRowType().AssemblyQualifiedName;
@@ -362,6 +363,7 @@ namespace KCoreKit
                     asset = CreateInstance(rowScript.GetClass()) as DataTableRowBase;
                     AssetDatabase.AddObjectToAsset(asset, this);
                 }
+
                 asset.SetRawData(row);
                 Type type = rowScript.GetClass();
                 FieldInfo[] allFields =
@@ -376,6 +378,7 @@ namespace KCoreKit
                     if (key == null) continue;
 
                     string rawValue = row[key];
+
                     Type fieldType = field.FieldType;
 
                     try
@@ -386,16 +389,8 @@ namespace KCoreKit
                         }
                         else if (fieldType.IsGenericType)
                         {
-                            // [수정됨] 백그라운드 스레드에서 SetValue 실행을 방지하기 위해 로컬 async 래퍼 사용
-                            async Task AssignGenericTypeAsync()
-                            {
-                                var result = await ProcessGenericType(fieldType, rawValue);
-                                field.SetValue(asset, result);
-#if UNITY_EDITOR
-                                EditorUtility.SetDirty(asset);
-#endif
-                            }
-                            tasks.Add(AssignGenericTypeAsync());
+                            tasks.Add(ProcessGenericType(fieldType, rawValue)
+                                .ContinueWith(t => field.SetValue(asset, t.Result)));
                         }
                         else
                         {
@@ -421,30 +416,17 @@ namespace KCoreKit
                             }
                             else if (typeof(MonoBehaviour).IsAssignableFrom(fieldType))
                             {
-                                // Addressable 방식 유지
-                                tasks.Add(AddressableExtension.LoadAsset<GameObject>(rawValue, x =>
-                                {
-                                    if (x != null)
+                                tasks.Add(AddressableExtension.LoadAsset<GameObject>(rawValue,
+                                    x =>
                                     {
-                                        field.SetValue(asset, x.GetComponent(fieldType));
-#if UNITY_EDITOR
-                                        // [수정됨] 콜백 완료 시점에 다시 한 번 Dirty 마킹 (매우 중요)
-                                        EditorUtility.SetDirty(asset); 
-#endif
-                                    }
-                                }));
+                                        if (x != null)
+                                            field.SetValue(asset, x.GetComponent(fieldType));
+                                    }));
                             }
                             else if (typeof(Object).IsAssignableFrom(fieldType))
                             {
-                                // Addressable 방식 유지
-                                tasks.Add(AddressableExtension.LoadAsset<Object>(rawValue, x =>
-                                {
-                                    field.SetValue(asset, x);
-#if UNITY_EDITOR
-                                    // [수정됨] 콜백 완료 시점에 다시 한 번 Dirty 마킹 (매우 중요)
-                                    EditorUtility.SetDirty(asset);
-#endif
-                                }));
+                                tasks.Add(AddressableExtension.LoadAsset<Object>(rawValue,
+                                    x => { field.SetValue(asset, x); }));
                             }
                         }
                     }
@@ -456,8 +438,7 @@ namespace KCoreKit
                     customAction?.Invoke(asset, row);
                     asset.name = asset.id;
                 }
-                
-                EditorUtility.SetDirty(asset);
+
                 newList.Add(asset);
                 rowCount++;
             }
@@ -471,11 +452,8 @@ namespace KCoreKit
 
             dataList = newList;
             EditorUtility.SetDirty(this);
-            
-#if UNITY_EDITOR
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-#endif
         }
 
         private static async Task<object> ProcessGenericType(Type fieldType, string rawValue)
@@ -513,13 +491,10 @@ namespace KCoreKit
                 MethodInfo addMethod = targetListType.GetMethod("Add");
                 foreach (string item in list)
                 {
-                    // Addressable 방식 유지
-                    await AddressableExtension.LoadAsset<GameObject>(item, 
-                        x => { 
-                            if(x != null) addMethod.Invoke(targetList, new object[] { x.GetComponent(elementType) }); 
-                        });
+                    await AddressableExtension.LoadAsset<GameObject>(item,
+                        x => { addMethod.Invoke(targetList, new object[] { x.GetComponent(fieldType) }); });
                 }
-                
+
                 result = targetList;
             }
             else if (typeof(Object).IsAssignableFrom(elementType))
@@ -529,11 +504,8 @@ namespace KCoreKit
                 MethodInfo addMethod = targetListType.GetMethod("Add");
                 foreach (string item in list)
                 {
-                    // Addressable 방식 유지
                     await AddressableExtension.LoadAsset<Object>(item,
-                        x => { 
-                            if(x != null) addMethod.Invoke(targetList, new object[] { x }); 
-                        });
+                        x => { addMethod.Invoke(targetList, new object[] { x }); });
                 }
 
                 result = targetList;
@@ -542,9 +514,9 @@ namespace KCoreKit
             return result;
         }
 
-#if UNITY_EDITOR
         public void Clear()
         {
+            // 1. 현재 메인 에셋의 경로를 가져옵니다. (this는 메인 스크립터블 오브젝트라고 가정)
             string path = AssetDatabase.GetAssetPath(this);
             if (string.IsNullOrEmpty(path))
             {
@@ -552,19 +524,25 @@ namespace KCoreKit
                 return;
             }
 
+            // 2. 메인 에셋을 제외한 순수 '하위 에셋'들만 모두 가져옵니다.
             Object[] subAssets = AssetDatabase.LoadAllAssetRepresentationsAtPath(path);
 
+            // 3. 안전한 삭제를 위해 배열의 뒤에서부터 역순으로 순회하며 파괴합니다.
             for (int i = subAssets.Length - 1; i >= 0; i--)
             {
                 Object subAsset = subAssets[i];
                 if (subAsset != null)
                 {
+                    // 하위 에셋 관계 해제
                     AssetDatabase.RemoveObjectFromAsset(subAsset);
+                    // 메모리 및 에셋 파괴
                     DestroyImmediate(subAsset, true);
                 }
             }
 
+            // 4. 만약 별도의 내부 리스트(dataList 등)를 유지하고 있었다면 비워줍니다.
             dataList?.Clear();
+            // 5. 부모 에셋이 변경되었음을 Unity에 알리고 저장합니다.
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
