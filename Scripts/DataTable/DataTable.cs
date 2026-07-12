@@ -419,14 +419,20 @@ namespace KCoreKit
                                 tasks.Add(AddressableExtension.LoadAsset<GameObject>(rawValue,
                                     x =>
                                     {
-                                        if (x != null)
-                                            field.SetValue(asset, x.GetComponent(fieldType));
+                                        field.SetValue(asset, x.GetComponent(fieldType));
+                                        EditorUtility.SetDirty(asset);
+                                        AssetDatabase.SaveAssets();
                                     }));
                             }
                             else if (typeof(Object).IsAssignableFrom(fieldType))
                             {
                                 tasks.Add(AddressableExtension.LoadAsset<Object>(rawValue,
-                                    x => { field.SetValue(asset, x); }));
+                                    x =>
+                                    {
+                                        field.SetValue(asset, x); 
+                                        EditorUtility.SetDirty(asset);
+                                        AssetDatabase.SaveAssets();
+                                    }));
                             }
                         }
                     }
