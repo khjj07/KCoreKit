@@ -24,7 +24,7 @@ namespace KCoreKit
                 {
                     _dataTableDictionary[key].Add(asset);
                 }
-                else
+                else if (key != null)
                 {
                     _dataTableDictionary.TryAdd(Type.GetType(type), new List<DataTable>() { asset });
                 }
