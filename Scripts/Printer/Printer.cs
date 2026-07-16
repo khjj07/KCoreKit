@@ -185,6 +185,7 @@ namespace KCoreKit
                     colors[characterInfo.vertexIndex + 1] = _letters[i].color;
                     colors[characterInfo.vertexIndex + 2] = _letters[i].color;
                     colors[characterInfo.vertexIndex + 3] = _letters[i].color;
+                    
                 }
 
                 mesh.colors = colors;

@@ -20,8 +20,10 @@ namespace KCoreKit
 
             var header = Regex.Split(lines[0], SPLIT_RE);
             
-            if (header.Length > 0) {
-                header[0] = header[0].Trim(new char[] { '\uFEFF', '\u200B' });
+            // 모든 헤더 요소에서 공백 및 BOM 문자 제거
+            for (int h = 0; h < header.Length; h++)
+            {
+                header[h] = header[h].Trim().Trim(new char[] { '\uFEFF', '\u200B' });
             }
 
             for (var i = 1; i < lines.Length; i++)

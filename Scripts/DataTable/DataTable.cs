@@ -28,8 +28,9 @@ namespace KCoreKit
             scriptProp = serializedObject.FindProperty("rowScript");
             if (dataTable.csv)
             {
+                GUI.enabled = false;
                 base.OnInspectorGUI();
-
+                GUI.enabled = true;
                 SyncCSV(dataTable);
                 GUILayout.Space(10);
                 DrawTableFields(dataTable);
@@ -206,11 +207,11 @@ namespace KCoreKit
     public class DataTable : ScriptableObject
     {
 #if UNITY_EDITOR
-        [ReadOnly] public MonoScript rowScript;
+        public MonoScript rowScript;
 #endif
-        [ReadOnly] public TextAsset csv;
-        [SerializeField] [HideInInspector] public List<DataTableRowBase> dataList = new List<DataTableRowBase>();
-        [ReadOnly] public string rowTypeName;
+        public TextAsset csv;
+        public string rowTypeName;
+        [SerializeField] public List<DataTableRowBase> dataList = new List<DataTableRowBase>();
 
 #if UNITY_EDITOR
 
@@ -341,17 +342,17 @@ namespace KCoreKit
             return null;
         }
 
-        public async Task UpdateData(TextAsset csvAsset, Action<object, Dictionary<string, string>> customAction)
+        public void UpdateData(TextAsset csvAsset, Action<object, Dictionary<string, string>> customAction)
         {
             rowTypeName = GetRowType().AssemblyQualifiedName;
             var newList = new List<DataTableRowBase>();
             List<Dictionary<string, string>> csv = CSVReader.Read(csvAsset);
-            var tasks = new List<Task>();
-
+        
             int rowCount = 1;
             foreach (var row in csv)
             {
-                if (bool.Parse(row["isEnable"]) != true)
+                
+                if (!row.ContainsKey("isEnable") || bool.Parse(row["isEnable"]) != true)
                 {
                     continue;
                 }
@@ -362,6 +363,7 @@ namespace KCoreKit
                 {
                     asset = CreateInstance(rowScript.GetClass()) as DataTableRowBase;
                     AssetDatabase.AddObjectToAsset(asset, this);
+                    
                 }
 
                 asset.SetRawData(row);
@@ -389,8 +391,8 @@ namespace KCoreKit
                         }
                         else if (fieldType.IsGenericType)
                         {
-                            tasks.Add(ProcessGenericType(fieldType, rawValue)
-                                .ContinueWith(t => field.SetValue(asset, t.Result)));
+                            var temp = ProcessGenericType(fieldType, rawValue);
+                            field.SetValue(asset, temp);
                         }
                         else
                         {
@@ -416,23 +418,23 @@ namespace KCoreKit
                             }
                             else if (typeof(MonoBehaviour).IsAssignableFrom(fieldType))
                             {
-                                tasks.Add(AddressableExtension.LoadAsset<GameObject>(rawValue,
+                                AddressableExtension.LoadAsset<GameObject>(rawValue,
                                     x =>
                                     {
                                         field.SetValue(asset, x.GetComponent(fieldType));
                                         EditorUtility.SetDirty(asset);
                                         AssetDatabase.SaveAssets();
-                                    }));
+                                    });
                             }
                             else if (typeof(Object).IsAssignableFrom(fieldType))
                             {
-                                tasks.Add(AddressableExtension.LoadAsset<Object>(rawValue,
+                                AddressableExtension.LoadAsset<Object>(rawValue,
                                     x =>
                                     {
-                                        field.SetValue(asset, x); 
+                                        field.SetValue(asset, x);
                                         EditorUtility.SetDirty(asset);
                                         AssetDatabase.SaveAssets();
-                                    }));
+                                    });
                             }
                         }
                     }
@@ -449,7 +451,6 @@ namespace KCoreKit
                 rowCount++;
             }
 
-            await Task.WhenAll(tasks);
 
             foreach (var item in newList)
             {
@@ -462,7 +463,7 @@ namespace KCoreKit
             AssetDatabase.Refresh();
         }
 
-        private static async Task<object> ProcessGenericType(Type fieldType, string rawValue)
+        private static object ProcessGenericType(Type fieldType, string rawValue)
         {
             Type elementType = fieldType.GetGenericArguments()[0];
 
@@ -497,7 +498,7 @@ namespace KCoreKit
                 MethodInfo addMethod = targetListType.GetMethod("Add");
                 foreach (string item in list)
                 {
-                    await AddressableExtension.LoadAsset<GameObject>(item,
+                    AddressableExtension.LoadAsset<GameObject>(item,
                         x => { addMethod.Invoke(targetList, new object[] { x.GetComponent(fieldType) }); });
                 }
 
@@ -510,7 +511,7 @@ namespace KCoreKit
                 MethodInfo addMethod = targetListType.GetMethod("Add");
                 foreach (string item in list)
                 {
-                    await AddressableExtension.LoadAsset<Object>(item,
+                    AddressableExtension.LoadAsset<Object>(item,
                         x => { addMethod.Invoke(targetList, new object[] { x }); });
                 }
 
