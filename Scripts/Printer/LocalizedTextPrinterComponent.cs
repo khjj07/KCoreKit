@@ -9,6 +9,7 @@ namespace KCoreKit
         private Printer _printer;
         private TMP_Text _textComponent;
         public string key;
+        public string style ="default";
       
         public override void Awake()
         {
@@ -21,7 +22,8 @@ namespace KCoreKit
         {
             _textComponent.font = LocalizationManager.GetFontAsset(0);
             _printer.Stop();
-            _printer.Setup(LocalizationManager.GetLocalizedText(key));
+            var text = LocalizationManager.GetLocalizedText(key);
+            _printer.Setup($"<{style}>{text}</{style}>");
             _printer.Print(Random.Range(0.0f,1.0f));
         }
         
