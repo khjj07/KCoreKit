@@ -98,37 +98,33 @@ namespace KCoreKit
         public Letter[] GenerateLetter(string text)
         {
             List<Letter> result = new List<Letter>();
-            string pattern = @"<(?<tag>\w+)>(?<value>.*?)<\/\w+>|([^<>]+)";
-            string pattern1 = @"<(?<tag>\w+)>(?<value>.*?)<\/\w+>";
+    
+            // 1. RegexOptions.Singleline을 사용하여 \n을 포함하도록 설정
+            string tagPattern = @"<(?<tag>\w+)>(?<value>[\s\S]*?)<\/\w+>|(?<text>[^<>]+)";
 
-            MatchCollection matches = Regex.Matches(text, pattern, RegexOptions.Singleline);
+            MatchCollection matches = Regex.Matches(text, tagPattern, RegexOptions.Multiline);
+    
             foreach (Match match in matches)
             {
-                var realMatch = Regex.Match(match.Value, pattern1);
-                if (realMatch.Success)
+                // 태그 형태인 경우 (<tag>value</tag>)
+                if (match.Groups["tag"].Success)
                 {
-                    string sytleName = match.Groups["tag"].Value;
+                    string styleName = match.Groups["tag"].Value;
                     string value = match.Groups["value"].Value;
 
-                    if (sytleName != "")
+                    PrintStyle style = PrinterManager.FindDialogStyle(styleName) ?? PrinterManager.defaultStyle;
+
+                    foreach (var c in value)
                     {
-                        PrintStyle style = PrinterManager.FindDialogStyle(sytleName);
-                        foreach (var c in value)
-                        {
-                            result.Add(new Letter(c, style, _textComponent.color));
-                        }
-                    }
-                    else
-                    {
-                        foreach (var c in value)
-                        {
-                            result.Add(new Letter(c, PrinterManager.defaultStyle, _textComponent.color));
-                        }
+                        result.Add(new Letter(c, style, _textComponent.color));
                     }
                 }
-                else
+                // 일반 텍스트인 경우
+                else if (match.Groups["text"].Success)
                 {
-                    foreach (var c in match.Value)
+                    string value = match.Groups["text"].Value;
+            
+                    foreach (var c in value)
                     {
                         result.Add(new Letter(c, PrinterManager.defaultStyle, _textComponent.color));
                     }
@@ -153,10 +149,17 @@ namespace KCoreKit
 
                 Color[] colors = mesh.colors;
                 
+                int letterIndex = 0;
             
                 for (int i = 0; i < textInfo.characterCount; i++)
                 {
                     var characterInfo = textInfo.characterInfo[i];
+                    while (letterIndex < _letters.Length && (_letters[letterIndex].value == '\n' || _letters[letterIndex].value == '\r'))
+                    {
+                        letterIndex++;
+                    }
+                    if (letterIndex >= _letters.Length) break;
+                    
                     characterInfo.fontAsset = _letters[i].style.font;
                     characterInfo.materialReferenceIndex = PrinterManager.GetStyleIndex(_letters[i].style);
                     textInfo.characterInfo[i] = characterInfo;
