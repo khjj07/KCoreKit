@@ -13,11 +13,12 @@ namespace KCoreKit
     {
         [SerializeField] private string exeName = "";
 
-        [SerializeField] private List<SceneAsset> scenes;
-
+      
         private static string _exeName => GetInstance().exeName;
 
 #if UNITY_EDITOR
+        [SerializeField] private List<SceneAsset> scenes;
+
         [MenuItem("Assets/KCoreKit/Create/BuildPipelineSetting")]
         public static void Create()
         {
