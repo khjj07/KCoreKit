@@ -121,7 +121,7 @@ namespace KCoreKit
                 // BuildPipeline.BuildAssetBundles의 주요 예외 포착
                 BuildPipeline.BuildAssetBundles(
                     assetBundleOutputFolder,
-                    BuildAssetBundleOptions.StrictMode,
+                    BuildAssetBundleOptions.None,
                     target
                 );
 
