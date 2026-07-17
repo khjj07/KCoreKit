@@ -114,6 +114,11 @@ namespace KCoreKit
 
                     PrintStyle style = PrinterManager.FindDialogStyle(styleName) ?? PrinterManager.defaultStyle;
 
+                    if (style == PrinterManager.defaultStyle)
+                    {
+                        value = match.Value;
+                    }
+                    
                     foreach (var c in value)
                     {
                         result.Add(new Letter(c, style, _textComponent.color));
@@ -160,25 +165,27 @@ namespace KCoreKit
                     }
                     if (letterIndex >= _letters.Length) break;
                     
-                    characterInfo.fontAsset = _letters[i].style.font;
-                    characterInfo.materialReferenceIndex = PrinterManager.GetStyleIndex(_letters[i].style);
-                    textInfo.characterInfo[i] = characterInfo;
+                    
                     
                     if (!characterInfo.isVisible)
 
                     {
                         continue;
                     }
-
-                    Vector3 center = Vector3.zero;
+                    
+                    var addOffsetX = (_letters[i].scale.x-1)*i;
+                    var addOffsetY = (_letters[i].scale.y-1)*i;
+                    Vector3 center = new Vector3(addOffsetX,addOffsetY,0);
 
                     float halfHeight, halfWidth;
 
+                   
+                    
                     halfHeight = Vector3.Distance(vertices[characterInfo.vertexIndex],
-                        vertices[characterInfo.vertexIndex + 1]) * _letters[i].scale.y / 2;
+                        vertices[characterInfo.vertexIndex + 1]) / 2;
 
                     halfWidth = Vector3.Distance(vertices[characterInfo.vertexIndex + 1],
-                        vertices[characterInfo.vertexIndex + 2]) * _letters[i].scale.x / 2;
+                        vertices[characterInfo.vertexIndex + 2]) / 2;
 
 
                     for (int j = 0; j < 4; j++)
@@ -218,10 +225,15 @@ namespace KCoreKit
 
                     colors[characterInfo.vertexIndex + 3] = _letters[i].color;
                     
+                    int matIndex = PrinterManager.GetStyleIndex(_letters[i].style);
+                    textInfo.characterInfo[i].fontAsset = _letters[i].style.font;
+                    textInfo.characterInfo[i].materialReferenceIndex = matIndex;
+                    
                 }
                 mesh.colors = colors;
                 mesh.vertices = vertices;
                 _textComponent.canvasRenderer.SetMesh(mesh);
+                
                 
             }
         }

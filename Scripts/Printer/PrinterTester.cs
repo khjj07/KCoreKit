@@ -11,8 +11,8 @@ namespace KCoreKit
         [SerializeField] private string text;
  
         private Printer _printer;
-
-        [Button("실행")]
+        
+        [Button]
         public void Run()
         {
             _printer = GetComponent<Printer>();
