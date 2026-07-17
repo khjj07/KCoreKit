@@ -13,7 +13,7 @@ namespace KCoreKit
         {
             var list = new List<Dictionary<string, string>>();
             
-            string content = data.text; 
+            string content = data.text;
 
             var lines = Regex.Split(content, LINE_SPLIT_RE);
             if (lines.Length <= 1) return list;
@@ -35,14 +35,21 @@ namespace KCoreKit
                 for (var j = 0; j < header.Length && j < values.Length; j++)
                 {
                     string value = values[j];
-                    value = value.Trim('\"').Replace("\\", ""); 
-                    entry[header[j]] = value;
+                    value = value.Trim('\"').Replace("\\", "");
+                   
+                    entry[header[j]] =  PostProcessColumn(value);
                 }
                 list.Add(entry);
             }
             return list;
         }
-      
 
+        private static string PostProcessColumn(string value)
+        {
+            var result = value;
+            result = result.Replace("@", ",");
+            result = result.Replace("^", "\n");
+            return result;
+        }
     }
 }
