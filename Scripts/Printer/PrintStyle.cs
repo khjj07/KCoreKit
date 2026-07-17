@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -24,6 +25,9 @@ namespace KCoreKit
         {
             serializedObject.Update();
 
+            SerializedProperty fontProp = serializedObject.FindProperty("font");
+            EditorGUILayout.PropertyField(fontProp, true);
+            
             SerializedProperty appearOptionProp = serializedObject.FindProperty("appearOption");
             EditorGUILayout.PropertyField(appearOptionProp, true);
 
@@ -116,6 +120,7 @@ namespace KCoreKit
     [CreateAssetMenu(menuName = "Printer/Print Style", fileName = "new Print Style")]
     public class PrintStyle : ScriptableObject
     {
+        public TMP_FontAsset font;
         [BigHeader("Appear")] public AdvancedPrintOption appearOption;
         public PrintStylePositionModifier appearPosition;
         public PrintStyleRotationModifier appearRotation;
