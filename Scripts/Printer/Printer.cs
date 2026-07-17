@@ -98,10 +98,10 @@ namespace KCoreKit
         public Letter[] GenerateLetter(string text)
         {
             List<Letter> result = new List<Letter>();
-    
-            // 1. RegexOptions.Singleline을 사용하여 \n을 포함하도록 설정
-            string tagPattern = @"<(?<tag>\w+)>(?<value>[\s\S]*?)<\/\w+>|(?<text>[^<>]+)";
 
+            // 줄바꿈(\n)을 포함하여 중첩된 태그를 완벽하게 추적하는 패턴
+            string tagPattern = @"<(?<tag>\w+)>(?<value>(?:[^<>]+|<(?<Open>\w+)[^>]*>|<\/(?<-Open>\w+)>)*(?(Open)(?!)))<\/\1>|(?<text>[^<>]+)";
+            
             MatchCollection matches = Regex.Matches(text, tagPattern, RegexOptions.Multiline);
     
             foreach (Match match in matches)
@@ -159,13 +159,6 @@ namespace KCoreKit
                 for (int i = 0; i < textInfo.characterCount; i++)
                 {
                     var characterInfo = textInfo.characterInfo[i];
-                    while (letterIndex < _letters.Length && (_letters[letterIndex].value == '\n' || _letters[letterIndex].value == '\r'))
-                    {
-                        letterIndex++;
-                    }
-                    if (letterIndex >= _letters.Length) break;
-                    
-                    
                     
                     if (!characterInfo.isVisible)
 

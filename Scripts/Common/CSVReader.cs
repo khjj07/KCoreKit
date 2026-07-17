@@ -35,9 +35,11 @@ namespace KCoreKit
                 for (var j = 0; j < header.Length && j < values.Length; j++)
                 {
                     string value = values[j];
+                    Debug.Log($"old : {value}");
                     value = value.Trim('\"').Replace("\\", "");
                    
                     entry[header[j]] =  PostProcessColumn(value);
+                    Debug.Log($"current : { entry[header[j]] }");
                 }
                 list.Add(entry);
             }
@@ -47,8 +49,8 @@ namespace KCoreKit
         private static string PostProcessColumn(string value)
         {
             var result = value;
-            result = result.Replace("@", ",");
-            result = result.Replace("^", "\n");
+            result = result.Replace('@', ',');
+            result = result.Replace('^', '\n');
             return result;
         }
     }
