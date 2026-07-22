@@ -207,7 +207,6 @@ namespace KCoreKit
         private static void Log(string message)
         {
             Console.WriteLine(message);
-            Debug.Log(message);
         }
     }
 }
