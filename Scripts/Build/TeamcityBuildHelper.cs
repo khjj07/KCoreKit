@@ -112,6 +112,19 @@ namespace KCoreKit
         {
             Log("\n🔧 Unity BuildPipeline.BuildPlayer 실행 중...");
 
+            BuildTargetGroup targetGroup = BuildPipeline.GetBuildTargetGroup(targetPlatform);
+            if (EditorUserBuildSettings.activeBuildTarget != targetPlatform)
+            {
+                Log($"🔄 빌드 타겟을 {targetPlatform}(으)로 전환 중...");
+                bool switchSuccess = EditorUserBuildSettings.SwitchActiveBuildTarget(targetGroup, targetPlatform);
+                if (!switchSuccess)
+                {
+                    ReportTeamCityProblem($"빌드 타겟을 {targetPlatform}으로 전환하는 데 실패했습니다.", "TARGET_SWITCH_FAIL");
+                    EditorApplication.Exit(1);
+                    return;
+                }
+            }
+            
             string buildFolder = Path.Combine("Builds", settingName);
             string locationPathName;
 
