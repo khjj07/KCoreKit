@@ -29,7 +29,7 @@ namespace KCoreKit
                 var args = Environment.GetCommandLineArgs();
                 string idStr = GetArgument(args, "-id");
                
-                var assetPath = TeamcityBuildSetting.GetInstance().buildPipelineSettingFolder.GetAbsolutePath();
+                var assetPath = TeamcityBuildSetting.GetInstance().buildPipelineSettingFolder.GetLocalPath();
                 
                var settings = AssetDatabase.LoadAssetAtPath<TeamcityBuildPipelineSetting>($"{assetPath}/{idStr}.asset");
 
