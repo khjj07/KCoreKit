@@ -11,7 +11,6 @@ namespace KCoreKit
     public class TeamcityBuildPipelineSetting : ScriptableObject
     {
         
-#if UNITY_EDITOR
         [Header("Target Platform")]
         public BuildTarget targetPlatform;
         public BuildTargetGroup targetGroup;
@@ -34,9 +33,5 @@ namespace KCoreKit
         {
             TypeExtension.CreateAsset<TeamcityBuildPipelineSetting>("TeamcityBuildPipelineSetting");
         }
-
-      
-        
-#endif
     }
 }
