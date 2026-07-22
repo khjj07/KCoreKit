@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace KCoreKit
 {
-    public static class TeamcityBuildHelper
+    public class TeamcityBuildHelper
     {
 #if UNITY_EDITOR
         private static string GetArgument(string[] args,string name)
