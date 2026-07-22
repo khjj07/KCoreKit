@@ -15,11 +15,9 @@ namespace KCoreKit
 
       
 
-        [Header("Output")]
-        public string outputDirectory = "Builds";
+        [Header("Output")] 
         public string outputName = "Game";
-
-
+        
         [Header("Scenes")]
         [SerializeField] public List<SceneAsset> scenes;
         

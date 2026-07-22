@@ -109,7 +109,7 @@ namespace KCoreKit
         {
             Log("\n🔧 Unity BuildPipeline.BuildPlayer 실행 중...");
 
-            string buildFolder = Path.Combine(setting.outputDirectory, setting.targetPlatform.ToString());
+            string buildFolder = Path.Combine("Builds", setting.name);
             string locationPathName;
 
             if (setting.targetPlatform == BuildTarget.WebGL)
