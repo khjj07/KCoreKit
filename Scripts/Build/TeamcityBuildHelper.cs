@@ -41,14 +41,17 @@ namespace KCoreKit
                     return;
                 }
                 
-                AssetDatabase.SaveAssets();
-                
                 Log("====================================");
                 Log($"🚀 {settings.name} CI 통합 빌드 시작");
                 Log("====================================");
                 
 
                 Log($"✅ Build Target: {settings.targetPlatform}");
+
+                var platform = settings.targetPlatform;
+                var name = settings.name;
+                var outputName = settings.outputName;
+                var scenePaths = settings.scenes.ConvertAll(AssetDatabase.GetAssetPath).ToArray();
 
                 if (!BuildAssetBundlesImpl(settings))
                 {
@@ -57,7 +60,7 @@ namespace KCoreKit
                     return;
                 }
 
-                BuildPlayerImpl(settings);
+                BuildPlayerImpl(name,platform,outputName,scenePaths);
                 Log("🎉 통합 빌드 최종 완료.");
             }
             catch (Exception ex)
@@ -105,21 +108,21 @@ namespace KCoreKit
             }
         }
 
-        private static void BuildPlayerImpl(TeamcityBuildPipelineSetting setting)
+        private static void BuildPlayerImpl(string settingName, BuildTarget targetPlatform, string outputName, string[] scenePaths)
         {
             Log("\n🔧 Unity BuildPipeline.BuildPlayer 실행 중...");
 
-            string buildFolder = Path.Combine("Builds", setting.name);
+            string buildFolder = Path.Combine("Builds", settingName);
             string locationPathName;
 
-            if (setting.targetPlatform == BuildTarget.WebGL)
+            if (targetPlatform == BuildTarget.WebGL)
             {
                 locationPathName = buildFolder;
             }
             else
             {
-                string executableName = setting.outputName;
-                switch (setting.targetPlatform)
+                string executableName = outputName;
+                switch (targetPlatform)
                 {
                     case BuildTarget.StandaloneWindows:
                     case BuildTarget.StandaloneWindows64:
@@ -144,14 +147,12 @@ namespace KCoreKit
             Directory.CreateDirectory(buildFolder);
 
             Log($"📁 출력 경로: {Path.GetFullPath(locationPathName)}");
-            var scenePaths = setting.scenes.ConvertAll(AssetDatabase.GetAssetPath).ToArray();
-
 
             var buildOptions = new BuildPlayerOptions
             {
                 scenes = scenePaths,
                 locationPathName = locationPathName,
-                target = setting.targetPlatform,
+                target = targetPlatform,
                 options = BuildOptions.None
             };
 
