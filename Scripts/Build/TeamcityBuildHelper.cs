@@ -1,16 +1,18 @@
-﻿#if UNITY_EDITOR
+﻿
 using System;
 using System.IO;
+#if UNITY_EDITOR
 using UnityEditor;
-using UnityEngine;
-
 using UnityEditor.Build.Reporting;
+#endif
+using UnityEngine;
 
 
 namespace KCoreKit
 {
     public static class TeamcityBuildHelper
     {
+#if UNITY_EDITOR
         private static string GetArgument(string[] args,string name)
         {
             for (int i = 0; i < args.Length; i++)
@@ -209,7 +211,6 @@ namespace KCoreKit
             Console.WriteLine(message);
             Debug.Log(message);
         }
-
+#endif
     }
 }
-#endif
