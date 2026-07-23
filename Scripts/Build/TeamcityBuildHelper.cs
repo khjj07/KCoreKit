@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 
@@ -45,7 +46,9 @@ namespace KCoreKit
                 Log($"🚀 {settings.name} CI 통합 빌드 시작");
                 Log("====================================");
                 
-
+                EditorSceneManager.SaveOpenScenes();
+                AssetDatabase.SaveAssets();
+                
                 Log($"✅ Build Target: {settings.targetPlatform}");
 
                 var platform = settings.targetPlatform;
