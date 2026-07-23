@@ -49,6 +49,7 @@ namespace KCoreKit
                 EditorSceneManager.SaveOpenScenes();
                 AssetDatabase.SaveAssets();
                 
+                
                 Log($"✅ Build Target: {settings.targetPlatform}");
 
                 var platform = settings.targetPlatform;
