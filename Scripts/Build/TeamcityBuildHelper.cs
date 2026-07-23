@@ -46,6 +46,21 @@ namespace KCoreKit
                 Log($"🚀 {settings.name} CI 통합 빌드 시작");
                 Log("====================================");
                 
+                Log("\n🔧 Unity BuildPipeline.BuildPlayer 실행 중...");
+
+                BuildTargetGroup targetGroup = BuildPipeline.GetBuildTargetGroup(settings.targetPlatform);
+                if (EditorUserBuildSettings.activeBuildTarget != settings.targetPlatform)
+                {
+                    Log($"🔄 빌드 타겟을 {settings.targetPlatform}(으)로 전환 중...");
+                    bool switchSuccess = EditorUserBuildSettings.SwitchActiveBuildTarget(targetGroup, settings.targetPlatform);
+                    if (!switchSuccess)
+                    {
+                        ReportTeamCityProblem($"빌드 타겟을 {settings.targetPlatform}으로 전환하는 데 실패했습니다.", "TARGET_SWITCH_FAIL");
+                        EditorApplication.Exit(1);
+                        return;
+                    }
+                }
+                
                 EditorSceneManager.SaveOpenScenes();
                 AssetDatabase.SaveAssets();
                 
@@ -114,20 +129,7 @@ namespace KCoreKit
 
         private static void BuildPlayerImpl(string settingName, BuildTarget targetPlatform, string outputName, string[] scenePaths)
         {
-            Log("\n🔧 Unity BuildPipeline.BuildPlayer 실행 중...");
-
-            BuildTargetGroup targetGroup = BuildPipeline.GetBuildTargetGroup(targetPlatform);
-            if (EditorUserBuildSettings.activeBuildTarget != targetPlatform)
-            {
-                Log($"🔄 빌드 타겟을 {targetPlatform}(으)로 전환 중...");
-                bool switchSuccess = EditorUserBuildSettings.SwitchActiveBuildTarget(targetGroup, targetPlatform);
-                if (!switchSuccess)
-                {
-                    ReportTeamCityProblem($"빌드 타겟을 {targetPlatform}으로 전환하는 데 실패했습니다.", "TARGET_SWITCH_FAIL");
-                    EditorApplication.Exit(1);
-                    return;
-                }
-            }
+            
             
             string buildFolder = Path.Combine("Builds", settingName);
             string locationPathName;
