@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class LocalizedTextDataTableRow : LocalizedDataTableRowBase<string>
 {
+    [TextArea]
     public string EN;
+    [TextArea]
     public string KR;
+    [TextArea]
     public string JP;
+    [TextArea]
     public string CN;
 
     public override string Get(Language language)

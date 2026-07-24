@@ -102,7 +102,7 @@ namespace KCoreKit
             // 줄바꿈(\n)을 포함하여 중첩된 태그를 완벽하게 추적하는 패턴
             string tagPattern = @"<(?<tag>\w+)>(?<value>(?:[^<>]+|<(?<Open>\w+)[^>]*>|<\/(?<-Open>\w+)>)*(?(Open)(?!)))<\/\1>|(?<text>[^<>]+)";
             
-            MatchCollection matches = Regex.Matches(text, tagPattern, RegexOptions.Multiline);
+            MatchCollection matches = Regex.Matches(text, tagPattern, RegexOptions.Multiline, TimeSpan.FromSeconds(5.0));
     
             foreach (Match match in matches)
             {
