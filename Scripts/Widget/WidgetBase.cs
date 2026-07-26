@@ -38,7 +38,7 @@ namespace KCoreKit
     {
         [HideInInspector] public RectTransform rectTransform => GetComponent<RectTransform>();
         [HideInInspector] public CanvasGroup canvasGroup => GetComponent<CanvasGroup>();
-        [HideInInspector] public Canvas canvas => GetComponentInParent<Canvas>();
+        [HideInInspector] public Canvas canvas => GetComponentInParent<Canvas>(true);
         protected bool isAwake = false;
         public bool isShown => gameObject.activeSelf;
 
