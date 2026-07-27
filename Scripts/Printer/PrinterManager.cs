@@ -14,20 +14,10 @@ namespace KCoreKit
         public static PrintStyle defaultStyle => FindDialogStyle("default");
 
         private static PrintStyle[] styles;
-        public Material[] fontSharedMaterials;
         public void Awake()
         {
             styles = Resources.LoadAll<PrintStyle>("");
-            fontSharedMaterials = new Material[styles.Length];
-            for (int i = 0; i < styles.Length; i++)
-            {
-                fontSharedMaterials[i] = styles[i].font.material;
-            }
-        }
 
-        public static Material[] GetFontSharedMaterials()
-        {
-            return GetInstance().fontSharedMaterials;
         }
 
         public static int GetStyleIndex(PrintStyle style)

@@ -30,14 +30,6 @@ namespace KCoreKit
             _appearSequence = GenerateAppearSequence(_letters);
         }
 
-        public void OnEnable()
-        {
-            _textComponent = GetComponent<TMP_Text>();
-            _textComponent.fontSharedMaterials = PrinterManager.GetFontSharedMaterials();
-          
-        } 
-
-
         private string GenerateText()
         {
             var builder = new StringBuilder();
