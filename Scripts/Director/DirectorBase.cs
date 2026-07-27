@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace KCoreKit
 {
-    public abstract class GameSubModeBase : MonoBehaviour, IGameSubMode
+    public abstract class DirectorBase : MonoBehaviour, IDirector
     {
-        protected GameMode gameMode;
-        public void Setup(GameMode gameMode)
+        protected DirectorFacade DirectorFacade;
+        public void Setup(DirectorFacade directorFacade)
         {
-            this.gameMode = gameMode;
+            this.DirectorFacade = directorFacade;
         }
 
         public virtual IEnumerator OnInitialize()

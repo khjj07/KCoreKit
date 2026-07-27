@@ -92,7 +92,12 @@ namespace KCoreKit
             List<Letter> result = new List<Letter>();
 
             // 줄바꿈(\n)을 포함하여 중첩된 태그를 완벽하게 추적하는 패턴
-            string tagPattern = @"<(?<tag>\w+)>(?<value>(?:[^<>]+|<(?<Open>\w+)[^>]*>|<\/(?<-Open>\w+)>)*(?(Open)(?!)))<\/\1>|(?<text>[^<>]+)";
+            string tagPattern = 
+                @"<(?<tag>\w+)>(?<value>(?:[^<>]+|<(?<Open>\w+)[^>]*>|<\/(?<-Open>\w+)>)*(?(Open)(?!)))<\/\1>" + // 1. 쌍을 이루는 태그
+                @"|" + 
+                @"(?<tag>br|hr|img)\b[^>]*\/?>" + // 2. <br> 같은 단독 태그 추가 (예시)
+                @"|" + 
+                @"(?<text>[^<>]+)"; // 3. 일반 텍스트
             
             MatchCollection matches = Regex.Matches(text, tagPattern, RegexOptions.Multiline, TimeSpan.FromSeconds(5.0));
     

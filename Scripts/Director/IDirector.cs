@@ -2,9 +2,9 @@
 
 namespace KCoreKit
 {
-    public interface IGameSubMode
+    public interface IDirector
     {
-        public abstract void Setup(GameMode gameMode);
+        public abstract void Setup(DirectorFacade directorFacade);
         public abstract IEnumerator OnInitialize();
         
         public abstract IEnumerator OnUpdate();

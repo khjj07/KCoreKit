@@ -1,0 +1,38 @@
+using System;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+using UnityEngine;
+
+namespace KCoreKit
+{
+    public class SingletonAsset<T> : ScriptableObject where T : ScriptableObject
+    {
+        private static T _instance;
+
+        public static T GetInstance()
+        {
+            if (_instance == null)
+                try
+                {
+                    var type = typeof(T).Name;
+#if UNITY_EDITOR
+
+                    var guid = AssetDatabase.FindAssets("t:" + type);
+                    var path = AssetDatabase.GUIDToAssetPath(guid[0]);
+                    _instance = (T)AssetDatabase.LoadAssetAtPath(path, typeof(T));
+#else
+                        _instance = (T)Resources.LoadAll<T>("")[0];
+#endif
+
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogError(e.StackTrace);
+                    return null;
+                }
+
+            return _instance;
+        }
+    }
+}

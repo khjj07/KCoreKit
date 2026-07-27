@@ -6,15 +6,15 @@ using UnityEngine;
 namespace KCoreKit
 {
     
-    public class GameMode : Singleton<GameMode>
+    public class DirectorFacade : Singleton<DirectorFacade>
     {
         private bool isInitialized;
-        private IGameSubMode[] _subModes;
+        private IDirector[] _subModes;
         private bool _isRunning = false;
 
         public void Awake()
         {
-            _subModes = GetComponentsInChildren<IGameSubMode>(true);
+            _subModes = GetComponentsInChildren<IDirector>(true);
             foreach (var subMode in _subModes)
             {
                 subMode.Setup(this);
