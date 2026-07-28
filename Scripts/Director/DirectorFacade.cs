@@ -15,10 +15,6 @@ namespace KCoreKit
         public void Awake()
         {
             _subModes = GetComponentsInChildren<IDirector>(true);
-            foreach (var subMode in _subModes)
-            {
-                subMode.Setup(this);
-            }
         }
 
         public void Start()

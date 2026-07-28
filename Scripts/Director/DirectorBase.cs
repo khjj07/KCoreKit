@@ -6,11 +6,7 @@ namespace KCoreKit
 {
     public abstract class DirectorBase : MonoBehaviour, IDirector
     {
-        protected DirectorFacade DirectorFacade;
-        public void Setup(DirectorFacade directorFacade)
-        {
-            this.DirectorFacade = directorFacade;
-        }
+        
 
         public virtual IEnumerator OnInitialize()
         {
