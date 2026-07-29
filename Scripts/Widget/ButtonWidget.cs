@@ -29,5 +29,10 @@ namespace KCoreKit
         {
             button.onClick.RemoveAllListeners();
         }
+
+        public void SetInteractable(bool value)
+        {
+            button.interactable = value;
+        }
     }
 }
