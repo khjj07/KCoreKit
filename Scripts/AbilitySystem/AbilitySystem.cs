@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace KCoreKit
 {
-    public static class AbilityManager
+    public static class AbilitySystem
     {
         private static MethodInfo[] actionMethods;
         private static MethodInfo[] conditionMethods;

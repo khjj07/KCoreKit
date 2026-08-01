@@ -12,6 +12,7 @@ namespace KCoreKit
         public List<AbilityEffect> effects = new List<AbilityEffect>();
         public IAbilityStatSet abilityStatSet;
         private List<AbilityScheduler> _abilityScheduler = new List<AbilityScheduler>();
+        private bool _isUpdate;
 
         public void SetStats(IAbilityStatSet statSet)
         {
@@ -45,7 +46,7 @@ namespace KCoreKit
 
         public void AddEffect(string id, AbilityProvider provider = null)
         {
-            var effect = AbilityManager.CreateAbilityEffect(id);
+            var effect = AbilitySystem.CreateAbilityEffect(id);
             effect.Setup(this);
             effect.SetProvider(provider);
             effects.Add(effect);
@@ -86,8 +87,17 @@ namespace KCoreKit
             _abilityScheduler.Add(new AbilityScheduler(this,id,interval,abilityId,context));
         }
 
+        public void SetUpdate(bool isUpdate)
+        {
+            _isUpdate = isUpdate;
+        }
+
         public void Update()
         {
+            if (!_isUpdate)
+            {
+                return;
+            }
             foreach (var scheduler in _abilityScheduler)
             {
                 scheduler.OnUpdate();
