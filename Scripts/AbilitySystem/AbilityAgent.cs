@@ -11,7 +11,8 @@ namespace KCoreKit
     {
         public List<AbilityEffect> effects = new List<AbilityEffect>();
         public IAbilityStatSet abilityStatSet;
-        
+        private List<AbilityScheduler> _abilityScheduler = new List<AbilityScheduler>();
+
         public void SetStats(IAbilityStatSet statSet)
         {
             abilityStatSet = statSet;
@@ -78,6 +79,19 @@ namespace KCoreKit
         public void RegisterPostExecutionCallback(string id, Action<IAbilityContext> action)
         {
             effects.Find(x=>x.id == id).RegisterPostExecutionCallback(action);
+        }
+
+        public void AddScheduler(string id, string abilityId, float interval,ref IAbilityContext context)
+        {
+            _abilityScheduler.Add(new AbilityScheduler(this,id,interval,abilityId,context));
+        }
+
+        public void Update()
+        {
+            foreach (var scheduler in _abilityScheduler)
+            {
+                scheduler.OnUpdate();
+            }
         }
     }
 }
