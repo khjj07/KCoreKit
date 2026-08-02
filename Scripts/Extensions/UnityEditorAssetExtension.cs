@@ -92,11 +92,11 @@ namespace KCoreKit
             File.WriteAllBytes(path, bytes);
         }
 
-        public static Sprite ToSprite(this Texture2D @this)
+        public static Sprite ToSprite(this Texture2D @this, int ppu = 100)
         {
             if (@this)
             {
-                return Sprite.Create(@this, new Rect(0, 0, @this.width, @this.height), new Vector2(0.5f, 0.5f));
+                return Sprite.Create(@this, new Rect(0, 0, @this.width, @this.height), new Vector2(0.5f, 0.5f), ppu);
             }
 
             return null;

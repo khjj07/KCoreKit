@@ -7,22 +7,25 @@ using UnityEngine.UI;
 namespace KCoreKit
 {
     [RequireComponent(typeof(Button))]
-    public class ButtonWidget : ImageWidget
+    public class ButtonWidget : WidgetBase
     {
         [HideInInspector]
         public Button button => GetComponent<Button>();
         
         [HideInInspector]
-        public TMP_Text label => GetComponentInChildren<TMP_Text>(true);
+        public Image image => GetComponentInChildren<Image>(true);
+        
+        [HideInInspector]
+        public TMP_Text textComponent => GetComponentInChildren<TMP_Text>(true);
 
-        public void AddOnClickAction(UnityAction action)
+        public void AddOnClickAction(Action action)
         {
-            button.onClick.AddListener(action);
+            button.onClick.AddListener(action.Invoke);
         }
 
-        public void RemoveOnClickAction(UnityAction action)
+        public void RemoveOnClickAction(Action action)
         {
-            button.onClick.RemoveListener(action);
+            button.onClick.RemoveListener(action.Invoke);
         }
 
         public void ClearOnClickAction()

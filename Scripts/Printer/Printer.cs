@@ -16,30 +16,22 @@ namespace KCoreKit
         private TMP_Text _textComponent;
         private bool _isPlaying;
 
+        public void Awake()
+        {
+            _textComponent = GetComponent<TMP_Text>();
+        }
 
         public void Setup(string text, TMP_FontAsset font = null)
         {
-            _textComponent = GetComponent<TMP_Text>();
             if (font)
             {
                 _textComponent.font = font;
             }
-
+            
             _letters = GenerateLetter(text);
-            _textComponent.text = GenerateText();
             _appearSequence = GenerateAppearSequence(_letters);
         }
 
-        private string GenerateText()
-        {
-            var builder = new StringBuilder();
-            foreach (var letter in _letters)
-            {
-                builder.Append(letter.value);
-            }
-
-            return builder.ToString();
-        }
 
         public Tween Print(float delay = 0, TweenCallback callback = null)
         {
@@ -62,23 +54,22 @@ namespace KCoreKit
             if (_appearSequence != null)
             {
                 _appearSequence.Kill();
-                _appearSequence = null;
             }
-
-            _isPlaying = false;
-            if (_letters == null) return;
 
             foreach (var letter in _letters)
             {
                 letter.KillRepeatTween();
             }
+
+            _isPlaying = false;
+            //_textComponent.text = "";
         }
 
 
         public Sequence GenerateAppearSequence(Letter[] letters)
         {
             var sequence = DOTween.Sequence().Pause().SetAutoKill(false);
-            ;
+            
             foreach (var letter in letters)
             {
                 sequence.Append(letter.AppearSequence().AppendCallback(() => { letter.RepeatSequence(); }));
@@ -92,15 +83,16 @@ namespace KCoreKit
             List<Letter> result = new List<Letter>();
 
             // 줄바꿈(\n)을 포함하여 중첩된 태그를 완벽하게 추적하는 패턴
-            string tagPattern = 
+            string tagPattern =
                 @"<(?<tag>\w+)>(?<value>(?:[^<>]+|<(?<Open>\w+)[^>]*>|<\/(?<-Open>\w+)>)*(?(Open)(?!)))<\/\1>" + // 1. 쌍을 이루는 태그
-                @"|" + 
+                @"|" +
                 @"(?<tag>br|hr|img)\b[^>]*\/?>" + // 2. <br> 같은 단독 태그 추가 (예시)
-                @"|" + 
+                @"|" +
                 @"(?<text>[^<>]+)"; // 3. 일반 텍스트
-            
-            MatchCollection matches = Regex.Matches(text, tagPattern, RegexOptions.Multiline, TimeSpan.FromSeconds(5.0));
-    
+
+            MatchCollection matches =
+                Regex.Matches(text, tagPattern, RegexOptions.Multiline, TimeSpan.FromSeconds(5.0));
+
             foreach (Match match in matches)
             {
                 // 태그 형태인 경우 (<tag>value</tag>)
@@ -115,7 +107,7 @@ namespace KCoreKit
                     {
                         value = match.Value;
                     }
-                    
+
                     foreach (var c in value)
                     {
                         result.Add(new Letter(c, style, _textComponent.color));
@@ -125,7 +117,7 @@ namespace KCoreKit
                 else if (match.Groups["text"].Success)
                 {
                     string value = match.Groups["text"].Value;
-            
+
                     foreach (var c in value)
                     {
                         result.Add(new Letter(c, PrinterManager.defaultStyle, _textComponent.color));
@@ -137,7 +129,6 @@ namespace KCoreKit
         }
 
         private void LateUpdate()
-
         {
             if (_letters != null && _textComponent.text.Length > 0)
             {
@@ -150,27 +141,26 @@ namespace KCoreKit
                 Vector3[] vertices = mesh.vertices;
 
                 Color[] colors = mesh.colors;
-                
+
                 int letterIndex = 0;
-            
+
                 for (int i = 0; i < textInfo.characterCount; i++)
                 {
                     var characterInfo = textInfo.characterInfo[i];
-                    
+
                     if (!characterInfo.isVisible)
 
                     {
                         continue;
                     }
-                    
-                    var addOffsetX = (_letters[i].scale.x-1)*i;
-                    var addOffsetY = (_letters[i].scale.y-1)*i;
-                    Vector3 center = new Vector3(addOffsetX,addOffsetY,0);
+
+                    var addOffsetX = (_letters[i].scale.x - 1) * i;
+                    var addOffsetY = (_letters[i].scale.y - 1) * i;
+                    Vector3 center = new Vector3(addOffsetX, addOffsetY, 0);
 
                     float halfHeight, halfWidth;
 
-                   
-                    
+
                     halfHeight = Vector3.Distance(vertices[characterInfo.vertexIndex],
                         vertices[characterInfo.vertexIndex + 1]) / 2;
 
@@ -214,17 +204,15 @@ namespace KCoreKit
                     colors[characterInfo.vertexIndex + 2] = _letters[i].color;
 
                     colors[characterInfo.vertexIndex + 3] = _letters[i].color;
-                    
+
                     int matIndex = PrinterManager.GetStyleIndex(_letters[i].style);
                     textInfo.characterInfo[i].fontAsset = _letters[i].style.font;
                     textInfo.characterInfo[i].materialReferenceIndex = matIndex;
-                    
                 }
+
                 mesh.colors = colors;
                 mesh.vertices = vertices;
                 _textComponent.canvasRenderer.SetMesh(mesh);
-                
-                
             }
         }
 

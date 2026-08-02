@@ -74,12 +74,12 @@ namespace KCoreKit
 
         public void RegisterPreExecutionCallback(string id, Action<IAbilityContext> action)
         {
-            effects.Find(x=>x.id == id).RegisterPreExecutionCallback(action);
+            effects.Find(x=>x.id == id).RegisterPreExecutionAction(action);
         }
         
         public void RegisterPostExecutionCallback(string id, Action<IAbilityContext> action)
         {
-            effects.Find(x=>x.id == id).RegisterPostExecutionCallback(action);
+            effects.Find(x=>x.id == id).RegisterPostExecutionAction(action);
         }
 
         public void AddScheduler(string id, string abilityId, float interval,ref IAbilityContext context)

@@ -14,12 +14,12 @@ namespace KCoreKit
     [RequireComponent(typeof(PlayerInput))]
     public class InputManager : Singleton<InputManager>
     {
-        private static PlayerInput PlayerInput => GetInstance().GetComponent<PlayerInput>();
+        private static PlayerInput _playerInput => GetInstance().GetComponent<PlayerInput>();
         
 
         public static void RegisterAction(Action<InputAction.CallbackContext> callback)
         {
-            PlayerInput.onActionTriggered += callback;
+            _playerInput.onActionTriggered += callback;
         }
         
         public static void RegisterAction(string action, PlayerActionType actionType,
@@ -28,13 +28,13 @@ namespace KCoreKit
             switch (actionType)
             {
                 case PlayerActionType.Started:
-                    PlayerInput.actions[action].started += callback;
+                    _playerInput.actions[action].started += callback;
                     break;
                 case PlayerActionType.Performed:
-                    PlayerInput.actions[action].performed += callback;
+                    _playerInput.actions[action].performed += callback;
                     break;
                 case PlayerActionType.Canceled:
-                    PlayerInput.actions[action].canceled += callback;
+                    _playerInput.actions[action].canceled += callback;
                     break;
             }
         }
@@ -45,13 +45,13 @@ namespace KCoreKit
             switch (actionType)
             {
                 case PlayerActionType.Started:
-                    PlayerInput.actions[action].started -= callback;
+                    _playerInput.actions[action].started -= callback;
                     break;
                 case PlayerActionType.Performed:
-                    PlayerInput.actions[action].performed -= callback;
+                    _playerInput.actions[action].performed -= callback;
                     break;
                 case PlayerActionType.Canceled:
-                    PlayerInput.actions[action].canceled -= callback;
+                    _playerInput.actions[action].canceled -= callback;
                     break;
             }
         }

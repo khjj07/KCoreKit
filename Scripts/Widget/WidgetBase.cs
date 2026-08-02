@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 #if UNITY_EDITOR
+using UnityEditor;
 #endif
 
 namespace KCoreKit
@@ -34,25 +34,63 @@ namespace KCoreKit
 #endif
 
     [RequireComponent(typeof(RectTransform), typeof(CanvasGroup))]
-    public class WidgetBase : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IPointerMoveHandler
+    public class WidgetBase : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler,
+        IPointerDownHandler, IPointerUpHandler, IPointerMoveHandler
     {
-        [HideInInspector] public RectTransform rectTransform => GetComponent<RectTransform>();
-        [HideInInspector] public CanvasGroup canvasGroup => GetComponent<CanvasGroup>();
-        [HideInInspector] public Canvas canvas => GetComponentInParent<Canvas>(true);
-        protected bool isAwake = false;
+        [HideInInspector]
+        public RectTransform rectTransform
+        {
+            get
+            {
+                if (!_rectTransform)
+                {
+                    _rectTransform = GetComponent<RectTransform>();
+                }
+
+                return _rectTransform;
+            }
+        }
+
+        [HideInInspector]
+        public CanvasGroup canvasGroup
+        {
+            get
+            {
+                if (!_canvasGroup)
+                {
+                    _canvasGroup = GetComponent<CanvasGroup>();
+                }
+
+                return _canvasGroup;
+            }
+        }
+
+        [HideInInspector]
+        public Canvas canvas
+        {
+            get
+            {
+                if (!_canvas)
+                {
+                    _canvas = GetComponent<Canvas>();
+                }
+
+                return _canvas;
+            }
+        }
+
+
+        private RectTransform _rectTransform;
+        private CanvasGroup _canvasGroup;
+        private Canvas _canvas;
         public bool isShown => gameObject.activeSelf;
 
-        public Action<PointerEventData> onPointerClickCallback;
-        public Action<PointerEventData> onPointerEnterCallback;
-        public Action<PointerEventData> onPointerExitCallback;
-        public Action<PointerEventData> onPointerDownCallback;
-        public Action<PointerEventData> onPointerUpCallback;
-        public Action<PointerEventData> onPointerMoveCallback;
-
-        public virtual void Awake()
-        {
-            isAwake = true;
-        }
+        public Action<PointerEventData> onPointerClickAction;
+        public Action<PointerEventData> onPointerEnterAction;
+        public Action<PointerEventData> onPointerExitAction;
+        public Action<PointerEventData> onPointerDownAction;
+        public Action<PointerEventData> onPointerUpAction;
+        public Action<PointerEventData> onPointerMoveAction;
 
         public virtual void Hide()
         {
@@ -63,40 +101,46 @@ namespace KCoreKit
         {
             gameObject.SetActive(true);
         }
-        
-        public void SetParent(Transform parent,bool worldPositionStays = false)
+
+        public void SetCanvas(Canvas canvas, bool worldPositionStays = false)
         {
-            transform.SetParent(parent,worldPositionStays);
+            _canvas = canvas;
+            transform.SetParent(_canvas.transform, worldPositionStays);
+        }
+
+        public void SetParent(Transform parent, bool worldPositionStays = false)
+        {
+            transform.SetParent(parent, worldPositionStays);
         }
 
         public virtual void OnPointerClick(PointerEventData eventData)
         {
-            onPointerClickCallback?.Invoke(eventData);
+            onPointerClickAction?.Invoke(eventData);
         }
 
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
-            onPointerEnterCallback?.Invoke(eventData);
+            onPointerEnterAction?.Invoke(eventData);
         }
 
         public virtual void OnPointerExit(PointerEventData eventData)
         {
-            onPointerExitCallback?.Invoke(eventData);
+            onPointerExitAction?.Invoke(eventData);
         }
 
         public virtual void OnPointerDown(PointerEventData eventData)
         {
-            onPointerDownCallback?.Invoke(eventData);
+            onPointerDownAction?.Invoke(eventData);
         }
 
         public virtual void OnPointerUp(PointerEventData eventData)
         {
-            onPointerUpCallback?.Invoke(eventData);
+            onPointerUpAction?.Invoke(eventData);
         }
 
         public virtual void OnPointerMove(PointerEventData eventData)
         {
-            onPointerMoveCallback?.Invoke(eventData);
+            onPointerMoveAction?.Invoke(eventData);
         }
     }
 }

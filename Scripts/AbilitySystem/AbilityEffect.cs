@@ -17,10 +17,10 @@ namespace KCoreKit
         
         private List<List<MethodInfo>> orConditionMethods;
         private List<MethodInfo> currentAndConditionGroup;
-        private List<AbilityPropertySet> conditionProperties;
+        private List<AbilityConditionDataTableRow> conditionDataList;
         
         private List<MethodInfo> actionMethods;
-        private List<AbilityPropertySet> actionProperties;
+        private List<AbilityActionDataTableRow> actionDataList;
         private Action<IAbilityContext> _onPreExecute;
         private Action<IAbilityContext> _onPostExecute;
 
@@ -29,9 +29,7 @@ namespace KCoreKit
             this.id = id;
             this.tags = tags.ToArray();
             orConditionMethods = new List<List<MethodInfo>>();
-            conditionProperties = new List<AbilityPropertySet>();
             actionMethods = new List<MethodInfo>();
-            actionProperties = new List<AbilityPropertySet>();
         }
         
         public void Setup(AbilityAgent owner)
@@ -50,16 +48,16 @@ namespace KCoreKit
             orConditionMethods.Add(currentAndConditionGroup);
         }
 
-        public void BindAndCondition(MethodInfo condition, Dictionary<string, string> prop)
+        public void BindAndCondition(MethodInfo condition,AbilityConditionDataTableRow data)
         {
             currentAndConditionGroup.Add(condition);
-            conditionProperties.Add(new AbilityPropertySet(this,prop));
+            conditionDataList.Add(data);
         }
 
-        public void BindAction(MethodInfo action, Dictionary<string, string> prop)
+        public void BindAction(MethodInfo action,AbilityActionDataTableRow data)
         {
             actionMethods.Add(action);
-            actionProperties.Add(new AbilityPropertySet(this,prop));
+            actionDataList.Add(data);
         }
 
 
@@ -67,7 +65,7 @@ namespace KCoreKit
         {
             for (int i = 0; i < actionMethods.Count; i++)
             {
-               actionMethods[i]?.Invoke(null, new object[] { this, actionProperties[i], context });
+               actionMethods[i]?.Invoke(null, new object[] { this, actionDataList[i], context });
             }
         }
 
@@ -80,7 +78,7 @@ namespace KCoreKit
                 var andConditionResult = true;
                 foreach (var andCondition in orConditionMethods[i])
                 {
-                    andConditionResult &= (bool)andCondition.Invoke(null, new object[] { this, conditionProperties[i], context });
+                    andConditionResult &= (bool)andCondition.Invoke(null, new object[] { this, conditionDataList[i], context });
                 }
 
                 result |= andConditionResult;
@@ -102,12 +100,12 @@ namespace KCoreKit
             return false;
         }
 
-        public void RegisterPreExecutionCallback(Action<IAbilityContext> action)
+        public void RegisterPreExecutionAction(Action<IAbilityContext> action)
         {
             _onPreExecute += action;
         }
         
-        public void RegisterPostExecutionCallback(Action<IAbilityContext> action)
+        public void RegisterPostExecutionAction(Action<IAbilityContext> action)
         {
             _onPostExecute += action;
         }
