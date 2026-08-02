@@ -19,7 +19,6 @@ namespace KCoreKit
             _random = new Random(_seed);
         }
         
-        
         public static T GetRandomElement<T>(this IList<T> array)
         {
             if (array == null || array.Count == 0)
@@ -28,6 +27,7 @@ namespace KCoreKit
             }
             return array.OrderBy(x => Next()).First();
         }
+        
         public static List<T> GetRandomElements<T>(this IList<T> array, int number)
         {
             if (array == null || array.Count == 0 || number <= 0)
@@ -41,6 +41,7 @@ namespace KCoreKit
                 .Take(count)
                 .ToList();
         }
+        
         public static float Range(float min, float max)
         {
             return (float)NextDouble() * (max - min) + min;

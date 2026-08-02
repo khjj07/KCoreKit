@@ -26,7 +26,7 @@ namespace KCoreKit
             StartCoroutine(Run());
         }
 
-        public static T GetSubMode<T>() where T : class
+        public static T GetDirector<T>() where T : class
         {
             return Array.Find(GetInstance()._subModes, s => s is T) as T;
         }

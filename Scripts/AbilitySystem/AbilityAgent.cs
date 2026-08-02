@@ -44,7 +44,7 @@ namespace KCoreKit
 
         public void AddEffect(string id, AbilityProvider provider = null)
         {
-            var effect = AbilityManager.CreateAbilityEffect(id);
+            var effect = AbilitySystem.CreateAbilityEffect(id);
             effect.Setup(this);
             effect.SetProvider(provider);
             effects.Add(effect);
@@ -72,12 +72,12 @@ namespace KCoreKit
 
         public void RegisterPreExecutionCallback(string id, Action<IAbilityContext> action)
         {
-            effects.Find(x=>x.id == id).RegisterPreExecutionCallback(action);
+            effects.Find(x=>x.id == id).RegisterPreExecutionAction(action);
         }
         
         public void RegisterPostExecutionCallback(string id, Action<IAbilityContext> action)
         {
-            effects.Find(x=>x.id == id).RegisterPostExecutionCallback(action);
+            effects.Find(x=>x.id == id).RegisterPostExecutionAction(action);
         }
     }
 }
