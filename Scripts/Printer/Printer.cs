@@ -13,19 +13,15 @@ namespace KCoreKit
     {
         private Letter[] _letters;
         private Sequence _appearSequence;
-        private TMP_Text _textComponent;
+        private TMP_Text textComponent => GetComponent<TMP_Text>();
         private bool _isPlaying;
 
-        public void Awake()
-        {
-            _textComponent = GetComponent<TMP_Text>();
-        }
-
+     
         public void Setup(string text, TMP_FontAsset font = null)
         {
             if (font)
             {
-                _textComponent.font = font;
+                textComponent.font = font;
             }
             
             _letters = GenerateLetter(text);
@@ -110,7 +106,7 @@ namespace KCoreKit
 
                     foreach (var c in value)
                     {
-                        result.Add(new Letter(c, style, _textComponent.color));
+                        result.Add(new Letter(c, style, textComponent.color));
                     }
                 }
                 // 일반 텍스트인 경우
@@ -120,7 +116,7 @@ namespace KCoreKit
 
                     foreach (var c in value)
                     {
-                        result.Add(new Letter(c, PrinterManager.defaultStyle, _textComponent.color));
+                        result.Add(new Letter(c, PrinterManager.defaultStyle, textComponent.color));
                     }
                 }
             }
@@ -130,13 +126,13 @@ namespace KCoreKit
 
         private void LateUpdate()
         {
-            if (_letters != null && _textComponent.text.Length > 0)
+            if (_letters != null && textComponent.text.Length > 0)
             {
-                _textComponent.ForceMeshUpdate();
+                textComponent.ForceMeshUpdate();
 
-                var mesh = _textComponent.mesh;
+                var mesh = textComponent.mesh;
 
-                var textInfo = _textComponent.textInfo;
+                var textInfo = textComponent.textInfo;
 
                 Vector3[] vertices = mesh.vertices;
 
@@ -212,7 +208,7 @@ namespace KCoreKit
 
                 mesh.colors = colors;
                 mesh.vertices = vertices;
-                _textComponent.canvasRenderer.SetMesh(mesh);
+                textComponent.canvasRenderer.SetMesh(mesh);
             }
         }
 
