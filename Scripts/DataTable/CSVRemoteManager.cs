@@ -27,7 +27,7 @@ namespace KCoreKit
             if (GUILayout.Button("모든 CSV 원격 동기화 (Sync All)", GUILayout.Height(30)))
             {
                 // 비동기 메서드 실행
-                manager.SyncAllContexts();
+                manager.SyncAllContexts(CSVSyncOption.Editor);
             }
 
             GUI.enabled = true;
@@ -35,19 +35,24 @@ namespace KCoreKit
     }
 #endif
 
+    public enum  CSVSyncOption
+    {
+        Editor,
+        Both,
+        Runtime
+    }
 
     [Serializable]
     public class CSVRemoteContext
     {
         public TextAsset csvFile;
         public string remoteAddress;
+        public CSVSyncOption syncOption;
     }
-
-    // SingletonAsset 구조를 유지합니다. (없다면 ScriptableObject로 대체 가능)
+    
     public class CSVRemoteManager : SingletonAsset<CSVRemoteManager>
     {
         public List<CSVRemoteContext> contexts = new List<CSVRemoteContext>();
-
         /// <summary>
         /// 특정 텍스트 에셋의 원격 데이터를 다운로드하여 동기화합니다.
         /// </summary>
@@ -105,13 +110,16 @@ namespace KCoreKit
         /// 리스트에 등록된 모든 CSV 파일을 순차적으로 동기화합니다.
         /// </summary>
         
-        public void SyncAllContexts()
+        public void SyncAllContexts(CSVSyncOption option)
         {
             Debug.Log("[CSVRemoteManager] 모든 CSV 파일 동기화 시작...");
             foreach (var context in contexts)
             {
-                Debug.Log($"context :  {context.remoteAddress}, {context.csvFile.name}");
-                DownloadAndSync(context);
+                if (context.syncOption == option || context.syncOption == CSVSyncOption.Both)
+                {
+                    Debug.Log($"context :  {context.remoteAddress}, {context.csvFile.name}");
+                    DownloadAndSync(context);
+                }
             }
 
 #if UNITY_EDITOR
@@ -125,7 +133,7 @@ namespace KCoreKit
         [MenuItem("DataTable/Sync & Refresh All")]
         public static void SyncAll()
         {
-            GetInstance().SyncAllContexts();
+            GetInstance().SyncAllContexts(CSVSyncOption.Editor);
             DataTableUtility.RefreshAll();
         }
         
