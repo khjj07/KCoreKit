@@ -11,8 +11,6 @@ namespace KCoreKit
     {
         public List<AbilityEffect> effects = new List<AbilityEffect>();
         public IAbilityStatSet abilityStatSet;
-        private List<AbilityScheduler> _abilityScheduler = new List<AbilityScheduler>();
-        private bool _isUpdate;
 
         public void SetStats(IAbilityStatSet statSet)
         {
@@ -51,7 +49,7 @@ namespace KCoreKit
             effect.SetProvider(provider);
             effects.Add(effect);
         }
-        
+
         public void ExecuteEffectsByTag<TAbilityContext>(string tag, ref TAbilityContext argumentData)
             where TAbilityContext : IAbilityContext
         {
@@ -63,45 +61,23 @@ namespace KCoreKit
                     effect.TryExecute(ref argumentData);
                 }
             }
-           
+
         }
 
         public void ExecuteEffectById<TAbilityContext>(string id, ref TAbilityContext argumentData)
             where TAbilityContext : IAbilityContext
         {
-             effects.Find(x=>x.id == id).TryExecute(ref argumentData);
+            effects.Find(x => x.id == id).TryExecute(ref argumentData);
         }
 
         public void RegisterPreExecutionCallback(string id, Action<IAbilityContext> action)
         {
-            effects.Find(x=>x.id == id).RegisterPreExecutionAction(action);
+            effects.Find(x => x.id == id).RegisterPreExecutionAction(action);
         }
-        
+
         public void RegisterPostExecutionCallback(string id, Action<IAbilityContext> action)
         {
-            effects.Find(x=>x.id == id).RegisterPostExecutionAction(action);
-        }
-
-        public void AddScheduler(string id, string abilityId, float interval,ref IAbilityContext context)
-        {
-            _abilityScheduler.Add(new AbilityScheduler(this,id,interval,abilityId,context));
-        }
-
-        public void SetUpdate(bool isUpdate)
-        {
-            _isUpdate = isUpdate;
-        }
-
-        public void Update()
-        {
-            if (!_isUpdate)
-            {
-                return;
-            }
-            foreach (var scheduler in _abilityScheduler)
-            {
-                scheduler.OnUpdate();
-            }
+            effects.Find(x => x.id == id).RegisterPostExecutionAction(action);
         }
     }
 }

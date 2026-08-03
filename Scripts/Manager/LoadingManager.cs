@@ -17,7 +17,7 @@ namespace KCoreKit
             onSceneLoaded?.Invoke();
         }
 
-        public static void ChangeScene(string sceneName, Action onSceneLoaded = null)
+        public static void LoadScene(string sceneName, Action onSceneLoaded = null)
         {
             var instance = GetInstance();
             instance.StartCoroutine(instance.LoadSceneAsync(sceneName, onSceneLoaded));

@@ -18,19 +18,16 @@ namespace KCoreKit
         [HideInInspector]
         public TMP_Text textComponent => GetComponentInChildren<TMP_Text>(true);
 
-        public void AddOnClickAction(Action action)
+        public Action onClickAction;
+
+        public void Awake()
         {
-            button.onClick.AddListener(action.Invoke);
+            button.onClick.AddListener(OnClick);
         }
 
-        public void RemoveOnClickAction(Action action)
+        protected virtual void OnClick()
         {
-            button.onClick.RemoveListener(action.Invoke);
-        }
-
-        public void ClearOnClickAction()
-        {
-            button.onClick.RemoveAllListeners();
+            onClickAction?.Invoke();
         }
 
         public void SetInteractable(bool value)
