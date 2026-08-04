@@ -10,17 +10,17 @@ namespace KCoreKit
     public class AbilityEffect
     {
         public string id;
-        public AbilityProvider provider;
+        public object source;
         public AbilityAgent owner;
         public string[] tags;
         private bool _isActive;
         
         private List<List<MethodInfo>> orConditionMethods;
         private List<MethodInfo> currentAndConditionGroup;
-        private List<AbilityConditionDataTableRow> conditionDataList;
+        private List<AbilityConditionDataTableRow> conditionDataList = new List<AbilityConditionDataTableRow>();
         
         private List<MethodInfo> actionMethods;
-        private List<AbilityActionDataTableRow> actionDataList;
+        private List<AbilityActionDataTableRow> actionDataList = new List<AbilityActionDataTableRow>();
         private Action<IAbilityContext> _onPreExecute;
         private Action<IAbilityContext> _onPostExecute;
 
@@ -32,15 +32,12 @@ namespace KCoreKit
             actionMethods = new List<MethodInfo>();
         }
         
-        public void Setup(AbilityAgent owner)
+        public void Setup(AbilityAgent owner, object source)
         {
             this.owner = owner;
+            this.source = source;
         }
-
-        public void SetProvider(AbilityProvider provider)
-        {
-            this.provider = provider;
-        }
+        
         
         public void AddNewOrConditionGroup()
         {

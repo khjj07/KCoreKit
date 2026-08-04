@@ -10,46 +10,38 @@ namespace KCoreKit
     public class AbilityAgent : MonoBehaviour
     {
         public List<AbilityEffect> effects = new List<AbilityEffect>();
-        public IAbilityStatSet abilityStatSet;
-
-        public void SetStats(IAbilityStatSet statSet)
-        {
-            abilityStatSet = statSet;
-        }
-
-        public T GetStats<T>() where T : IAbilityStatSet
-        {
-            return (T)abilityStatSet;
-        }
-
+  
         public void RemoveEffect(string id)
         {
             var effect = effects.Find(x => x.id == id);
             effects.Remove(effect);
         }
 
-        public void ResetAllStats()
-        {
-            foreach (var stat in abilityStatSet.Get())
-            {
-                stat.Reset();
-            }
-        }
-
         public void ClearEffect()
         {
             effects.Clear();
-            ResetAllStats();
         }
 
-        public void AddEffect(string id, AbilityProvider provider = null)
+        public void AddEffect(string id, object source = null)
         {
             var effect = AbilitySystem.CreateAbilityEffect(id);
-            effect.Setup(this);
-            effect.SetProvider(provider);
+            effect.Setup(this,source);
             effects.Add(effect);
         }
 
+        public void RemoveEffectFromSource(object source)
+        {
+            bool removed = false;
+            for (int i = effects.Count - 1; i >= 0; i--)
+            {
+                if (effects[i].source == source)
+                {
+                    effects.RemoveAt(i);
+                    removed = true;
+                }
+            }
+        }
+        
         public void ExecuteEffectsByTag<TAbilityContext>(string tag, ref TAbilityContext argumentData)
             where TAbilityContext : IAbilityContext
         {
@@ -79,5 +71,7 @@ namespace KCoreKit
         {
             effects.Find(x => x.id == id).RegisterPostExecutionAction(action);
         }
+        
+       
     }
 }
