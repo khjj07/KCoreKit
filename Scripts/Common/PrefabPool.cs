@@ -13,11 +13,9 @@ namespace KCoreKit.Scripts.Common
         private Quaternion _rotation;
         private Vector3 _scale = Vector3.one;
         private T _prefab;
-
-        public Action<T> onCreateAction;
+        
         public Action<T> onGetAction;
         public Action<T> onReleaseAction;
-        public Action<T> onDestroyAction;
 
         public PrefabPool(T prefab, Transform parent = null, int capacity = 10)
         {
@@ -45,13 +43,11 @@ namespace KCoreKit.Scripts.Common
         {
             var instance = Object.Instantiate(_prefab, _parent, true);
             instance.gameObject.SetActive(false);
-            onCreateAction?.Invoke(instance);
             return instance;
         }
 
         private void DestroyInstance(T instance)
         {
-            onDestroyAction?.Invoke(instance);
             Object.Destroy(instance.gameObject);
         }
 

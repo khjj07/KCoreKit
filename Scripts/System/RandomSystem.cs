@@ -34,11 +34,10 @@ namespace KCoreKit
             {
                 return new List<T>();
             }
-
-            int count = Math.Min(number, array.Count);
+            
             
             return array.OrderBy(x => Next())
-                .Take(count)
+                .Take(number)
                 .ToList();
         }
         
