@@ -10,7 +10,7 @@ namespace KCoreKit.Scripts.Common
         private ObjectPool<T> _pool;
         private Transform _parent;
         private Vector3 _position;
-        private Quaternion _rotation;
+        private Quaternion _rotation = Quaternion.identity;
         private Vector3 _scale = Vector3.one;
         private T _prefab;
         

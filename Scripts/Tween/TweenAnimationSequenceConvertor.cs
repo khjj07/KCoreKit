@@ -1,13 +1,22 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using DG.Tweening.Core;
 using UnityEngine;
 
 namespace KCoreKit
 {
+    public enum TweenConvertMode
+    {
+        Join,
+        Append
+    }
     public class TweenAnimationSequenceConvertor : MonoBehaviour
     {
         private Sequence _sequence;
-
+        [SerializeField]
+        private TweenConvertMode mode;
+        [SerializeField]
+        private bool subNode;
         // Awake 대신 Start를 사용하여 모든 컴포넌트의 초기화 완료를 보장
         public void Start()
         {
@@ -19,7 +28,18 @@ namespace KCoreKit
                 // tween이 정상적으로 생성되었는지 확인 후 추가
                 if (component.tween != null)
                 {
-                    _sequence.Join(component.tween);
+                    switch (mode)
+                    {    
+                        case TweenConvertMode.Join:
+                            _sequence.Join(component.tween);
+                            break;
+                        case TweenConvertMode.Append:
+                            _sequence.Append(component.tween);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                
                 }
             }
         }
