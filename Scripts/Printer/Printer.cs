@@ -138,8 +138,6 @@ namespace KCoreKit
 
                 Color[] colors = mesh.colors;
 
-                int letterIndex = 0;
-
                 for (int i = 0; i < textInfo.characterCount; i++)
                 {
                     var characterInfo = textInfo.characterInfo[i];
