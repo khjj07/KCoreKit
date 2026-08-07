@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -72,7 +75,7 @@ namespace KCoreKit
             {
                 if (!_canvas)
                 {
-                    _canvas = GetComponent<Canvas>();
+                    _canvas = GetComponentInParent<Canvas>();
                 }
 
                 return _canvas;
@@ -101,7 +104,15 @@ namespace KCoreKit
         {
             gameObject.SetActive(true);
         }
-
+        
+        public void SetPositionFromWorldPoint(Camera camera, Vector3 worldPosition, Vector2 offset = default)
+        {
+            var screenPoint = RectTransformUtility.WorldToScreenPoint(camera, worldPosition);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                (RectTransform)canvas.transform, screenPoint, camera, out var localPoint);
+            rectTransform.anchoredPosition = localPoint+offset;
+        }
+        
         public void SetCanvas(Canvas canvas, bool worldPositionStays = false)
         {
             _canvas = canvas;
