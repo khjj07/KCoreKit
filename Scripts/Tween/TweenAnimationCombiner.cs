@@ -17,8 +17,9 @@ namespace KCoreKit
     {
         public TweenCombineMode mode;
         
-        public IEnumerator Play(Action action = null)
+        public IEnumerator Play(float delay = 0,Action action = null)
         {
+            yield return new WaitForSeconds(delay);
             yield return PlayRecursiveRoutine(action);
         }
 
