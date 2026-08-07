@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using DG.DOTweenEditor;
+using System.Collections.Generic;
 using DG.Tweening;
 using DG.Tweening.Core;
 using UnityEngine;
@@ -16,65 +16,114 @@ namespace KCoreKit
     public class TweenAnimationCombiner : MonoBehaviour
     {
         public TweenCombineMode mode;
-        [SerializeField] private bool isRoot;
-
-
-        public IEnumerator Play()
+        
+        public IEnumerator Play(Action action = null)
         {
-            yield return PlayRecursiveRoutine();
+            yield return PlayRecursiveRoutine(action);
         }
 
-        private IEnumerator PlayRoutine(Action callback = null)
+        private IEnumerator PlayRecursiveRoutine(Action callback = null)
         {
-            var components = GetComponents<ABSAnimationComponent>();
-            var count = 0;
-            foreach (var component in components)
+            var selfComponents = GetComponents<ABSAnimationComponent>();
+
+            if (mode == TweenCombineMode.Append)
             {
-                switch (mode)
+                // 1. Append 모드: 자신의 트윈을 순차적으로 완료될 때까지 대기
+                foreach (var comp in selfComponents)
                 {
-                    case TweenCombineMode.Join:
-                        count++;
-                        component.tween.Play().OnComplete(() => count--);
-                        break;
-                    case TweenCombineMode.Append:
-                        yield return component.tween.Play().WaitForCompletion();
-                        break;
+                    if (comp != null && comp.tween != null)
+                    {
+                        comp.tween.Rewind();
+                        yield return comp.tween.Play().WaitForCompletion();
+                    }
                 }
+
+                // 2. 자식들 순차 처리
+                yield return PlayChildrenAppendRoutine();
             }
-
-            yield return new WaitUntil(() => count == 0);
-            callback?.Invoke();
-        }
-
-        private IEnumerator PlayRecursiveRoutine()
-        {
-            if (isRoot)
+            else // Join 모드
             {
-                int count = 0;
+                List<Tween> activeTweens = new List<Tween>();
+                List<Coroutine> childCoroutines = new List<Coroutine>();
 
+                // 1. 자신의 트윈들을 동시에 실행 시작
+                foreach (var comp in selfComponents)
+                {
+                    if (comp != null && comp.tween != null)
+                    {
+                        comp.tween.Rewind();
+                        activeTweens.Add(comp.tween.Play());
+                    }
+                }
+
+                // 2. 자식들도 동시에 실행 시작 (Join)
                 for (int i = 0; i < transform.childCount; i++)
                 {
-                    Transform directChild = transform.GetChild(i);
-                    var combiner = directChild.GetComponent<TweenAnimationCombiner>();
+                    var childTransform = transform.GetChild(i);
+                    var childCombiner = childTransform.GetComponent<TweenAnimationCombiner>();
 
-                    // 자식에게 Combiner가 존재할 경우에만 처리
-                    if (combiner != null)
+                    if (childCombiner != null)
                     {
-                        // 자식의 mode 설정에 따라 부모 시퀀스에 결합
-                        switch (combiner.mode)
+                        childCoroutines.Add(StartCoroutine(childCombiner.PlayRecursiveRoutine()));
+                    }
+                    else
+                    {
+                        // Combiner가 없고 컴포넌트만 있는 자식 처리
+                        var anims = childTransform.GetComponents<ABSAnimationComponent>();
+                        foreach (var anim in anims)
                         {
-                            case TweenCombineMode.Join:
-                                count++;
-                                StartCoroutine(combiner.PlayRoutine(() => count--));
-                                break;
-                            case TweenCombineMode.Append:
-                                yield return combiner.PlayRoutine();
-                                break;
+                            if (anim != null && anim.tween != null)
+                            {
+                                anim.tween.Rewind();
+                                activeTweens.Add(anim.tween.Play());
+                            }
                         }
                     }
                 }
 
-                yield return new WaitUntil(() => count == 0);
+                // 3. 자신의 모든 트윈이 끝날 때까지 대기
+                foreach (var tween in activeTweens)
+                {
+                    if (tween != null && tween.IsActive())
+                    {
+                        yield return tween.WaitForCompletion();
+                    }
+                }
+
+                // 4. 자식 코루틴들이 모두 끝날 때까지 대기
+                foreach (var co in childCoroutines)
+                {
+                    yield return co;
+                }
+            }
+
+            // 모든 재생이 끝난 후 콜백 호출 보장
+            callback?.Invoke();
+        }
+
+        private IEnumerator PlayChildrenAppendRoutine()
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                var childTransform = transform.GetChild(i);
+                var childCombiner = childTransform.GetComponent<TweenAnimationCombiner>();
+
+                if (childCombiner != null)
+                {
+                    yield return childCombiner.PlayRecursiveRoutine();
+                }
+                else
+                {
+                    var anims = childTransform.GetComponents<ABSAnimationComponent>();
+                    foreach (var anim in anims)
+                    {
+                        if (anim != null && anim.tween != null)
+                        {
+                            anim.tween.Rewind();
+                            yield return anim.tween.Play().WaitForCompletion();
+                        }
+                    }
+                }
             }
         }
     }
