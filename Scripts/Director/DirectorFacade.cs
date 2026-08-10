@@ -41,16 +41,6 @@ namespace KCoreKit
             }
             instance.isInitialized = true;
             instance._isRunning = true;
-            
-            while (instance._isRunning)
-            {
-                foreach (var subMode in instance._subModes)
-                {
-                    yield return subMode.OnUpdate();
-                }
-
-                yield return new WaitForEndOfFrame();
-            }
         }
 
         public void OnDestroy()

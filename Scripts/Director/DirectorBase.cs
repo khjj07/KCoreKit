@@ -12,10 +12,5 @@ namespace KCoreKit
         {
             yield return null;
         }
-
-        public virtual IEnumerator OnUpdate()
-        {
-            yield return null;
-        }
     }
 }
