@@ -13,12 +13,23 @@ namespace KCoreKit
         Append
     }
 
-    public class TweenAnimationExecuter : MonoBehaviour
+    public class TweenAnimationPlayer : MonoBehaviour
     {
+       
         public TweenCombineMode mode;
+        public bool forcePlay;
         
         public IEnumerator Play(float delay = 0,Action action = null)
         {
+            if (forcePlay)
+            {
+                var components = GetComponentsInChildren<ABSAnimationComponent>();
+                foreach (var component in components)
+                {
+                    component.DORewind();
+                }
+            }
+
             yield return new WaitForSeconds(delay);
             yield return PlayRecursiveRoutine(action);
         }
@@ -61,7 +72,7 @@ namespace KCoreKit
                 for (int i = 0; i < transform.childCount; i++)
                 {
                     var childTransform = transform.GetChild(i);
-                    var childCombiner = childTransform.GetComponent<TweenAnimationExecuter>();
+                    var childCombiner = childTransform.GetComponent<TweenAnimationPlayer>();
 
                     if (childCombiner != null)
                     {
@@ -107,7 +118,7 @@ namespace KCoreKit
             for (int i = 0; i < transform.childCount; i++)
             {
                 var childTransform = transform.GetChild(i);
-                var childCombiner = childTransform.GetComponent<TweenAnimationExecuter>();
+                var childCombiner = childTransform.GetComponent<TweenAnimationPlayer>();
 
                 if (childCombiner != null)
                 {
