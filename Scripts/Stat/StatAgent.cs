@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KCoreKit.Scripts
@@ -26,6 +27,10 @@ namespace KCoreKit.Scripts
             return _stats[key].Value;
         }
 
-      
+
+        public Dictionary<string, Stat> GetAllStats()
+        {
+            return _stats;
+        }
     }
 }
