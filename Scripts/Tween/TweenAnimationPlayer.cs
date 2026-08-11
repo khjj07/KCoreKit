@@ -13,7 +13,7 @@ namespace KCoreKit
         Append
     }
 
-    public class TweenAnimationCombiner : MonoBehaviour
+    public class TweenAnimationExecuter : MonoBehaviour
     {
         public TweenCombineMode mode;
         
@@ -61,7 +61,7 @@ namespace KCoreKit
                 for (int i = 0; i < transform.childCount; i++)
                 {
                     var childTransform = transform.GetChild(i);
-                    var childCombiner = childTransform.GetComponent<TweenAnimationCombiner>();
+                    var childCombiner = childTransform.GetComponent<TweenAnimationExecuter>();
 
                     if (childCombiner != null)
                     {
@@ -107,7 +107,7 @@ namespace KCoreKit
             for (int i = 0; i < transform.childCount; i++)
             {
                 var childTransform = transform.GetChild(i);
-                var childCombiner = childTransform.GetComponent<TweenAnimationCombiner>();
+                var childCombiner = childTransform.GetComponent<TweenAnimationExecuter>();
 
                 if (childCombiner != null)
                 {
