@@ -111,5 +111,10 @@ namespace KCoreKit.Scripts
             finalValue *= (1 + sumPercentAdd);
             return (float)Math.Round(finalValue, 4); // 소수점 정리
         }
+
+        public void ClearModifier()
+        {
+           statModifiers.Clear();
+        }
     }
 }

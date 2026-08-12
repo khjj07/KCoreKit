@@ -32,5 +32,10 @@ namespace KCoreKit.Scripts
         {
             return _stats;
         }
+
+        public void ClearStatModifier(string key)
+        {
+            _stats[key].ClearModifier();
+        }
     }
 }
