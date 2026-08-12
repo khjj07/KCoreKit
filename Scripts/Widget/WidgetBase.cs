@@ -107,10 +107,7 @@ namespace KCoreKit
         
         public void SetPositionFromWorldPoint(Camera camera, Vector3 worldPosition, Vector2 offset = default)
         {
-            var screenPoint = RectTransformUtility.WorldToScreenPoint(camera, worldPosition);
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)canvas.transform, screenPoint, camera, out var localPoint);
-            rectTransform.anchoredPosition = localPoint+offset;
+            rectTransform.anchoredPosition = WidgetUtility.WorldPositionToScreenAnchoredPosition(camera,canvas,worldPosition)+offset;
         }
         
         public void SetCanvas(Canvas canvas, bool worldPositionStays = false)
