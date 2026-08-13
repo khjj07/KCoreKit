@@ -104,12 +104,13 @@ namespace KCoreKit
         {
             gameObject.SetActive(true);
         }
-        
+
         public void SetPositionFromWorldPoint(Camera camera, Vector3 worldPosition, Vector2 offset = default)
         {
-            rectTransform.anchoredPosition = WidgetUtility.WorldPositionToScreenAnchoredPosition(camera,canvas,worldPosition)+offset;
+            rectTransform.anchoredPosition =
+                WidgetUtility.WorldPositionToScreenAnchoredPosition(camera, canvas, worldPosition) + offset;
         }
-        
+
         public void SetCanvas(Canvas canvas, bool worldPositionStays = false)
         {
             _canvas = canvas;
@@ -123,32 +124,50 @@ namespace KCoreKit
 
         public virtual void OnPointerClick(PointerEventData eventData)
         {
-            onPointerClickAction?.Invoke(eventData);
+            if (gameObject.activeSelf)
+            {
+                onPointerClickAction?.Invoke(eventData);
+            }
         }
 
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
-            onPointerEnterAction?.Invoke(eventData);
+            if (gameObject.activeSelf)
+            {
+                onPointerEnterAction?.Invoke(eventData);
+            }
         }
 
         public virtual void OnPointerExit(PointerEventData eventData)
         {
-            onPointerExitAction?.Invoke(eventData);
+            if (gameObject.activeSelf)
+            {
+                onPointerExitAction?.Invoke(eventData);
+            }
         }
 
         public virtual void OnPointerDown(PointerEventData eventData)
         {
-            onPointerDownAction?.Invoke(eventData);
+            if (gameObject.activeSelf)
+            {
+                onPointerDownAction?.Invoke(eventData);
+            }
         }
 
         public virtual void OnPointerUp(PointerEventData eventData)
         {
-            onPointerUpAction?.Invoke(eventData);
+            if (gameObject.activeSelf)
+            {
+                onPointerUpAction?.Invoke(eventData);
+            }
         }
 
         public virtual void OnPointerMove(PointerEventData eventData)
         {
-            onPointerMoveAction?.Invoke(eventData);
+            if (gameObject.activeSelf)
+            {
+                onPointerMoveAction?.Invoke(eventData);
+            }
         }
     }
 }

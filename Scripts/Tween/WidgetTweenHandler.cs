@@ -18,27 +18,27 @@ namespace KCoreKit
             _widget = GetComponent<WidgetBase>();
             if (enterPlayer)
             {
-                _widget.onPointerEnterAction += x => StartCoroutine(enterPlayer.Play());
+                _widget.onPointerEnterAction += x => _widget?.StartCoroutine(enterPlayer.Play());
             }
 
             if (exitPlayer)
             {
-                _widget.onPointerExitAction += x => StartCoroutine(exitPlayer.Play());
+                _widget.onPointerExitAction += x => _widget?.StartCoroutine(exitPlayer.Play());
             }
 
             if (clickPlayer)
             {
-                _widget.onPointerClickAction += x => StartCoroutine(clickPlayer.Play());
+                _widget.onPointerClickAction += x => _widget?.StartCoroutine(clickPlayer.Play());
             }
 
             if (downPlayer)
             {
-                _widget.onPointerDownAction += x => StartCoroutine(downPlayer.Play());
+                _widget.onPointerDownAction += x => _widget?.StartCoroutine(downPlayer.Play());
             }
 
             if (upPlayer)
             {
-                _widget.onPointerUpAction += x => StartCoroutine(upPlayer.Play());
+                _widget.onPointerUpAction += x => _widget?.StartCoroutine(upPlayer.Play());
             }
         }
     }
