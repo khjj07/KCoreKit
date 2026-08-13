@@ -9,7 +9,13 @@ namespace KCoreKit
     {
         public static void Save<T>(T data, string fileName, string directory, bool prettyPrint = false) where T : ISerializeData
         {
-            var savePath = Application.persistentDataPath + "/" + directory + "/" + fileName;
+            var saveDirectory = Application.persistentDataPath + "/" + directory;
+            if (!Directory.Exists(saveDirectory))
+            {
+                Directory.CreateDirectory(saveDirectory);
+            }
+
+            var savePath = saveDirectory + "/" + fileName;
             var jsonString = JsonUtility.ToJson(data, prettyPrint);
             using FileStream fileStream = File.Open(savePath, FileMode.OpenOrCreate);
             using BinaryWriter binaryWriter = new(fileStream, Encoding.UTF8);
