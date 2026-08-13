@@ -1,4 +1,5 @@
 ﻿using System;
+using Ami.BroAudio;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,6 +20,7 @@ namespace KCoreKit
         public TMP_Text textComponent => GetComponentInChildren<TMP_Text>(true);
 
         public Action onClickAction;
+        public SoundID clickSound;
 
         public void Awake()
         {
@@ -28,6 +30,10 @@ namespace KCoreKit
         protected virtual void OnClick()
         {
             onClickAction?.Invoke();
+            if (clickSound.IsValid())
+            {
+                clickSound.Play();
+            }
         }
 
         public void SetInteractable(bool value)
