@@ -6,6 +6,13 @@ using UnityEngine.UI;
 
 namespace KCoreKit
 {
+    public enum TextMode
+    {
+        Int,
+        Float1,
+        Float2
+    }
+    
     public class GaugeWidget : WidgetBase
     {
         public float maxValue;
@@ -13,6 +20,7 @@ namespace KCoreKit
         public float changeDuration = 0.1f;
         public Image image;
         public TMP_Text textComponent;
+        public TextMode textMode;
 
         public void OnEnable()
         {
@@ -26,7 +34,19 @@ namespace KCoreKit
             image.fillAmount = currentValue / maxValue;
             if (textComponent)
             {
-                textComponent.text = $"{currentValue:N0}/{maxValue:N0}";
+                switch (textMode)
+                {
+                    case TextMode.Int:
+                        textComponent.text = $"{currentValue:N0}/{maxValue:N0}";
+                        break;
+                    case TextMode.Float1:
+                        textComponent.text = $"{currentValue:F1}/{maxValue:F1}";
+                        break;
+                    case TextMode.Float2:
+                        textComponent.text = $"{currentValue:F2}/{maxValue:F2}";
+                        break;
+                }
+                
             }
         }
 
@@ -35,7 +55,18 @@ namespace KCoreKit
             currentValue = value;
             if (textComponent)
             {
-                textComponent.text = $"{currentValue:N0}/{maxValue:N0}";
+                switch (textMode)
+                {
+                    case TextMode.Int:
+                        textComponent.text = $"{currentValue:N0}/{maxValue:N0}";
+                        break;
+                    case TextMode.Float1:
+                        textComponent.text = $"{currentValue:F1}/{maxValue:F1}";
+                        break;
+                    case TextMode.Float2:
+                        textComponent.text = $"{currentValue:F2}/{maxValue:F2}";
+                        break;
+                }
             }
             DOTween.To(() => image.fillAmount, x => image.fillAmount = x, currentValue / maxValue, changeDuration);
         }
