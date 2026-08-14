@@ -6,6 +6,7 @@ namespace KCoreKit.Scripts
 {
     public class Stat
     {
+        private string name;
         private float baseValue;
         private bool isDirty = true;
         private float cachedValue;
@@ -41,8 +42,9 @@ namespace KCoreKit.Scripts
             }
         }
 
-        public Stat(float baseValue)
+        public Stat(string name,float baseValue)
         {
+            this.name = name;
             this.baseValue = baseValue;
         }
 
@@ -115,6 +117,13 @@ namespace KCoreKit.Scripts
         public void ClearModifier()
         {
            statModifiers.Clear();
+        }
+
+        public override string ToString()
+        {
+            var finalValue = CalculateFinalValue();
+            var result = $"{name} : {baseValue}(+{finalValue - baseValue})";
+            return result;
         }
     }
 }

@@ -15,12 +15,6 @@ namespace KCoreKit
     public class InputManager : Singleton<InputManager>
     {
         private static PlayerInput _playerInput => GetInstance().GetComponent<PlayerInput>();
-        private static Mouse _mouse;
-
-        public void Start()
-        {
-            _mouse = Mouse.current;
-        }
 
         public static void RegisterAction(Action<InputAction.CallbackContext> callback)
         {
@@ -61,10 +55,11 @@ namespace KCoreKit
             }
         }
 
-        public static Vector3 GetWorldMousePosition(float z = 0)
+        public static Vector3 GetWorldPointerPosition(float z = 0)
         {
-            var mousePosition = _mouse.position.ReadValue();
-            var worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+            var pointer = Pointer.current;
+            var screenPosition = pointer != null ? pointer.position.ReadValue() : Vector2.zero;
+            var worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
             worldPosition.z = z;
             return worldPosition;
         }

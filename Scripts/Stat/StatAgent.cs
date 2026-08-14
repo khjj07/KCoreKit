@@ -11,7 +11,7 @@ namespace KCoreKit.Scripts
 
         public void AddStat(string key, float baseValue = 0)
         {
-            _stats.Add(key,new Stat(baseValue));
+            _stats.Add(key,new Stat(key,baseValue));
         }
         public void SetBaseValue(string key, float baseValue)
         {
