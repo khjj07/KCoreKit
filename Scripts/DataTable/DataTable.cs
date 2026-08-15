@@ -315,8 +315,7 @@ namespace KCoreKit
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(assetPath);
 
             string finalPath = Path.Combine(directoryPath, fileNameWithoutExtension + ".csv");
-            System.Text.Encoding encoder = new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: true);
-
+          
             try
             {
                 // 명시적 바이트 변환 대신 문자열로 직접 저장 (유니티 표준 방식)
