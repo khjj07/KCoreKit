@@ -22,7 +22,7 @@ namespace KCoreKit
         public Action onClickAction;
         public SoundID clickSound;
 
-        public void Awake()
+        public virtual void Awake()
         {
             button.onClick.AddListener(OnClick);
         }
