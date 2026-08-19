@@ -4,9 +4,7 @@
     "references": [
         "BroAudio",
         "Unity.Addressables",
-        "Unity.Addressables.Editor",
-        "Unity.Localization",
-        "Unity.Localization.Editor"
+        "Unity.Addressables.Editor"
     ],
     "includePlatforms": [
         "Editor"

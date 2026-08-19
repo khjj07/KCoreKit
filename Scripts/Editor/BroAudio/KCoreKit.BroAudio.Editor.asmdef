@@ -1,0 +1,19 @@
+{
+    "name": "KCoreKit.BroAudio.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:111d4e39aeddad44898002abada9c174",
+        "GUID:3aec8f720e94af547ac266c12aac8446"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
