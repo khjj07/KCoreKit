@@ -1,10 +1,11 @@
+﻿#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
 using KCoreKit.Scripts.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace KCoreKit.Scripts.TextMeshPro
+namespace KCoreKit
 {
     public static class TmpSpriteImportUtility
     {
@@ -61,3 +62,4 @@ namespace KCoreKit.Scripts.TextMeshPro
         }
     }
 }
+#endif
