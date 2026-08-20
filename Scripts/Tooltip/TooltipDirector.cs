@@ -22,5 +22,10 @@ namespace KCoreKit
         {
             tooltipProvider.BindWidget(_widgetDictionary[id],enabled);
         }
+
+        public void Hide(string id)
+        {
+            _widgetDictionary[id].Hide();
+        }
     }
 }
