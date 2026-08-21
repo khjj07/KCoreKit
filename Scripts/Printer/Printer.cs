@@ -35,6 +35,12 @@ namespace KCoreKit
      
         public void Setup(string text, TMP_FontAsset font = null)
         {
+            // 이전 Setup 이 만들어둔 것들을 먼저 정리한다.
+            // appear 시퀀스는 SetAutoKill(false) 라 Kill 하지 않으면 DOTween 활성 목록에
+            // 계속 남고, letter 의 반복 트윈은 SetLoops(-1) 이라 스스로 끝나지 않는다.
+            // _letters 를 새로 만들기 전에 호출해야 예전 letter 의 반복 트윈까지 해제된다.
+            Stop();
+
             if (font)
             {
                 textComponent.font = font;
