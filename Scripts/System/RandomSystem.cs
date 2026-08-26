@@ -27,7 +27,27 @@ namespace KCoreKit
             }
             return array.OrderBy(x => Next()).First();
         }
-        
+        public static T GetRandomElementWithWeight<T>(this IList<T> array, Func<T,float> weightGetter)
+        {
+            if (array == null || array.Count == 0)
+            {
+                return default;
+            }
+
+            var sum = array.Sum(weightGetter.Invoke);
+            var randomVal = Range(0,sum);
+            float accum = 0;
+            foreach (var x in array)
+            {
+                accum += weightGetter.Invoke(x);
+                if (randomVal > accum)
+                {
+                    return x;
+                }
+            }
+
+            throw new ArgumentOutOfRangeException();
+        }
         public static List<T> GetRandomElements<T>(this IList<T> array, int number)
         {
             if (array == null || array.Count == 0 || number <= 0)

@@ -63,5 +63,12 @@ namespace KCoreKit
             worldPosition.z = z;
             return worldPosition;
         }
+
+        public static Vector3 GetScreenPointerPosition()
+        {
+            var pointer = Pointer.current;
+            var screenPosition = pointer != null ? pointer.position.ReadValue() : Vector2.zero;
+            return screenPosition;
+        }
     }
 }
