@@ -64,11 +64,12 @@ namespace KCoreKit
             return worldPosition;
         }
 
-        public static Vector3 GetScreenPointerPosition()
+        public static Vector3 GetScreenPointerPosition(Canvas canvas)
         {
             var pointer = Pointer.current;
             var screenPosition = pointer != null ? pointer.position.ReadValue() : Vector2.zero;
-            return screenPosition;
+            RectTransformUtility.ScreenPointToWorldPointInRectangle((RectTransform)canvas.transform, screenPosition, canvas.worldCamera, out var result);
+            return result;
         }
     }
 }

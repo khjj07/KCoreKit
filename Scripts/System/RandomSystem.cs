@@ -40,7 +40,7 @@ namespace KCoreKit
             foreach (var x in array)
             {
                 accum += weightGetter.Invoke(x);
-                if (randomVal > accum)
+                if (randomVal < accum)
                 {
                     return x;
                 }
