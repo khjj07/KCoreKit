@@ -18,12 +18,22 @@ namespace KCoreKit
 
         public static void RegisterAction(Action<InputAction.CallbackContext> callback)
         {
+            if (!_playerInput)
+            {
+                return;
+            }
+            
             _playerInput.onActionTriggered += callback;
         }
 
         public static void RegisterAction(string action, PlayerActionType actionType,
             Action<InputAction.CallbackContext> callback)
         {
+            if (!_playerInput)
+            {
+                return;
+            }
+            
             switch (actionType)
             {
                 case PlayerActionType.Started:
@@ -41,6 +51,11 @@ namespace KCoreKit
         public static void UnregisterAction(string action, PlayerActionType actionType,
             Action<InputAction.CallbackContext> callback)
         {
+            if (!_playerInput)
+            {
+                return;
+            }
+            
             switch (actionType)
             {
                 case PlayerActionType.Started:
