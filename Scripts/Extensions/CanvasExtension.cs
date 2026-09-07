@@ -12,5 +12,10 @@ namespace KCoreKit
         {
             canvas.gameObject.SetActive(false);
         }
+        
+        public static bool IsOpened(this Canvas canvas)
+        {
+            return canvas.gameObject.activeSelf;
+        }
     }
 }
