@@ -48,7 +48,7 @@ namespace KCoreKit
                 }
             }
 
-            if (!root.children.Any())
+            if (!root.childList.Any())
                 root.AddChild(new AdvancedDropdownItem("No RowScript found"));
 
             return root;

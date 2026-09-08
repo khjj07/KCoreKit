@@ -89,7 +89,7 @@ namespace ANU.IngameDebug.Console
             {
                 sb.Append(item.name);
                 sb.Append("[");
-                sb.Append(item.GetInstanceID());
+                sb.Append(item.GetEntityId().ToString());
                 sb.AppendLine("]:");
 
                 sb.Append("|--parent: ");

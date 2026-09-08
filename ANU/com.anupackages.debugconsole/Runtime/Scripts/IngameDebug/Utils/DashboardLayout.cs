@@ -87,7 +87,7 @@ namespace ANU.IngameDebug.Console
                 y += lastMinY + _spacing;
                 x = padding.left;
             }
-            SetLayoutInputForAxis(y, y, 0, 1);
+            SetLayoutInputForAxis(y, y, 0, 1, 0);
         }
 
         public override void CalculateLayoutInputVertical() { }
