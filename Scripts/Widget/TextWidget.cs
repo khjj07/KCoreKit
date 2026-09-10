@@ -23,5 +23,10 @@ namespace KCoreKit
         {
             textComponent.color = white;
         }
+
+        public string GetText()
+        {
+           return textComponent.text;
+        }
     }
 }
