@@ -50,7 +50,7 @@ namespace KCoreKit
             }
         }
 
-        public void OnChange(float value)
+        public void OnChange(float value, bool useAnimation = true)
         {
             currentValue = value;
             if (textComponent)
@@ -68,7 +68,16 @@ namespace KCoreKit
                         break;
                 }
             }
-            DOTween.To(() => image.fillAmount, x => image.fillAmount = x, currentValue / maxValue, changeDuration);
+
+            if (useAnimation)
+            {
+                DOTween.To(() => image.fillAmount, x => image.fillAmount = x, currentValue / maxValue, changeDuration);
+            }
+            else
+            {
+                image.fillAmount = currentValue / maxValue;
+            }
         }
+        
     }
 }
