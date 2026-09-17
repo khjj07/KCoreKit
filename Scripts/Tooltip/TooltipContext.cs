@@ -10,6 +10,7 @@ namespace KCoreKit
         public bool enabled;
         public bool screenSpace;
         public Vector2 offset;
+        public bool usePosition = true;
         public Dictionary<string,string> textDictionary = new Dictionary<string, string>();
         public Dictionary<string,Sprite> spriteDictionary = new Dictionary<string, Sprite>();
     }

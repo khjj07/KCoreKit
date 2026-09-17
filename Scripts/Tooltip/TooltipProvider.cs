@@ -8,9 +8,20 @@ namespace KCoreKit
     public class TooltipProvider : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         private TooltipContext _context;
-        public readonly Action<TooltipContext> enterAction;
-        public readonly Action<TooltipContext> exitAction;
+        public event Action<TooltipContext> enterAction;
+        public event Action<TooltipContext> exitAction;
         private bool _isHovered;
+        private bool _usePosition = true;
+        
+        public void SetUsePosition(bool usePosition)
+        {
+            _usePosition = usePosition;
+            if (_context != null)
+            {
+                _context.usePosition = usePosition;
+            }
+        }
+        
         public void SetSprite(string key, Sprite sprite)
         {
             if (_context.textDictionary.ContainsKey(key))
@@ -37,6 +48,11 @@ namespace KCoreKit
 
         public void Update()
         {
+            if (!_usePosition)
+            {
+                return;
+            }
+            
             if (_context is { enabled: true } && _isHovered)
             {
                 _context.widget.OnUpdate(_context);
@@ -49,7 +65,8 @@ namespace KCoreKit
             _context = new TooltipContext
             {
                 widget = widget,
-                enabled = enabled
+                enabled = enabled,
+                usePosition = _usePosition
             };
         }
 
@@ -71,6 +88,7 @@ namespace KCoreKit
             {
                 _context.widget.Show();
                 _context.widget.OnShow(_context);
+                enterAction?.Invoke(_context);
             }
 
             _isHovered = true;
@@ -102,6 +120,11 @@ namespace KCoreKit
         public bool IsHovered()
         {
             return _isHovered;
+        }
+
+        public WidgetBase GetWidget()
+        {
+            return _context.widget;
         }
     }
 }

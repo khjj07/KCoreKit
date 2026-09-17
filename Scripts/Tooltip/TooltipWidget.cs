@@ -12,16 +12,20 @@ namespace KCoreKit
         [SerializeField] private RectTransform root;
         private Dictionary<string,TooltipTextWidget> textDictionary;
         private Dictionary<string,TooltipImageWidget> imageDictionary;
-
+      
         public void Awake()
         {
             textDictionary = GetComponentsInChildren<TooltipTextWidget>(true).ToDictionary(x => x.key);
             imageDictionary = GetComponentsInChildren<TooltipImageWidget>(true).ToDictionary(x => x.key);
         }
+        
 
         public void OnShow(TooltipContext context)
         {
-            UpdatePosition(context);
+            if (context.usePosition)
+            {
+                UpdatePosition(context);
+            }
 
             foreach (var text in context.textDictionary)
             {
