@@ -169,6 +169,7 @@ belong to the host project's commits.
 - **DOTween is not vendored.** `KCoreKit.asmdef` references the `DOTween.Modules`
   assembly by name (not GUID) so it resolves regardless of how a given host project
   installed DOTween. Each host project must install core DOTween itself — see
-  `README.md` for the OpenUPM setup. Never re-add a vendored `Demigiant/` copy inside
+  `README.md` for the setup (DOTween has no UPM/OpenUPM distribution — Asset Store or
+  the official zip). Never re-add a vendored `Demigiant/` copy inside
   this submodule; that reintroduces GUID collisions the moment the submodule is
   connected to a project with its own DOTween install.
