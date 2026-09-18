@@ -9,9 +9,8 @@
         "GUID:75469ad4d38634e559750d17036d5f7c",
         "GUID:4307f53044263cf4b835bd812fc161a4",
         "GUID:f06555f75b070af458a003d92f9efb00",
-        "GUID:6fb02f6e150f5964490814aa58559cf7",
+        "DOTween.Modules",
         "GUID:784c0cab5edc66349921b8d31006af57",
-        "GUID:c0e114284e81a9e4b971e9a4c65aa1fa",
         "GUID:111d4e39aeddad44898002abada9c174"
     ],
     "includePlatforms": [],
