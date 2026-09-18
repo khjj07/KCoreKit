@@ -1,26 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
 using UnityEngine;
 
 namespace KCoreKit
 {
     public class SpriteRenderGroup : MonoBehaviour
     {
-        
         private List<SpriteRenderer> _spriteRenderers;
-        private bool _shown;
 
         public void Awake()
         {
             _spriteRenderers = GetComponentsInChildren<SpriteRenderer>().ToList();
         }
 
-        public void Fade(float alpha,float duration)
+        public void SetFade(float alpha)
         {
             foreach (var spriteRenderer in _spriteRenderers)
             {
-                spriteRenderer.DOFade(alpha, duration);
+                var color = spriteRenderer.color;
+                color.a = alpha;
+                spriteRenderer.color = color;
             }
         }
     }
