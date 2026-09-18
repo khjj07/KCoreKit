@@ -163,7 +163,12 @@ belong to the host project's commits.
     drops such references silently, with no error. Code needing types from an
     Editor-only assembly must live in its own Editor-only asmdef
     (see `Scripts/Editor/BroAudio/` for the pattern).
-- **Vendored third-party code** — `Demigiant/` (DOTween), `ANU/` (debug console),
-  `BroAudio/`, `TextMesh Pro/` — is upstream code. Do not edit it to fix a host-project
-  problem; changes are lost on update. Flag the issue and fix it on the KCoreKit or
-  host side instead.
+- **Vendored third-party code** — `ANU/` (debug console), `BroAudio/`, `TextMesh Pro/`
+  — is upstream code. Do not edit it to fix a host-project problem; changes are lost
+  on update. Flag the issue and fix it on the KCoreKit or host side instead.
+- **DOTween is not vendored.** `KCoreKit.asmdef` references the `DOTween.Modules`
+  assembly by name (not GUID) so it resolves regardless of how a given host project
+  installed DOTween. Each host project must install core DOTween itself — see
+  `README.md` for the OpenUPM setup. Never re-add a vendored `Demigiant/` copy inside
+  this submodule; that reintroduces GUID collisions the moment the submodule is
+  connected to a project with its own DOTween install.

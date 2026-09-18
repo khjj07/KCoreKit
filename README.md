@@ -7,7 +7,7 @@
 ## 환경
 
 - Unity 엔진 전용 라이브러리 (Assembly Definition 기반: `KCoreKit.asmdef`)
-- 의존성: Addressables, DOTween(Demigiant 폴더에 포함), BroAudio, TextMesh Pro
+- 의존성: Addressables, DOTween(호스트 프로젝트가 직접 설치, 아래 참고), BroAudio, TextMesh Pro
 
 ## 설치
 
@@ -18,6 +18,35 @@ git submodule add https://github.com/khjj07/KCoreKit.git Assets/KCoreKit
 ```
 
 이후 Package Manager에서 Addressables, TextMesh Pro가 설치되어 있는지 확인하면 됩니다.
+
+### DOTween
+
+KCoreKit은 DOTween 바이너리를 벤더링하지 않습니다 — 여러 프로젝트에 서브모듈을 연결할 때마다
+프로젝트마다 다른 GUID로 설치된 DOTween 사본과 충돌해 `KCoreKit.asmdef`의 참조가 깨지는 문제가
+있었기 때문입니다. 호스트 프로젝트가 아래처럼 OpenUPM을 통해 **직접, 동일한 방식으로**
+DOTween을 설치해야 합니다 — 그래야 모든 프로젝트에서 동일한 GUID를 가진 동일한 패키지를 참조하게
+되어 서브모듈 연결 시 asmdef 참조가 깨지지 않습니다.
+
+`Packages/manifest.json`:
+
+```json
+{
+  "scopedRegistries": [
+    {
+      "name": "OpenUPM",
+      "url": "https://package.openupm.com",
+      "scopes": ["com.demigiant.dotween"]
+    }
+  ],
+  "dependencies": {
+    "com.demigiant.dotween": "1.2.765"
+  }
+}
+```
+
+설치 후 Unity 메뉴의 `Tools > Demigiant > DOTween Utility Panel`에서 `Setup DOTween...`을 한 번
+실행해 모듈을 활성화하세요. KCoreKit 코드는 core DOTween(`DG.Tweening`)만 사용하며
+DOTweenPro는 필요하지 않습니다.
 
 ## 사용법
 
@@ -51,7 +80,6 @@ Scripts/
 └── Extensions / Common / Interface    # 공용 확장 메서드·인터페이스
 
 BroAudio/   # 오디오 라이브러리(BroAudio) 통합
-Demigiant/  # DOTween 벤더링
 TextMesh Pro/
 Shader/
 ```
