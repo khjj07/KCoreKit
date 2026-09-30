@@ -7,11 +7,11 @@ namespace KCoreKit
     {
         public Slider slider => GetComponent<Slider>();
 
-        public Action<float> onValueChanged;
+        public event Action<float> OnValueChanged;
 
         public void Awake()
         {
-            slider.onValueChanged.AddListener(x=>onValueChanged?.Invoke(x));
+            slider.onValueChanged.AddListener(x=>OnValueChanged?.Invoke(x));
         }
 
         public void Setup(float min, float max, float current)
