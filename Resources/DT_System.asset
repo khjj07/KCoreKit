@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4933449651906494297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95426c39dc4848d4881c675150fa8cbe, type: 3}
+  m_Name: languageName
+  m_EditorClassIdentifier: KCoreKit::LocalizedTextDataTableRow
+  rawData:
+  - key: id
+    value: languageName
+  - key: EN
+    value: English
+  - key: KR
+    value: "\uD55C\uAD6D\uC5B4"
+  - key: JP
+    value: "\u65E5\u672C\u8A9E "
+  - key: CN
+    value: "\u4E2D\u6587"
+  - key: isEnable
+    value: TRUE
+  id: languageName
+  tags: []
+  isEnable: 1
+  EN: English
+  KR: "\uD55C\uAD6D\uC5B4"
+  JP: "\u65E5\u672C\u8A9E "
+  CN: "\u4E2D\u6587"
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 463daf5080d293049bd98a91154e958f, type: 3}
+  m_Name: DT_System
+  m_EditorClassIdentifier: KCoreKit::KCoreKit.DataTable
+  rowScript: {fileID: 11500000, guid: 95426c39dc4848d4881c675150fa8cbe, type: 3}
+  csv: {fileID: 4900000, guid: ae66bd82c3fa3f9479a05a1fb9adee70, type: 3}
+  rowTypeName: LocalizedTextDataTableRow, KCoreKit, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  dataList:
+  - {fileID: -4933449651906494297}

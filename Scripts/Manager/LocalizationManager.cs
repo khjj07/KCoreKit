@@ -75,5 +75,17 @@ namespace KCoreKit
         {
             return _prefabDataTableRows.Find(x => x.id == key).Get(_language);
         }
+
+        public static List<string> GetLanguageNames()
+        {
+            var languageName = _textDataTableRows.Find(x => x.id == "languageName");
+            return new List<string>
+            {
+                languageName.KR,
+                languageName.EN,
+                languageName.JP,
+                languageName.CN
+            };
+        }
     }
 }

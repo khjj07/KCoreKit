@@ -19,7 +19,7 @@ namespace KCoreKit
         [HideInInspector]
         public TMP_Text textComponent => GetComponentInChildren<TMP_Text>(true);
 
-        public Action onClickAction;
+        public event Action OnClickAction;
 
         public virtual void Awake()
         {
@@ -28,7 +28,7 @@ namespace KCoreKit
 
         protected virtual void OnClick()
         {
-            onClickAction?.Invoke();
+            OnClickAction?.Invoke();
         }
 
         public void SetInteractable(bool value)

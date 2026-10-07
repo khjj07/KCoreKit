@@ -13,5 +13,10 @@ namespace KCoreKit
         {
             image.sprite = sprite;
         }
+
+        public void SetMaterial(Material material)
+        {
+            image.material = material;
+        }
     }
 }
