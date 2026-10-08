@@ -15,6 +15,24 @@ namespace KCoreKit
         private Sequence _appearSequence;
         private TMP_Text _textComponent;
         private bool _isPlaying;
+        private float _speed = 1f;
+
+        // 모든 Printer 의 글자 등장 속도에 곱해지는 전역 배율 (1 = 기본, 2 = 두 배 빠르게).
+        // 텍스트 속도 같은 사용자 설정을 호스트 프로젝트가 SetGlobalSpeedMultiplier 로 밀어 넣는다.
+        public static float GlobalSpeedMultiplier { get; private set; } = 1f;
+        public static event Action OnGlobalSpeedChanged;
+
+        public static void SetGlobalSpeedMultiplier(float value)
+        {
+            if (value <= 0f)
+            {
+                Debug.LogWarning($"{nameof(Printer)}.{nameof(SetGlobalSpeedMultiplier)} value must be greater than 0 (was {value}). Using 1.");
+                value = 1f;
+            }
+
+            GlobalSpeedMultiplier = value;
+            OnGlobalSpeedChanged?.Invoke();
+        }
 
         // LateUpdate 에서 매 프레임 수십 번 접근하므로 GetComponent 결과를 캐싱한다.
         // Awake 가 아니라 지연 초기화인 이유는 에디터에서 Setup 을 직접 호출하는
@@ -63,13 +81,24 @@ namespace KCoreKit
         }
 
 
-        public Tween Print(float delay = 0, TweenCallback callback = null)
+        // speed 는 이번 출력의 속도 배율이다 (1 = PrintStyle 에 정의된 기본 속도). 실제 속도는 speed × GlobalSpeedMultiplier.
+        // 글자 등장 연출(appear)에만 적용되고, 등장 이후의 반복 연출(repeat)은 영향을 받지 않는다.
+        public Tween Print(float delay = 0, TweenCallback callback = null, float speed = 1f)
         {
             if (_appearSequence == null)
             {
                 Debug.LogWarning($"{nameof(Printer)}.{nameof(Print)} called before {nameof(Setup)}.", this);
                 return DOTween.Sequence().Play();
             }
+
+            if (speed <= 0f)
+            {
+                Debug.LogWarning($"{nameof(Printer)}.{nameof(Print)} speed must be greater than 0 (was {speed}). Using 1.", this);
+                speed = 1f;
+            }
+
+            _speed = speed;
+            ApplyTimeScale();
 
             if (_isPlaying)
             {
@@ -84,7 +113,33 @@ namespace KCoreKit
                 _isPlaying = false;
                 callback?.Invoke();
             });
-            return _appearSequence.SetDelay(delay).Play();
+
+            // DOTween 은 delay 도 timeScale 이 적용된 시간으로 소모하므로,
+            // 실제 대기 시간이 속도와 무관하게 delay 초가 되도록 미리 곱해 둔다.
+            return _appearSequence.SetDelay(delay * _appearSequence.timeScale).Play();
+        }
+
+        private void OnEnable()
+        {
+            OnGlobalSpeedChanged += ApplyTimeScale;
+            ApplyTimeScale();
+        }
+
+        private void OnDisable()
+        {
+            OnGlobalSpeedChanged -= ApplyTimeScale;
+        }
+
+        // 출력 도중 전역 배율(설정)이 바뀌어도 진행 중인 등장 연출에 바로 반영되도록 timeScale 로 처리한다.
+        private void ApplyTimeScale()
+        {
+            // Stop() 으로 Kill 된 시퀀스는 건드리지 않는다.
+            if (_appearSequence == null || !_appearSequence.IsActive())
+            {
+                return;
+            }
+
+            _appearSequence.timeScale = _speed * GlobalSpeedMultiplier;
         }
 
         public void Stop()
