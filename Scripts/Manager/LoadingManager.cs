@@ -7,20 +7,48 @@ namespace KCoreKit
 {
     public class LoadingManager : Singleton<LoadingManager>
     {
-        private IEnumerator LoadSceneAsync(string sceneName, Action onSceneLoaded)
+        private static AsyncOperation _currentOperation;
+        private static bool _blockLoading;
+
+        private IEnumerator LoadSceneAsync(string sceneName,bool useAutoSceneActivation, Action onSceneLoaded)
         {
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-            asyncLoad.allowSceneActivation = false;
-            yield return new WaitUntil(() => asyncLoad.progress >= 0.9f);
-            asyncLoad.allowSceneActivation = true;
-            yield return new WaitUntil(() => asyncLoad.isDone);
+            _currentOperation = SceneManager.LoadSceneAsync(sceneName);
+            
+            if (_currentOperation != null)
+            {
+                _currentOperation.allowSceneActivation = false;
+                yield return new WaitUntil(() => _currentOperation.progress >= 0.9f && !_blockLoading);
+                if (useAutoSceneActivation)
+                {
+                    _currentOperation.allowSceneActivation = true;
+                }
+
+                yield return new WaitUntil(() => _currentOperation.isDone);
+            }
+
             onSceneLoaded?.Invoke();
         }
 
-        public static void LoadScene(string sceneName, Action onSceneLoaded = null)
+        public static void LoadScene(string sceneName, float minDuration = 0, bool useAutoSceneActivation = false, Action onSceneLoaded = null)
         {
             var instance = GetInstance();
-            instance.StartCoroutine(instance.LoadSceneAsync(sceneName, onSceneLoaded));
+            _blockLoading = true;
+            instance.StartCoroutine(WaitForMinLoadingDuration(minDuration));
+            instance.StartCoroutine(instance.LoadSceneAsync(sceneName, useAutoSceneActivation, onSceneLoaded));
+        }
+
+        public static void ActivateScene()
+        {
+            if (_currentOperation != null)
+            {
+                _currentOperation.allowSceneActivation = true;
+            }
+        }
+
+        private static IEnumerator WaitForMinLoadingDuration(float minDuration)
+        {
+            yield return new WaitForSeconds(minDuration);
+            _blockLoading = false;
         }
     }
 }
