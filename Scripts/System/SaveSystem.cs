@@ -7,7 +7,8 @@ namespace KCoreKit
 {
     public static class SaveSystem
     {
-        public static void Save<T>(T data, string fileName, string directory, bool prettyPrint = false) where T : ISerializeData
+        public static void Save<T>(T data, string fileName, string directory, bool prettyPrint = false)
+            where T : ISerializeData
         {
             var saveDirectory = Application.persistentDataPath + "/" + directory;
             if (!Directory.Exists(saveDirectory))
@@ -73,10 +74,10 @@ namespace KCoreKit
                     {
                         using FileStream fileStream = File.Open(path, FileMode.Open);
                         using BinaryReader binaryReader = new(fileStream, Encoding.UTF8);
-                
+
                         var jsonString = binaryReader.ReadString();
                         T data = JsonUtility.FromJson<T>(jsonString);
-                
+
                         if (data != null)
                         {
                             dataList.Add(data);
@@ -98,7 +99,7 @@ namespace KCoreKit
                 throw new DirectoryNotFoundException($"Directory doesn't exist: {directory}");
             }
         }
-        
+
         public static void Remove(string fileName, string directory)
         {
             var savePath = Application.persistentDataPath + "/" + directory + "/" + fileName;
@@ -111,10 +112,20 @@ namespace KCoreKit
 #endif
             }
         }
-        
+
         public static bool Exist(string fileName, string directory)
         {
             return File.Exists(Application.persistentDataPath + "/" + directory + "/" + fileName);
+        }
+
+        public static bool DirectoryExist(string directory)
+        {
+            return Directory.Exists(Application.persistentDataPath + "/" + directory);
+        }
+        
+        public static void CreateDirectory(string directory)
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/" + directory);
         }
     }
 }
