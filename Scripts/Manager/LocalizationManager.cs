@@ -58,7 +58,15 @@ namespace KCoreKit
 
         public static string GetLocalizedText(string key)
         {
-            return _textDataTableRows.Find(x => x.id == key).Get(_language);
+            var row = _textDataTableRows.Find(x => x.id == key);
+            if (row == null)
+            {
+                // 키가 테이블에 없으면 예외 대신 키를 그대로 보여줘서 화면에서 바로 찾을 수 있게 한다.
+                Debug.LogWarning($"[{nameof(LocalizationManager)}] Missing localized text key: '{key}'");
+                return key;
+            }
+
+            return row.Get(_language);
         }
 
         public static TMP_FontAsset GetFontAsset(int index)
